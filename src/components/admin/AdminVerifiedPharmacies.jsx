@@ -662,6 +662,7 @@ export default function AdminVerifiedPharmacies() {
             <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
 
               {/* Stat cards */}
+              <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
                 <StatCard
                   label="Verified Results"
@@ -688,6 +689,7 @@ export default function AdminVerifiedPharmacies() {
                   delta="Across results"
                   deltaBg="#edf9f2" deltaColor="#1f9d61"
                 />
+              </div>
               </div>
 
               {isLoading && (

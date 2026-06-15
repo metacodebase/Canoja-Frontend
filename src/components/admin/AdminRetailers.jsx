@@ -19,10 +19,10 @@ const C = {
 // ── Status badge — exact Figma: h-28, rounded-full, 12.48px extrabold ─────────
 function StatusBadge({ status }) {
   const map = {
-    Verified:   { bg: "#edf9f2", color: "#1f9d61" },
+    Claimed:   { bg: "#edf9f2", color: "#1f9d61" },
     Pending:    { bg: "#fff5eb", color: "#d9822b" },
     Expired:    { bg: "#fff1f1", color: "#d64545" },
-    Unverified: { bg: "#fff1f1", color: "#d64545" },
+    Unclaimed: { bg: "#fff1f1", color: "#d64545" },
   };
   const s = map[status] || { bg: "#f4f7fa", color: "#617182" };
   return (
@@ -126,7 +126,7 @@ function mapRetailer(r) {
   const isExpired   = exp && exp.getTime() < now;
   const isExpiring  = exp && !isExpired && (exp.getTime() - now) < 30 * 86400000;
   const isPending  = r._vrStatus?.status === "pending";
-  let verification = isPending ? "Pending" : r.claimed ? "Verified" : isExpired ? "Expired" : "Unverified";
+  let verification = isPending ? "Pending" : r.claimed ? "Claimed" : isExpired ? "Expired" : "Unclaimed";
   let actionStyle   = isExpiring ? "review" : "view";
   return {
     key:          r._id,
@@ -432,7 +432,7 @@ const columns = [
     render: v => <span style={{ fontSize: "16px", color: C.textPrimary }}>{v}</span>,
   },
   {
-    title: "Verification",
+    title: "Claimed",
     dataIndex: "verification",
     key: "verification",
     render: v => <StatusBadge status={v} />,
@@ -732,7 +732,7 @@ export default function AdminRetailers() {
 
       const SOURCE_LABELS = { state_db: "State DB", manual: "Manual", ai_verified: "AI Verified" };
 
-      const headers = ["Business Name", "DBA", "License #", "License Type", "State", "City", "Address", "Phone", "Email", "License Status", "Expiration Date", "Verification", "Completeness %", "Source"];
+      const headers = ["Business Name", "DBA", "License #", "License Type", "State", "City", "Address", "Phone", "Email", "License Status", "Expiration Date", "Claimed", "Completeness %", "Source"];
 
       const rows = allRecords.map(r => {
         const now = Date.now();
@@ -740,7 +740,7 @@ export default function AdminRetailers() {
         const isExpired  = exp && exp.getTime() < now;
         const isExpiring = exp && !isExpired && (exp.getTime() - now) < 30 * 86400000;
         const isPending  = r._vrStatus?.status === "pending";
-        const verification = isPending ? "Pending" : r.claimed ? "Verified" : isExpired ? "Expired" : "Unverified";
+        const verification = isPending ? "Pending" : r.claimed ? "Claimed" : isExpired ? "Expired" : "Unclaimed";
 
         return [
           r.business_name || "",
@@ -1004,8 +1004,10 @@ export default function AdminRetailers() {
           </div> */}
 
           {/* ── Stat cards ──────────────────────────────────────────────── */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
-            {STATS.map(s => <StatCard key={s.label} {...s} />)}
+          <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
+              {STATS.map(s => <StatCard key={s.label} {...s} />)}
+            </div>
           </div>
 
           {/* ── Content grid: filter panel + right side ──────────────────── */}
@@ -1060,14 +1062,14 @@ export default function AdminRetailers() {
                   </select>
                 </div>
 
-                {/* Verification Status */}
+                {/* Claim Status */}
                 <div>
                   <label style={{ display: "block", fontSize: "13.76px", fontWeight: 800, color: C.textPrimary, marginBottom: "8px" }}>
-                    Verification Status
+                    Claim Status
                   </label>
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     <FilterRow
-                      label="All Verified"
+                      label="All Claimed"
                       count={claimedCount.toLocaleString()}
                       active={vFilter === "verified"}
                       onClick={() => handleVFilter("verified")}
@@ -1091,7 +1093,7 @@ export default function AdminRetailers() {
                       onClick={() => handleVFilter("pending")}
                     />
                     <FilterRow
-                      label="Unverified"
+                      label="Unclaimed"
                       count={unclaimedCount.toLocaleString()}
                       active={vFilter === "unverified"}
                       onClick={() => handleVFilter("unverified")}

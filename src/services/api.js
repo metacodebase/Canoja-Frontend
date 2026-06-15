@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 
 // Environment configuration
 // const apiBaseUrl = "http://localhost:5000/api";
-const apiBaseUrl = "http://54.227.140.191/api";
+const apiBaseUrl = "http://54.227.140.191/api"; 
 
 // Token helpers
 export const setToken = (token) => localStorage.setItem("jwt", token);
@@ -14,7 +14,7 @@ export const removeToken = () => localStorage.removeItem("jwt");
 // Refresh token helpers
 export const setRefreshToken = (token) => localStorage.setItem("refreshToken", token);
 export const getRefreshToken = () => localStorage.getItem("refreshToken");
-export const removeRefreshToken = () => localStorage.removeItem("refreshToken");
+export const removeRefreshToken = () => localStorage.removeItem("refreshToken"); 
 
 // Create axios instance
 const api = axios.create({

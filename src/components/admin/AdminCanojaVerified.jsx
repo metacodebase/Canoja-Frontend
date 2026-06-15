@@ -559,8 +559,8 @@ export default function AdminCanojaVerified() {
       const response = await api.get("/admin/canoja-verified", { params: { ...apiParams, limit: 10000, page: 1 } });
       const allRecords = (response.data?.data || []).map(mapVerified);
       const rows = [
-        ["Business", "License #", "Market", "Verified Date", "Expires", "Badge Status", "Source"],
-        ...allRecords.map(r => [r.name, r.license, r.market, r.verifiedDate, r.expires, r.badgeStatus, r.sourceType]),
+        ["Business", "License #", "Market", "Expires", "Badge Status", "Source"],
+        ...allRecords.map(r => [r.name, r.license, r.market, r.expires, r.badgeStatus, r.sourceType]),
       ];
       const csv = rows.map(r => r.map(v => `"${String(v ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
       const BOM = "\uFEFF";
@@ -602,12 +602,6 @@ export default function AdminCanojaVerified() {
       title: "Market",
       dataIndex: "market",
       key: "market",
-      render: v => <span style={{ fontSize: "14px", color: C.textPrimary }}>{v}</span>,
-    },
-    {
-      title: "Verified",
-      dataIndex: "verifiedDate",
-      key: "verifiedDate",
       render: v => <span style={{ fontSize: "14px", color: C.textPrimary }}>{v}</span>,
     },
     {
@@ -714,8 +708,10 @@ export default function AdminCanojaVerified() {
           </div> */}
 
           {/* Stat cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
-            {STATS.map(s => <StatCard key={s.label} {...s} />)}
+          <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
+              {STATS.map(s => <StatCard key={s.label} {...s} />)}
+            </div>
           </div>
 
           {/* Content grid */}

@@ -763,7 +763,7 @@ export default function AdminPendingRequests() {
         {/* Sticky header */}
         <div style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(255,255,255,0.76)", borderBottom: "0.8px solid #dce7e1", padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", backdropFilter: "blur(8px)" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-            <h1 style={{ fontSize: "28.8px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.576px", margin: 0 }}>Pending Requests</h1>
+            <h1 style={{ fontSize: "28.8px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.576px", margin: 0 }}>Claim Requests History</h1>
             <p style={{ fontSize: "15.36px", color: C.textSecondary, maxWidth: "620px", margin: 0 }}>
               Operator intake and claim-my-business workflow with structured search, review, and approval tracking.
             </p>
@@ -797,8 +797,10 @@ export default function AdminPendingRequests() {
           </div> */}
 
           {/* Stat cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
-            {STATS.map(s => <StatCard key={s.label} {...s} />)}
+          <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
+              {STATS.map(s => <StatCard key={s.label} {...s} />)}
+            </div>
           </div>
 
           {/* Content grid */}
@@ -887,7 +889,7 @@ export default function AdminPendingRequests() {
               <div style={{ background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", overflow: "clip", padding: "0.8px" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px", borderBottom: "0.8px solid #dce7e1" }}>
                   <div>
-                    <p style={{ fontSize: "16.32px", fontWeight: 800, color: C.textPrimary, margin: 0 }}>Pending Request Table</p>
+                    <p style={{ fontSize: "16.32px", fontWeight: 800, color: C.textPrimary, margin: 0 }}>Requests History</p>
                     <p style={{ fontSize: "14.4px", color: C.textSecondary, margin: "4px 0 0" }}>Click any row for full details. Approve or reject directly from the table.</p>
                   </div>
                   <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>

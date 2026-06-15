@@ -9,8 +9,8 @@ import ChangePasswordModal from "../ChangePasswordModal";
 
 const NAV_ADMIN = [
   { label: "Retailers",              path: "/admin/retailers" },
-  { label: "Pending Verifications",  path: "/admin/pending-verifications" },
-  { label: "Pending Requests",       path: "/admin/pending-requests" },
+  { label: "Claim Requests Queue",   path: "/admin/pending-verifications" },
+  { label: "Claim Requests History", path: "/admin/pending-requests" },
   { label: "Canoja Verified",        path: "/admin/canoja-verified" },
 ];
 
