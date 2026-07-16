@@ -434,7 +434,7 @@ function NewRequestModal({ onClose, onSuccess }) {
       });
       onSuccess();
     } catch (e) {
-      toast.error(e.message || "Failed to create request");
+      toast.error(e.response?.data?.error || e.message || "Failed to create request");
     }
   };
 
