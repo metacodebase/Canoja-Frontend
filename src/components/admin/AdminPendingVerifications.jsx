@@ -52,8 +52,7 @@ function mapVerification(r) {
     submissionId: `PV-${r._id.toString().slice(-7).toUpperCase()}`,
     region:       r.license_information?.jurisdiction || r.license_information?.issuing_authority || "—",
     priority:     getPriority(r),
-    age:          h,
-    ageLabel:     h >= 72 ? `${h}h ⚠` : `${h}h`,
+    requestedDate: new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
     slaBreach:    h >= 72,
     evidence:     getEvidence(r),
     method:       r.verification_method,
@@ -645,9 +644,9 @@ export default function AdminPendingVerifications() {
       render: v => <PriorityBadge priority={v} />,
     },
     {
-      title: "Age",
-      dataIndex: "ageLabel",
-      key: "age",
+      title: "Requested",
+      dataIndex: "requestedDate",
+      key: "requestedDate",
       render: (v, row) => (
         <span style={{ fontSize: "14px", fontWeight: row.slaBreach ? 700 : 400, color: row.slaBreach ? "#d64545" : C.textPrimary }}>
           {v}
