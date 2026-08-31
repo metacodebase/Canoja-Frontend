@@ -5,10 +5,10 @@ import { useBusinessDashboard, useToggleSpotlight } from "../services/business";
 import OperatorLayout from "./OperatorLayout";
 
 const BENEFITS = [
-  { icon: Eye, text: "Shows your business at the top of the Explore screen" },
-  { icon: Users, text: "Reaches consumers actively browsing nearby shops" },
-  { icon: Filter, text: "Appears when users apply the Spotlight filter" },
-  { icon: Star, text: "Displays a featured badge on your listing card" },
+  { icon: <Eye size={18} />, text: "Shows your business at the top of the Explore screen" },
+  { icon: <Users size={18} />, text: "Reaches consumers actively browsing nearby shops" },
+  { icon: <Filter size={18} />, text: "Appears when users apply the Spotlight filter" },
+  { icon: <Star size={18} />, text: "Displays a featured badge on your listing card" },
 ];
 
 const OperatorSpotlight = () => {
@@ -41,7 +41,7 @@ const OperatorSpotlight = () => {
         <section className="operator-spotlight-info" style={styles.info}><Info size={18} color="#40ea54" /><p>When Spotlight is active, your business appears in the <strong>Spotlight</strong> section on the consumer Explore screen — giving you prime visibility among nearby users.</p></section>
 
         <h2 style={styles.sectionTitle}>What Spotlight does</h2>
-        <div style={styles.benefits}>{BENEFITS.map(({ icon: Icon, text }) => <div key={text} style={styles.benefit}><span style={styles.benefitIcon}><Icon size={18} /></span><span>{text}</span></div>)}</div>
+        <div style={styles.benefits}>{BENEFITS.map(({ icon, text }) => <div key={text} style={styles.benefit}><span style={styles.benefitIcon}>{icon}</span><span>{text}</span></div>)}</div>
 
         <button type="button" disabled={isLoading || toggleSpotlight.isPending} onClick={handleToggle} style={{ ...styles.action, ...(active ? styles.actionOff : styles.actionOn) }}><Star size={20} fill={active ? "none" : "currentColor"} />{toggleSpotlight.isPending ? "Updating..." : !hasAccess ? "Upgrade to Starter" : active ? "Remove from Spotlight" : "Add to Spotlight"}</button>
         {active && <p style={styles.hint}>Your business is currently visible in the Spotlight section. Use the button above to remove it.</p>}

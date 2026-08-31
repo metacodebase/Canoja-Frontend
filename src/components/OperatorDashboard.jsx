@@ -212,17 +212,10 @@ const OperatorDashboard = () => {
             fontSize: "32px",
             fontWeight: "700",
             color: "#1e293b",
-            margin: "0 0 8px 0",
+            // margin: "0 0 8px 0",
           }}>
-            Your Business
+               {businessName || "Business Dashboard"}
           </h1>
-          <p style={{
-            color: "#64748b",
-            fontSize: "16px",
-            margin: 0,
-          }}>
-            {businessName || "Business Dashboard"}
-          </p>
         </div>
 
         {/* Business Health Section */}
