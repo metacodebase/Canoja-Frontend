@@ -14,10 +14,10 @@ const Login = () => {
 	const [error, setError] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const [needsPasswordChange, setNeedsPasswordChange] = useState(false);
-	const [theme, setTheme] = useState(() => localStorage.getItem("canoja-login-theme") || "dark");
+	const [theme, setTheme] = useState(() => localStorage.getItem("canoja-theme") || localStorage.getItem("canoja-login-theme") || "dark");
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
-	const { login, isAuthenticated, user } = useAuth();
+	const { login, isAuthenticated, user, activeBusinessId } = useAuth();
 	const loginMutation = useAdminLogin();
 
 	useEffect(() => {
@@ -27,6 +27,7 @@ const Login = () => {
 	}, [searchParams]);
 
 	useEffect(() => {
+		localStorage.setItem("canoja-theme", theme);
 		localStorage.setItem("canoja-login-theme", theme);
 	}, [theme]);
 
@@ -39,13 +40,14 @@ const Login = () => {
 			if (role === "admin") {
 				navigate("/admin/dashboard", { replace: true });
 			} else if (role === "operator") {
-				navigate("/operator/dashboard", { replace: true });
+				const needsBusinessSelection = user.businesses?.length > 1 && !activeBusinessId;
+				navigate(needsBusinessSelection ? "/operator/switch-business" : "/operator/dashboard", { replace: true });
 			} else {
 				// For consumers, redirect to shop-finder
 				navigate("/explore", { replace: true });
 			}
 		}
-	}, [isAuthenticated, user, navigate]);
+	}, [activeBusinessId, isAuthenticated, user, navigate]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -80,7 +82,7 @@ const Login = () => {
 			if (userRole === "admin") {
 				navigate("/admin/dashboard");
 			} else if (userRole === "operator") {
-				navigate("/operator/dashboard");
+				navigate(response.user?.businesses?.length > 1 ? "/operator/switch-business" : "/operator/dashboard");
 			} else {
 				// For consumers, redirect to shop-finder instead of "/" to avoid redirect loop
 				navigate("/explore");

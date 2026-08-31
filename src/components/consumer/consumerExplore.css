@@ -95,6 +95,76 @@
 .filter-reset { border: 1px solid #19a158; background: transparent; color: #40ea54; }
 .filter-apply { border: 0; background: #27994b; color: #fff; }
 
+/* Operator Explore follows the persistent operator theme. */
+.operator-theme.admin-theme--light .consumer-explore {
+  background: radial-gradient(circle at 75% 8%, #effcf6 0, #f7fbf9 34%, #eef4f1 100%);
+  color: #18352c;
+}
+.operator-theme.admin-theme--light .consumer-brand { color: #159653; }
+.operator-theme.admin-theme--light .view-toggle,
+.operator-theme.admin-theme--light .consumer-search,
+.operator-theme.admin-theme--light .explore-controls > button,
+.operator-theme.admin-theme--light .explore-controls select,
+.operator-theme.admin-theme--light .all-shops-heading button {
+  border-color: #c9ddd4;
+  background: #fff;
+  color: #365b4e;
+  box-shadow: 0 4px 14px rgba(20, 82, 55, .06);
+}
+.operator-theme.admin-theme--light .view-toggle button { color: #6f8b81; }
+.operator-theme.admin-theme--light .view-toggle button.active { background: #e2f4eb; color: #159653; }
+.operator-theme.admin-theme--light .verified-strip {
+  border-color: #32b66e;
+  background: rgba(233, 249, 240, .88);
+}
+.operator-theme.admin-theme--light .verified-strip span { color: #617a70; }
+.operator-theme.admin-theme--light .verified-strip strong { color: #159653; }
+.operator-theme.admin-theme--light .explore-title-row h1,
+.operator-theme.admin-theme--light .section-heading h2,
+.operator-theme.admin-theme--light .all-shops-heading h2 { color: #17372c; }
+.operator-theme.admin-theme--light .consumer-search input { color: #17372c; }
+.operator-theme.admin-theme--light .consumer-search input::placeholder { color: #80978e; }
+.operator-theme.admin-theme--light .quick-filters label {
+  border-color: #c9ddd4;
+  background: #fff;
+  color: #47695d;
+}
+.operator-theme.admin-theme--light .consumer-business-card {
+  border-color: #c8e1d5;
+  background: linear-gradient(120deg, #fff 0%, #f5fbf8 55%, #e7f7ee 100%);
+  box-shadow: 0 8px 24px rgba(21, 82, 57, .09);
+}
+.operator-theme.admin-theme--light .business-photo { background: #e8f1ed; }
+.operator-theme.admin-theme--light .business-copy h3 { color: #138a4d; }
+.operator-theme.admin-theme--light .business-copy > span,
+.operator-theme.admin-theme--light .business-copy p,
+.operator-theme.admin-theme--light .business-copy small { color: #607a70; }
+.operator-theme.admin-theme--light .consumer-state {
+  border-color: #bdd6cb;
+  color: #607a70;
+}
+.operator-theme.admin-theme--light .consumer-map {
+  border-color: #bdd9cc;
+  background: radial-gradient(circle, #e3f7ec, #f8fcfa 64%);
+  color: #17372c;
+}
+.operator-theme.admin-theme--light .consumer-map small { color: #668078; }
+.operator-theme.admin-theme--light .filter-backdrop { background: rgba(15, 40, 32, .3); }
+.operator-theme.admin-theme--light .filter-panel,
+.operator-theme.admin-theme--light .filter-panel__footer { background: #f7fbf9; color: #17372c; }
+.operator-theme.admin-theme--light .filter-panel__header,
+.operator-theme.admin-theme--light .filter-panel__footer { border-color: #c9ddd4; }
+.operator-theme.admin-theme--light .filter-panel__header p { color: #607a70; }
+.operator-theme.admin-theme--light .filter-panel__header button { color: #17372c; }
+.operator-theme.admin-theme--light .filter-block { border-color: #b8dcca; background: #fff; }
+.operator-theme.admin-theme--light .filter-field,
+.operator-theme.admin-theme--light .filter-check { color: #17372c; }
+.operator-theme.admin-theme--light .filter-input { border-color: #c4d9d0; background: #f1f7f4; }
+.operator-theme.admin-theme--light .filter-input input { color: #17372c; }
+.operator-theme.admin-theme--light .mobile-checkbox { border-color: #9ab8ac; background: #fff; }
+.operator-theme.admin-theme--light .cannabis-types,
+.operator-theme.admin-theme--light .cannabis-types button { color: #526f64; }
+
 @media (max-width: 720px) {
   .consumer-shell { padding: 22px 18px 48px; }
   .consumer-brand { font-size: 22px; }

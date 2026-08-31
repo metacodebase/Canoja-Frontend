@@ -7,6 +7,11 @@ import AdminVerificationRequests from "./components/AdminVerificationRequests";
 import AdminHistory from "./components/AdminHistory";
 import AdminUsers from "./components/AdminUsers";
 import OperatorDashboard from "./components/OperatorDashboard";
+import BusinessSwitcher from "./components/BusinessSwitcher";
+import OperatorExplore from "./components/OperatorExplore";
+import OperatorBilling from "./components/OperatorBilling";
+import OperatorSettings from "./components/OperatorSettings";
+import OperatorSpotlight from "./components/OperatorSpotlight";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -93,6 +98,18 @@ function App() {
             />
 
             {/* Operator Dashboard - Protected */}
+            <Route
+              path="/operator/switch-business"
+              element={
+                <RoleRoute allowedRoles={["operator"]}>
+                  <BusinessSwitcher />
+                </RoleRoute>
+              }
+            />
+            <Route path="/operator/explore" element={<RoleRoute allowedRoles={["operator"]}><OperatorExplore /></RoleRoute>} />
+            <Route path="/operator/billing" element={<RoleRoute allowedRoles={["operator"]}><OperatorBilling /></RoleRoute>} />
+            <Route path="/operator/settings" element={<RoleRoute allowedRoles={["operator"]}><OperatorSettings /></RoleRoute>} />
+            <Route path="/operator/spotlight" element={<RoleRoute allowedRoles={["operator"]}><OperatorSpotlight /></RoleRoute>} />
             <Route 
               path="/operator/dashboard" 
               element={

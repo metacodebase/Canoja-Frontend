@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { BarChart3, Building2, ChevronRight, CreditCard, Crosshair, Globe2, House, LockKeyhole, Mailbox, MapPin, Star, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import OperatorLayout from "./OperatorLayout";
 import { toast } from "react-toastify";
 import {
@@ -10,7 +12,31 @@ import {
   useUploadMenu,
 } from "../services/business";
 
+const LocationRow = ({ icon, label, value, last = false }) => (
+  <div style={{ display: "flex", alignItems: "flex-start", gap: "14px", padding: "15px 0", borderBottom: last ? 0 : "1px solid rgba(255,255,255,.08)" }}>
+    <span style={{ width: "36px", height: "36px", borderRadius: "10px", display: "grid", placeItems: "center", flexShrink: 0, background: "rgba(16,185,129,.12)", color: "#34d399" }}>{icon}</span>
+    <span style={{ minWidth: 0 }}>
+      <small style={{ display: "block", marginBottom: "4px", color: "rgba(255,255,255,.45)", fontSize: "11px", fontWeight: 600, letterSpacing: ".5px", textTransform: "uppercase" }}>{label}</small>
+      <strong style={{ display: "block", color: "#fff", fontSize: "15px", fontWeight: 500, lineHeight: 1.45 }}>{value || "—"}</strong>
+    </span>
+  </div>
+);
+
+const DashboardActionRow = ({ icon, iconColor, title, description, badge, locked, onClick }) => (
+  <button type="button" onClick={onClick} style={{ width: "100%", display: "flex", alignItems: "center", gap: "16px", padding: "16px 20px", background: "#f9fafb", borderRadius: "12px", border: "1px solid #e5e7eb", color: "inherit", font: "inherit", textAlign: "left", cursor: "pointer", transition: "all .2s ease" }}
+    onMouseEnter={(e) => { e.currentTarget.style.background = "#f3f4f6"; e.currentTarget.style.borderColor = "#10b981"; }}
+    onMouseLeave={(e) => { e.currentTarget.style.background = "#f9fafb"; e.currentTarget.style.borderColor = "#e5e7eb"; }}>
+    <span style={{ width: "40px", height: "40px", display: "grid", placeItems: "center", flexShrink: 0, borderRadius: "10px", background: `${iconColor}20`, color: iconColor }}>{icon}</span>
+    <span style={{ minWidth: 0, flex: 1 }}>
+      <span style={{ display: "flex", alignItems: "center", gap: "8px" }}><strong style={{ color: "#1e293b", fontSize: "16px" }}>{title}</strong>{badge && <small style={{ padding: "2px 8px", borderRadius: "4px", background: "#10b981", color: "#fff", fontSize: "11px", fontWeight: 700 }}>{badge}</small>}</span>
+      <small style={{ display: "block", marginTop: "4px", color: "#6b7280", fontSize: "14px" }}>{description}</small>
+    </span>
+    {locked ? <LockKeyhole size={18} color="#8fa99f" /> : <ChevronRight size={20} color="#6b7280" />}
+  </button>
+);
+
 const OperatorDashboard = () => {
+  const navigate = useNavigate();
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showMenuUpload, setShowMenuUpload] = useState(false);
@@ -20,7 +46,7 @@ const OperatorDashboard = () => {
   // API Hooks
   const { data: dashboardData, isLoading: dashboardLoading, error: dashboardError } = useBusinessDashboard();
   const { data: locationData, isLoading: locationLoading } = useBusinessLocation();
-  const { data: profileData, isLoading: profileLoading } = useBusinessProfile();
+  const { data: profileData } = useBusinessProfile();
   const updateProfileMutation = useUpdateBusinessProfile();
   const toggleVisibilityMutation = useToggleBusinessVisibility();
   const uploadMenuMutation = useUploadMenu();
@@ -29,6 +55,8 @@ const OperatorDashboard = () => {
   const businessHealth = dashboardData?.data?.business_health;
   const businessName = dashboardData?.data?.business_name;
   const menuUrl = dashboardData?.data?.menu_url;
+  const planTier = dashboardData?.data?.plan_tier || "free";
+  const isSpotlighted = dashboardData?.data?.spotlight === true;
 
   // Handle visibility toggle
   const handleToggleVisibility = async () => {
@@ -73,7 +101,8 @@ const OperatorDashboard = () => {
     e.preventDefault();
     try {
       // Remove email from update data - it cannot be changed
-      const { email, ...updateData } = profileFormData;
+      const updateData = { ...profileFormData };
+      delete updateData.email;
       await updateProfileMutation.mutateAsync(updateData);
       toast.success("Profile updated successfully!");
       setShowProfileModal(false);
@@ -553,7 +582,41 @@ const OperatorDashboard = () => {
                 </button>
               </div>
             </div>
+
+            <DashboardActionRow
+              icon={<Star size={21} fill="currentColor" />}
+              iconColor="#10b981"
+              title="Spotlight"
+              description={planTier === "free" ? "Upgrade to Starter to unlock Spotlight" : isSpotlighted ? "Your business is featured in Spotlight" : "Feature your business in the Spotlight section"}
+              badge={planTier === "free" ? undefined : isSpotlighted ? "ON" : "OFF"}
+              locked={planTier === "free"}
+              onClick={() => planTier === "free" ? navigate("/operator/billing") : navigate("/operator/spotlight")}
+            />
           </div>
+        </div>
+
+        <div style={{ background: "#ffffff", borderRadius: "16px", padding: "24px 32px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)", border: "1px solid #e2e8f0" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#1e293b", margin: "0 0 24px", textTransform: "uppercase", letterSpacing: ".5px" }}>Grow</h2>
+          <DashboardActionRow
+            icon={<CreditCard size={21} />}
+            iconColor="#a78bfa"
+            title="Subscription & Billing"
+            description={planTier === "free" ? "Free plan — Upgrade to unlock all features" : "Starter plan — Manage billing & renewal"}
+            badge={planTier.toUpperCase()}
+            onClick={() => navigate("/operator/billing")}
+          />
+        </div>
+
+        <div style={{ background: "#ffffff", borderRadius: "16px", padding: "24px 32px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)", border: "1px solid #e2e8f0" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#1e293b", margin: "0 0 24px", textTransform: "uppercase", letterSpacing: ".5px" }}>Insights</h2>
+          <DashboardActionRow
+            icon={<BarChart3 size={21} />}
+            iconColor="#10b981"
+            title="Analytics"
+            description={planTier === "free" ? "Upgrade to Starter to unlock insights" : "Views, clicks, search appearances & more"}
+            locked={planTier === "free"}
+            onClick={() => planTier === "free" ? navigate("/operator/billing") : toast.info("Analytics is coming soon")}
+          />
         </div>
 
       </div>
@@ -566,7 +629,8 @@ const OperatorDashboard = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          background: "rgba(0, 0, 0, 0.5)",
+          background: "rgba(1, 15, 17, 0.82)",
+          backdropFilter: "blur(8px)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -574,66 +638,36 @@ const OperatorDashboard = () => {
         }}
         onClick={() => setShowLocationModal(false)}>
           <div style={{
-            background: "#ffffff",
-            borderRadius: "16px",
-            padding: "24px",
-            maxWidth: "500px",
-            width: "90%",
-            maxHeight: "80vh",
+            position: "relative",
+            background: "linear-gradient(155deg, rgba(21, 43, 36, .98), rgba(8, 27, 23, .99))",
+            border: "1px solid rgba(255,255,255,.15)",
+            borderRadius: "28px",
+            padding: "34px",
+            maxWidth: "540px",
+            width: "calc(100% - 48px)",
+            maxHeight: "85vh",
             overflow: "auto",
+            boxShadow: "0 28px 80px rgba(0,0,0,.52)",
           }}
           onClick={(e) => e.stopPropagation()}>
-            <h2 style={{ fontSize: "24px", fontWeight: "700", margin: "0 0 20px 0" }}>
-              Business Location
-            </h2>
+            <button type="button" onClick={() => setShowLocationModal(false)} aria-label="Close" style={{ position: "absolute", top: "18px", right: "18px", width: "38px", height: "38px", display: "grid", placeItems: "center", borderRadius: "10px", border: "1px solid rgba(52,211,153,.4)", background: "rgba(1,25,29,.65)", color: "#fff", cursor: "pointer" }}><X size={19} /></button>
+            <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "25px", paddingRight: "45px" }}>
+              <span style={{ width: "50px", height: "50px", borderRadius: "14px", display: "grid", placeItems: "center", background: "rgba(16,185,129,.14)", color: "#34d399" }}><MapPin size={27} fill="currentColor" /></span>
+              <h2 style={{ color: "#fff", fontSize: "24px", fontWeight: "700", margin: 0 }}>Business Location</h2>
+            </div>
             {locationLoading ? (
-              <p>Loading location...</p>
+              <p style={{ color: "rgba(255,255,255,.6)", padding: "30px 0", textAlign: "center" }}>Loading location...</p>
             ) : locationData?.data ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-                <div>
-                  <label style={{ fontSize: "14px", fontWeight: "600", color: "#374151", display: "block", marginBottom: "4px" }}>
-                    Address
-                  </label>
-                  <p style={{ fontSize: "16px", color: "#1e293b", margin: 0 }}>
-                    {locationData.data.address}
-                  </p>
-                </div>
-                <div>
-                  <label style={{ fontSize: "14px", fontWeight: "600", color: "#374151", display: "block", marginBottom: "4px" }}>
-                    City, State
-                  </label>
-                  <p style={{ fontSize: "16px", color: "#1e293b", margin: 0 }}>
-                    {locationData.data.city}, {locationData.data.state} {locationData.data.postal_code}
-                  </p>
-                </div>
-                <div>
-                  <label style={{ fontSize: "14px", fontWeight: "600", color: "#374151", display: "block", marginBottom: "4px" }}>
-                    Coordinates
-                  </label>
-                  <p style={{ fontSize: "16px", color: "#1e293b", margin: 0 }}>
-                    {locationData.data.coordinates?.lat?.toFixed(6)}, {locationData.data.coordinates?.lng?.toFixed(6)}
-                  </p>
-                </div>
+              <div>
+                <LocationRow icon={<House size={18} />} label="Street Address" value={locationData.data.address} />
+                <LocationRow icon={<Building2 size={18} />} label="City / State" value={[locationData.data.city, locationData.data.state].filter(Boolean).join(", ")} />
+                <LocationRow icon={<Mailbox size={18} />} label="Postal Code" value={locationData.data.postal_code} />
+                <LocationRow icon={<Globe2 size={18} />} label="Country" value={locationData.data.country} />
+                <LocationRow icon={<Crosshair size={18} />} label="Coordinates" value={locationData.data.coordinates?.lat !== undefined ? `${locationData.data.coordinates.lat.toFixed(6)}, ${locationData.data.coordinates.lng.toFixed(6)}` : "—"} last />
               </div>
             ) : (
-              <p>No location data available</p>
+              <p style={{ color: "rgba(255,255,255,.6)", padding: "30px 0", textAlign: "center" }}>No location data available</p>
             )}
-            <button
-              onClick={() => setShowLocationModal(false)}
-              style={{
-                marginTop: "20px",
-                width: "100%",
-                padding: "12px",
-                background: "#f3f4f6",
-                border: "none",
-                borderRadius: "8px",
-                fontSize: "16px",
-                fontWeight: "600",
-                color: "#374151",
-                cursor: "pointer",
-              }}>
-              Close
-            </button>
           </div>
         </div>
       )}

@@ -182,7 +182,7 @@ function PharmacyCard({ shop: record, onViewProfile }) {
 
 function DetailRow({ label, value }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+    <div className="admin-detail-row" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
       <span style={{ fontSize: "12px", fontWeight: 700, color: "#617182", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</span>
       <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>
     </div>
@@ -198,12 +198,12 @@ function ProfileDrawer({ record, onClose }) {
   const openNow = isOpenNowClient(record);
 
   return (
-    <Drawer open={!!record} onClose={onClose} width={520} title={null} closeIcon={null}
+    <Drawer rootClassName="admin-detail-drawer" open={!!record} onClose={onClose} width={520} title={null} closeIcon={null}
       styles={{ body: { padding: 0 }, header: { display: "none" } }}>
       <div style={{ display: "flex", flexDirection: "column", height: "100%", fontFamily: "Inter, sans-serif" }}>
 
         {/* Header */}
-        <div style={{ padding: "24px", borderBottom: "0.8px solid #dce7e1", background: "linear-gradient(155deg,rgba(45,169,109,0.08) 0%,#fff 100%)" }}>
+        <div className="admin-detail-drawer__header" style={{ padding: "24px", borderBottom: "0.8px solid #dce7e1", background: "linear-gradient(155deg,rgba(45,169,109,0.08) 0%,#fff 100%)" }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
             <div>
               <p style={{ fontSize: "18px", fontWeight: 800, color: C.textPrimary, margin: 0 }}>{record.business_name || "—"}</p>
@@ -553,6 +553,7 @@ export default function AdminVerifiedPharmacies() {
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     {[{ label: "Open Now", value: "openNow", count: openNowCount }].map(({ label, value, count }) => (
                       <div
+                        className={`admin-filter-row${availability === value ? " admin-filter-row--active" : ""}`}
                         key={value}
                         onClick={() => setAvailability(availability === value ? "" : value)}
                         style={{
@@ -638,6 +639,7 @@ export default function AdminVerifiedPharmacies() {
                       { label: "Unclaimed", value: "unclaimed", count: unclaimedCount },
                     ].map(({ label, value, count }) => (
                       <div
+                        className={`admin-filter-row${operator === value ? " admin-filter-row--active" : ""}`}
                         key={value}
                         onClick={() => setOperator(operator === value ? "" : value)}
                         style={{

@@ -52,6 +52,7 @@ const ChangePasswordModal = ({ onClose }) => {
 
   return (
     <div
+      className="change-password-backdrop"
       style={{
         position: "fixed",
         top: 0,
@@ -67,6 +68,7 @@ const ChangePasswordModal = ({ onClose }) => {
       }}
       onClick={onClose}>
       <div
+        className="change-password-sheet"
         style={{
           background: "#ffffff",
           borderRadius: "16px",
@@ -391,4 +393,3 @@ const ChangePasswordModal = ({ onClose }) => {
 };
 
 export default ChangePasswordModal;
-

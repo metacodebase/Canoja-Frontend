@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
-const Sidebar = ({ isOpen, onToggle, onChangePassword, navItems = [] }) => {
+const Sidebar = ({ isOpen, onToggle, onChangePassword, themeControl, navItems = [] }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -130,6 +130,8 @@ const Sidebar = ({ isOpen, onToggle, onChangePassword, navItems = [] }) => {
               {navItems.length > 0 && (
                 <div style={{ borderTop: "1px solid #e2e8f0", margin: "8px 0" }} />
               )}
+
+              {themeControl}
 
               {/* Change Password */}
               <button

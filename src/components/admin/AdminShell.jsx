@@ -6,6 +6,9 @@ import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import api from "../../services/api";
 import ChangePasswordModal from "../ChangePasswordModal";
+import AdminThemeToggle from "./AdminThemeToggle";
+import useAdminTheme from "./useAdminTheme";
+import "./adminTheme.css";
 
 const NAV_ADMIN = [
   { label: "Retailers",              path: "/admin/retailers" },
@@ -30,6 +33,7 @@ export default function AdminShell({ children }) {
   const { logout } = useAuth();
   const queryClient = useQueryClient();
   const [showCP, setShowCP] = useState(false);
+  const { theme, toggleTheme } = useAdminTheme();
 
   const handleLogout = async () => {
     try {
@@ -99,7 +103,7 @@ export default function AdminShell({ children }) {
   );
 
   return (
-    <div className="flex min-h-screen" style={{ background: "#f6f9f8", fontFamily: "Inter, sans-serif" }}>
+    <div className={`admin-theme admin-theme--${theme} flex min-h-screen`} style={{ background: "#f6f9f8", fontFamily: "Inter, sans-serif" }}>
       {/* Sidebar */}
       <aside
         className="sticky top-0 h-screen shrink-0 flex flex-col"
@@ -185,6 +189,7 @@ export default function AdminShell({ children }) {
             marginTop: "auto",
           }}
         >
+          <AdminThemeToggle theme={theme} onToggle={toggleTheme} sidebar />
           <button
             onClick={() => setShowCP(true)}
             className="flex items-center w-full px-[14px] py-[12px] rounded-[14px] text-left transition-all cursor-pointer hover:bg-white/10"

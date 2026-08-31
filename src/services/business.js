@@ -143,3 +143,28 @@ export const useEngagementStats = () => {
   });
 };
 
+export const updateBusinessPlan = async (planTier) => {
+  const response = await api.put("/business/plan", { plan_tier: planTier });
+  return response.data;
+};
+
+export const useUpdateBusinessPlan = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateBusinessPlan,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["businessDashboard"] }),
+  });
+};
+
+export const toggleSpotlight = async (spotlight) => {
+  const response = await api.put("/business/spotlight", { spotlight });
+  return response.data;
+};
+
+export const useToggleSpotlight = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: toggleSpotlight,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["businessDashboard"] }),
+  });
+};

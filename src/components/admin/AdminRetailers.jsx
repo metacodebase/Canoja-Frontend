@@ -146,7 +146,7 @@ function mapRetailer(r) {
 // ── Retailer detail drawer ────────────────────────────────────────────────────
 function DetailRow({ label, value }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+    <div className="admin-detail-row" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
       <span style={{ fontSize: "12px", fontWeight: 700, color: "#617182", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</span>
       <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>
     </div>
@@ -172,6 +172,7 @@ function RetailerDrawer({ record, onClose }) {
 
   return (
     <Drawer
+      rootClassName="admin-retailer-drawer"
       open={!!record}
       onClose={onClose}
       width={520}
@@ -182,7 +183,7 @@ function RetailerDrawer({ record, onClose }) {
       {record && (
         <div style={{ display: "flex", flexDirection: "column", height: "100%", fontFamily: "Inter, sans-serif" }}>
           {/* Header */}
-          <div style={{ padding: "24px", borderBottom: "0.8px solid #dce7e1", background: "linear-gradient(155deg, rgba(45,169,109,0.08) 0%, #fff 100%)" }}>
+          <div className="admin-retailer-drawer__header" style={{ padding: "24px", borderBottom: "0.8px solid #dce7e1", background: "linear-gradient(155deg, rgba(45,169,109,0.08) 0%, #fff 100%)" }}>
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
               <div>
                 <p style={{ fontSize: "18px", fontWeight: 800, color: "#18212b", margin: 0, lineHeight: "26px" }}>{record.business_name || "—"}</p>
@@ -205,7 +206,7 @@ function RetailerDrawer({ record, onClose }) {
 
             {/* License info */}
             <div>
-              <p style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
+              <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
                 <DetailRow label="License #"      value={record.license_number} />
                 <DetailRow label="Status"         value={record.license_status} />
@@ -218,7 +219,7 @@ function RetailerDrawer({ record, onClose }) {
 
             {/* Location */}
             <div>
-              <p style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Location</p>
+              <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Location</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
                 <DetailRow label="Address"   value={record.business_address} />
                 <DetailRow label="City"      value={record.city} />
@@ -229,7 +230,7 @@ function RetailerDrawer({ record, onClose }) {
 
             {/* Contact */}
             <div>
-              <p style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Contact</p>
+              <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Contact</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
                 <DetailRow label="Phone"    value={record.contact_information?.phone} />
                 <DetailRow label="Email"    value={record.contact_information?.email} />
@@ -274,7 +275,7 @@ function RetailerDrawer({ record, onClose }) {
 
             {/* Source / metadata */}
             <div>
-              <p style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Meta</p>
+              <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Meta</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
                 <DetailRow label="Source"       value={SOURCE_LABELS[record.sourceType] || record.sourceType} />
                 <DetailRow label="Risk Flag"    value={record.riskFlag} />
@@ -466,6 +467,7 @@ const columns = [
 function FilterRow({ label, count, active, onClick }) {
   return (
     <button
+      className={`admin-filter-row${active ? " admin-filter-row--active" : ""}`}
       onClick={onClick}
       style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -906,6 +908,7 @@ export default function AdminRetailers() {
               {/* Saved Searches */}
               <div style={{ position: "relative" }} ref={savedDropdownRef}>
                 <button
+                  className="admin-saved-searches-trigger"
                   onClick={() => setShowSavedDropdown(v => !v)}
                   style={{
                     height: "42px", padding: "0 14px",
@@ -922,13 +925,14 @@ export default function AdminRetailers() {
                   Saved Searches {savedSearches.length > 0 && `(${savedSearches.length})`}
                 </button>
                 {showSavedDropdown && (
-                  <div style={{
+                  <div className="admin-saved-searches-menu" style={{
                     position: "absolute", top: "48px", right: 0, zIndex: 100,
                     background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "16px",
                     boxShadow: "0px 8px 24px rgba(13,59,42,0.12)", minWidth: "260px", overflow: "hidden",
                   }}>
                     <div style={{ padding: "8px" }}>
                       <button
+                        className="admin-save-search-action"
                         onClick={handleSaveSearch}
                         style={{
                           width: "100%", padding: "10px 14px", borderRadius: "10px",

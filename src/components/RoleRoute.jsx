@@ -10,7 +10,7 @@ const ROLE_HOME = {
 const getRoleHome = (role) => ROLE_HOME[role] || "/explore";
 
 const RoleRoute = ({ allowedRoles, children }) => {
-  const { isAuthenticated, user } = useAuth();
+  const { activeBusinessId, isAuthenticated, user } = useAuth();
   const location = useLocation();
 
   if (!isAuthenticated) {
@@ -19,6 +19,15 @@ const RoleRoute = ({ allowedRoles, children }) => {
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {
     return <Navigate to={getRoleHome(user?.role)} replace />;
+  }
+
+  if (
+    user?.role === "operator" &&
+    user.businesses?.length > 1 &&
+    !activeBusinessId &&
+    location.pathname !== "/operator/switch-business"
+  ) {
+    return <Navigate to="/operator/switch-business" replace />;
   }
 
   return children;

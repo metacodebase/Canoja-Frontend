@@ -8,6 +8,9 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import ChangePasswordModal from "./ChangePasswordModal";
 import api from "../services/api";
+import AdminThemeToggle from "./admin/AdminThemeToggle";
+import useAdminTheme from "./admin/useAdminTheme";
+import "./admin/adminTheme.css";
 
 const AdminLayout = ({ children }) => {
   const navigate = useNavigate();
@@ -15,6 +18,7 @@ const AdminLayout = ({ children }) => {
   const queryClient = useQueryClient();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { theme, toggleTheme } = useAdminTheme();
 
   const handleLogout = async () => {
     try {
@@ -44,7 +48,7 @@ const AdminLayout = ({ children }) => {
   };
 
   return (
-    <div style={{
+    <div className={`admin-theme admin-theme--${theme}`} style={{
       minHeight: "100vh",
       background: "#fff",
       fontFamily: "system-ui, -apple-system, sans-serif",
@@ -62,6 +66,7 @@ const AdminLayout = ({ children }) => {
           isOpen={sidebarOpen}
           onToggle={() => setSidebarOpen(!sidebarOpen)}
           onChangePassword={() => setShowChangePassword(true)}
+          themeControl={<AdminThemeToggle theme={theme} onToggle={toggleTheme} sidebar />}
           navItems={[
             {
               label: "Verification Requests",

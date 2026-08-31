@@ -28,9 +28,11 @@ export const persistUser = (user) => {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
 };
 
-export const selectInitialBusiness = (businesses = []) => {
+export const selectInitialBusiness = (businesses = [], requireSelection = false) => {
   const storedId = getActiveBusinessId();
-  const nextId = businesses.some(({ _id }) => _id === storedId)
+  const nextId = requireSelection && businesses.length > 1
+    ? null
+    : businesses.some(({ _id }) => _id === storedId)
     ? storedId
     : businesses.length === 1 ? businesses[0]._id : null;
   setActiveBusinessId(nextId);

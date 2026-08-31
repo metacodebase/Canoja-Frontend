@@ -159,7 +159,7 @@ function RejectModal({ requestId, businessName, onClose, onConfirm, loading }) {
 // ── Detail drawer ─────────────────────────────────────────────────────────────
 function DetailRow({ label, value }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+    <div className="admin-detail-row" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
       <span style={{ fontSize: "12px", fontWeight: 700, color: "#617182", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</span>
       <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>
     </div>
@@ -193,11 +193,11 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
   if (!record) return null;
 
   return (
-    <Drawer open={!!record} onClose={onClose} width={520} title={null} closeIcon={null} styles={{ body: { padding: 0 }, header: { display: "none" } }}>
+    <Drawer rootClassName="admin-detail-drawer" open={!!record} onClose={onClose} width={520} title={null} closeIcon={null} styles={{ body: { padding: 0 }, header: { display: "none" } }}>
       <div style={{ display: "flex", flexDirection: "column", height: "100%", fontFamily: "Inter, sans-serif" }}>
 
         {/* Header */}
-        <div style={{ padding: "24px", borderBottom: "0.8px solid #dce7e1", background: "linear-gradient(155deg,rgba(100,149,237,0.08) 0%,#fff 100%)" }}>
+        <div className="admin-detail-drawer__header" style={{ padding: "24px", borderBottom: "0.8px solid #dce7e1", background: "linear-gradient(155deg,rgba(100,149,237,0.08) 0%,#fff 100%)" }}>
           <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
             <div>
               <p style={{ fontSize: "18px", fontWeight: 800, color: C.textPrimary, margin: 0 }}>{record.legal_business_name || "—"}</p>
@@ -574,7 +574,7 @@ function LayerBadge({ children, muted }) {
 
 function FilterRow({ label, count, active, onClick }) {
   return (
-    <button onClick={onClick} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "10.8px 12.8px", borderRadius: "12px", border: active ? "0.8px solid #2da96d" : "0.8px solid #dce7e1", background: active ? "#edf9f2" : "#fcfefd", cursor: "pointer" }}>
+    <button className={`admin-filter-row${active ? " admin-filter-row--active" : ""}`} onClick={onClick} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", padding: "10.8px 12.8px", borderRadius: "12px", border: active ? "0.8px solid #2da96d" : "0.8px solid #dce7e1", background: active ? "#edf9f2" : "#fcfefd", cursor: "pointer" }}>
       <span style={{ fontSize: "14.72px", fontWeight: 400, color: active ? "#1f9d61" : C.textPrimary }}>{label}</span>
       <span style={{ fontSize: "13.12px", fontWeight: 700, color: C.textSecondary }}>{count}</span>
     </button>

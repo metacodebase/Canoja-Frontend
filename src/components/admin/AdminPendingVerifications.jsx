@@ -188,7 +188,7 @@ function EscalateModal({ request, onClose, onConfirm, loading }) {
 // ── Detail drawer ─────────────────────────────────────────────────────────────
 function VRDetailRow({ label, value }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+    <div className="admin-detail-row" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
       <span style={{ fontSize: "12px", fontWeight: 700, color: "#617182", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</span>
       <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>
     </div>
@@ -207,6 +207,7 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
 
   return (
     <Drawer
+      rootClassName="admin-detail-drawer"
       open={!!record}
       onClose={onClose}
       width={520}
@@ -216,7 +217,7 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
     >
       <div style={{ display: "flex", flexDirection: "column", height: "100%", fontFamily: "Inter, sans-serif" }}>
         {/* Header */}
-        <div style={{
+        <div className="admin-detail-drawer__header" style={{
           padding: "24px", borderBottom: "0.8px solid #dce7e1",
           background: "linear-gradient(155deg, rgba(251,146,60,0.08) 0%, #fff 100%)",
         }}>
@@ -320,10 +321,10 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
                 ["Utility Bill",      record.uploaded_documents?.utility_bill],
                 ["Govt. Issued ID",   record.contact_person?.government_issued_id_document],
               ].map(([label, url]) => (
-                <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", borderRadius: "10px", background: "#f4f7fa" }}>
+                <div className="admin-document-row" key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", borderRadius: "10px", background: "#f4f7fa" }}>
                   <span style={{ fontSize: "13px", color: C.textPrimary }}>{label}</span>
                   {url
-                    ? <a href={url} target="_blank" rel="noreferrer" style={{ fontSize: "13px", fontWeight: 700, color: "#2da96d", textDecoration: "none" }}>View</a>
+                    ? <a className="admin-document-view" href={url} target="_blank" rel="noreferrer" style={{ fontSize: "13px", fontWeight: 700, color: "#2da96d", textDecoration: "none" }}>View</a>
                     : <span style={{ fontSize: "13px", color: "#d64545", fontWeight: 600 }}>Missing</span>
                   }
                 </div>
@@ -422,6 +423,7 @@ function LayerBadge({ children, muted }) {
 function FilterRow({ label, count, active, onClick }) {
   return (
     <button
+      className={`admin-filter-row${active ? " admin-filter-row--active" : ""}`}
       onClick={onClick}
       style={{
         display: "flex", alignItems: "center", justifyContent: "space-between",

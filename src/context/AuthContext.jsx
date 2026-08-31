@@ -27,7 +27,7 @@ export function AuthProvider({ children }) {
 	const login = (token, userData, refreshToken) => {
 		persistSession(token, userData, refreshToken);
 		setUser(userData);
-		setActiveBusinessId(selectInitialBusiness(userData?.businesses));
+		setActiveBusinessId(selectInitialBusiness(userData?.businesses, true));
 	};
 
 	const updateUser = (userData) => {
