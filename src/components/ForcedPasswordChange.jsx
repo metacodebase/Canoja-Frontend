@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useChangePassword } from "../services/admin";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const ForcedPasswordChange = () => {
@@ -13,7 +12,6 @@ const ForcedPasswordChange = () => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const changePasswordMutation = useChangePassword();
-  const navigate = useNavigate();
   const { user, updateUser } = useAuth();
 
   const handleSubmit = async (e) => {
@@ -61,7 +59,7 @@ const ForcedPasswordChange = () => {
       // Use window.location for a hard redirect to ensure we leave the Login route
       setTimeout(() => {
         const role = user?.role || "consumer";
-        let redirectPath = "/shop-finder";
+        let redirectPath = "/explore";
         if (role === "admin") {
           redirectPath = "/admin/dashboard";
         } else if (role === "operator") {
@@ -466,4 +464,3 @@ const ForcedPasswordChange = () => {
 };
 
 export default ForcedPasswordChange;
-

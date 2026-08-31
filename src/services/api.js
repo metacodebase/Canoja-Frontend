@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useMutation } from "@tanstack/react-query";
-import { jwtDecode } from "jwt-decode";
 
-// Environment configuration
-// const apiBaseUrl = "http://localhost:5000/api";
-const apiBaseUrl = "http://54.227.140.191/api"; 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? "/api" : "http://54.227.140.191/api");
+
+const ACTIVE_BUSINESS_KEY = "activeBusinessId";
 
 // Token helpers
 export const setToken = (token) => localStorage.setItem("jwt", token);
@@ -15,6 +14,12 @@ export const removeToken = () => localStorage.removeItem("jwt");
 export const setRefreshToken = (token) => localStorage.setItem("refreshToken", token);
 export const getRefreshToken = () => localStorage.getItem("refreshToken");
 export const removeRefreshToken = () => localStorage.removeItem("refreshToken"); 
+export const setActiveBusinessId = (businessId) => {
+  if (businessId) localStorage.setItem(ACTIVE_BUSINESS_KEY, businessId);
+  else localStorage.removeItem(ACTIVE_BUSINESS_KEY);
+};
+export const getActiveBusinessId = () => localStorage.getItem(ACTIVE_BUSINESS_KEY);
+export const removeActiveBusinessId = () => localStorage.removeItem(ACTIVE_BUSINESS_KEY);
 
 // Create axios instance
 const api = axios.create({
@@ -29,6 +34,11 @@ api.interceptors.request.use((config) => {
   //console.log("Token being sent:", token);
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  const activeBusinessId = getActiveBusinessId();
+  if (activeBusinessId) {
+    config.headers["X-Active-Business"] = activeBusinessId;
   }
   
   // If data is FormData, remove Content-Type header to let axios set it automatically with boundary

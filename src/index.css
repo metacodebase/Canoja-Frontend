@@ -68,3 +68,40 @@ button:focus-visible {
     background-color: #f8fafc;
   }
 }
+
+.age-gate {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(circle at top, #124c42 0, #01191d 58%);
+}
+
+.age-gate__card {
+  width: min(100%, 520px);
+  box-sizing: border-box;
+  padding: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  background: rgba(1, 25, 29, 0.9);
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+}
+
+.age-gate__logo { width: 72px; height: 72px; border-radius: 18px; }
+.age-gate__eyebrow { color: #40ea54; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; }
+.age-gate__card h1 { margin: 18px 0 12px; font-size: clamp(2rem, 6vw, 3rem); }
+.age-gate__card p { color: #a5baae; line-height: 1.7; }
+.age-gate__choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 28px 0 20px; }
+.age-gate__choices button, .age-gate__secondary { padding: 15px; border: 1px solid #3c5c59; border-radius: 12px; background: #0a292d; color: #fff; font-weight: 700; }
+.age-gate__choices button.active { border-color: #40ea54; background: rgba(64, 234, 84, 0.16); color: #40ea54; }
+.age-gate__remember { display: flex; align-items: center; justify-content: center; gap: 10px; color: #c8d8d1; font-size: 14px; }
+.age-gate__continue { width: 100%; margin-top: 24px; padding: 16px; border: 0; border-radius: 12px; background: #40ea54; color: #01191d; font-weight: 800; }
+.age-gate__continue:disabled { cursor: not-allowed; opacity: .4; }
+.age-gate__link { margin-top: 18px; border: 0; background: none; color: #a5baae; }
+
+@media (max-width: 560px) {
+  .age-gate__card { padding: 32px 20px; }
+  .age-gate__choices { grid-template-columns: 1fr; }
+}

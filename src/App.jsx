@@ -7,10 +7,9 @@ import AdminVerificationRequests from "./components/AdminVerificationRequests";
 import AdminHistory from "./components/AdminHistory";
 import AdminUsers from "./components/AdminUsers";
 import OperatorDashboard from "./components/OperatorDashboard";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ShopFinder from "./components/ShopFinder";
 import ClaimBusinessForm from "./components/ClaimBusinessForm";
 import ForgotPassword from "./components/ForgotPassword";
 import VerifyOTP from "./components/VerifyOTP";
@@ -19,6 +18,11 @@ import AdminPendingVerifications from "./components/admin/AdminPendingVerificati
 import AdminPendingRequests from "./components/admin/AdminPendingRequests";
 import AdminCanojaVerified from "./components/admin/AdminCanojaVerified";
 import AdminVerifiedPharmacies from "./components/admin/AdminVerifiedPharmacies";
+import RoleRoute from "./components/RoleRoute";
+import AgeVerification from "./components/AgeVerification";
+import ConsumerExplore from "./components/consumer/ConsumerExplore";
+import ConsumerAllShops from "./components/consumer/ConsumerAllShops";
+import ConsumerBusinessDetail from "./components/consumer/ConsumerBusinessDetail";
 
 // Create QueryClient with sensible defaults
 const queryClient = new QueryClient({
@@ -32,23 +36,19 @@ const queryClient = new QueryClient({
   },
 });
 
-// Protected Route Component
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return children;
-};
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <div style={{ minHeight: "100vh" }}>
           <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/explore" element={<ConsumerExplore />} />
+            <Route path="/explore/all" element={<ConsumerAllShops />} />
+            <Route path="/shop-finder" element={<Navigate to="/explore" replace />} />
+            <Route path="/age-verification" element={<AgeVerification />} />
+            <Route path="/business/:businessId" element={<ConsumerBusinessDetail />} />
+
             {/* General Login */}
             <Route path="/login" element={<Login />} />
             
@@ -69,43 +69,42 @@ function App() {
             <Route path="/admin/dashboard" element={<Navigate to="/admin/retailers" replace />} />
             <Route
               path="/admin/retailers"
-              element={<ProtectedRoute><AdminRetailers /></ProtectedRoute>}
+              element={<RoleRoute allowedRoles={["admin"]}><AdminRetailers /></RoleRoute>}
             />
             <Route
               path="/admin/pending-verifications"
-              element={<ProtectedRoute><AdminPendingVerifications /></ProtectedRoute>}
+              element={<RoleRoute allowedRoles={["admin"]}><AdminPendingVerifications /></RoleRoute>}
             />
             <Route
               path="/admin/pending-requests"
-              element={<ProtectedRoute><AdminPendingRequests /></ProtectedRoute>}
+              element={<RoleRoute allowedRoles={["admin"]}><AdminPendingRequests /></RoleRoute>}
             />
             <Route
               path="/admin/canoja-verified"
-              element={<ProtectedRoute><AdminCanojaVerified /></ProtectedRoute>}
+              element={<RoleRoute allowedRoles={["admin"]}><AdminCanojaVerified /></RoleRoute>}
             />
             <Route
               path="/admin/verified-pharmacies"
-              element={<ProtectedRoute><AdminVerifiedPharmacies /></ProtectedRoute>}
+              element={<RoleRoute allowedRoles={["admin"]}><AdminVerifiedPharmacies /></RoleRoute>}
             />
             <Route
               path="/admin/verification-requests"
-              element={<ProtectedRoute><AdminVerificationRequests /></ProtectedRoute>}
+              element={<RoleRoute allowedRoles={["admin"]}><AdminVerificationRequests /></RoleRoute>}
             />
 
             {/* Operator Dashboard - Protected */}
             <Route 
               path="/operator/dashboard" 
               element={
-                <ProtectedRoute>
+                <RoleRoute allowedRoles={["operator"]}>
                   <OperatorDashboard />
-                </ProtectedRoute>
+                </RoleRoute>
               } 
             />
             
             {/* Default Redirects */}
             <Route path="/admin" element={<Navigate to="/login" replace />} />
-            <Route path="/" element={<Navigate to="/login" replace />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           
           {/* Global Toast Notifications */}

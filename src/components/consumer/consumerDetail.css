@@ -1,0 +1,65 @@
+.consumer-detail { min-height: 100vh; background: #01191d; color: #fff; }
+.detail-hero { position: relative; height: min(48vh, 430px); overflow: hidden; background: #102724; }
+.detail-hero > img { width: 100%; height: 100%; object-fit: cover; }
+.detail-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(1,25,29,.03) 65%, rgba(1,25,29,.55)); pointer-events: none; }
+.detail-back { position: absolute; z-index: 2; top: 20px; left: 20px; width: 42px; height: 42px; border: 1px solid #1ba65b; border-radius: 10px; background: #06352e; color: #fff; font-size: 30px; line-height: 1; cursor: pointer; }
+.detail-content { width: 100%; max-width: 1220px; margin: auto; padding: 20px 20px 70px; box-sizing: border-box; }
+.detail-primary-grid { display: grid; gap: 20px; }
+.business-info-card { padding: 20px; border: 1px solid #1ab45b; border-radius: 15px; background: linear-gradient(135deg, #173d30, #1c6337); }
+.business-info-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.business-info-heading h1 { margin: 0 0 8px; font-size: clamp(20px, 3vw, 27px); line-height: 1.2; }
+.business-info-heading p { margin: 0; color: #b7c7c1; font-size: 14px; line-height: 1.5; }
+.business-info-heading > strong { flex: none; padding: 5px 9px; border: 1px solid #d9b70e; border-radius: 999px; color: #ffd52a; font-size: 12px; white-space: nowrap; }
+.business-status { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 14px; padding: 13px 0; border-top: 1px solid #31c969; font-size: 12px; }
+.business-status span { font-weight: 700; }
+.business-status strong.open { color: #40ea54; }
+.business-status strong.closed { color: #ff4d57; }
+.business-contacts { display: grid; gap: 14px; padding: 5px 0 4px; }
+.business-contacts > div { display: flex; align-items: center; gap: 12px; min-height: 20px; color: #79b99a; font-size: 13px; }
+.business-contacts svg { flex: none; color: #61b685; }
+.business-contacts a { color: #d5e1dc; text-decoration: underline; text-underline-offset: 2px; }
+.business-contacts span { color: #8ca79c; opacity: .62; }
+.view-menu { display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: 18px; padding: 13px 16px; border-radius: 10px; background: #40ea54; color: #041b13; font-size: 14px; font-weight: 900; text-decoration: none; }
+.detail-hours { margin-top: 18px; }
+.detail-hours h2 { margin: 0 0 12px; font-size: 19px; }
+.hours-list { display: grid; padding: 10px 14px; border: 1px solid #1ab45b; border-radius: 14px; background: #052828; }
+.hours-list div { display: flex; justify-content: space-between; gap: 20px; padding: 9px 0; color: #afc0ba; font-size: 13px; }
+.hours-list div.today { color: #40ea54; }
+.detail-extra-section { margin-top: 18px; }
+.detail-extra-section h2 { margin: 0 0 12px; font-size: 19px; }
+.service-chips { display: flex; flex-wrap: wrap; gap: 9px; }
+.service-chips span { padding: 9px 13px; border-radius: 10px; background: linear-gradient(135deg, #40ea54, #35d79a); color: #052016; font-size: 13px; }
+.directions-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 18px; padding: 15px; border: 1px solid #1ab45b; border-radius: 12px; background: #052828; color: #fff; text-decoration: none; }
+.directions-card > span { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 9px; background: linear-gradient(135deg, #40ea54, #35d79a); color: #062017; font-size: 13px; font-weight: 700; }
+.map-preview { position: relative; display: grid; place-items: center; height: 210px; margin-top: 18px; overflow: hidden; border: 1px solid #8ea7a3; border-radius: 12px; background-color: #dce9e7; background-image: linear-gradient(24deg, transparent 46%, #b6cecb 47% 50%, transparent 51%), linear-gradient(156deg, transparent 42%, #c4d8d5 43% 47%, transparent 48%), linear-gradient(90deg, transparent 48%, #eef4f3 49% 53%, transparent 54%); background-size: 110px 85px, 150px 100px, 82px 100%; }
+.map-preview::before { content: ""; position: absolute; width: 130%; height: 18px; background: #f7fbfa; transform: rotate(-18deg); box-shadow: 0 0 0 4px #c8d9d7; }
+.map-preview span { z-index: 1; color: #17c891; transform: rotate(16deg); filter: drop-shadow(0 2px 1px #fff); }
+.reviews-section { min-height: 105px; }
+.reviews-section p { margin: 0; color: #899b96; font-size: 13px; }
+.reviews-section > a { display: block; margin-top: 16px; color: #36d77e; font-size: 13px; text-align: right; text-decoration: none; }
+.claim-footer { margin: 34px 0 -70px; padding: 14px 16px; border-top: 1px solid #183b3b; background: #032326; }
+.claim-footer div, .claim-footer a { display: flex; align-items: center; justify-content: center; gap: 8px; width: min(100%, 720px); margin: auto; padding: 13px; border-radius: 12px; background: #15353a; color: #91a6a6; font-weight: 700; text-decoration: none; }
+.claim-footer a { background: linear-gradient(135deg, #40ea54, #04ca8f); color: #041b13; }
+.empty-detail { display: grid; place-content: center; text-align: center; }
+.empty-detail button { padding: 13px 20px; border: 0; border-radius: 12px; background: #40ea54; font-weight: 800; }
+
+@media (min-width: 900px) {
+  .detail-primary-grid { grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr); align-items: stretch; }
+  .business-info-card { display: flex; flex-direction: column; }
+  .business-contacts { flex: 1; }
+  .detail-hours { display: flex; flex-direction: column; margin-top: 0; }
+  .hours-list { flex: 1; align-content: center; }
+  .hours-list div { width: 100%; }
+}
+
+@media (max-width: 620px) {
+  .detail-hero { height: 43vh; min-height: 300px; max-height: 390px; }
+  .detail-back { top: 16px; left: 16px; }
+  .detail-content { padding: 12px clamp(16px, 4vw, 20px) 70px; }
+  .business-info-card { padding: 14px; }
+  .business-info-heading { gap: 10px; }
+  .business-info-heading h1 { font-size: 20px; }
+  .business-info-heading > strong { padding: 4px 7px; font-size: 11px; }
+  .hours-list div { font-size: 13px; }
+  .map-preview { height: 180px; }
+}

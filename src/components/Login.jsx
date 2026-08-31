@@ -22,7 +22,7 @@ const Login = () => {
 		if (searchParams.get("reason") === "deactivated") {
 			toast.error("Your account has been deactivated.");
 		}
-	}, []);
+	}, [searchParams]);
 
 	// Redirect based on role if already authenticated (but not if password change is required)
 	useEffect(() => {
@@ -36,7 +36,7 @@ const Login = () => {
 				navigate("/operator/dashboard", { replace: true });
 			} else {
 				// For consumers, redirect to shop-finder
-				navigate("/shop-finder", { replace: true });
+				navigate("/explore", { replace: true });
 			}
 		}
 	}, [isAuthenticated, user, navigate]);
@@ -77,7 +77,7 @@ const Login = () => {
 				navigate("/operator/dashboard");
 			} else {
 				// For consumers, redirect to shop-finder instead of "/" to avoid redirect loop
-				navigate("/shop-finder");
+				navigate("/explore");
 			}
 		} catch (error) {
 			setError(error.message);
@@ -103,13 +103,11 @@ const Login = () => {
 		<div
 			style={{
 				minHeight: "100vh",
-				width: "100vw",
+				width: "100%",
 				display: "flex",
 				margin: 0,
 				boxSizing: "border-box",
-				position: "fixed",
-				top: 0,
-				left: 0,
+				position: "relative",
 				fontFamily: "system-ui, -apple-system, sans-serif",
 			}}>
 			<ToastContainer position="top-center" autoClose={3000} />
@@ -117,13 +115,15 @@ const Login = () => {
 			<div
 				style={{
 					flex: 1,
+					minHeight: "100vh",
+					boxSizing: "border-box",
 					background: "linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)",
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
 					position: "relative",
 					overflow: "hidden",
-					padding: "60px 40px",
+					padding: "32px",
 				}}>
 				{/* Decorative geometric elements */}
 				<div
@@ -208,19 +208,19 @@ const Login = () => {
 							display: "inline-flex",
 							alignItems: "center",
 							justifyContent: "center",
-							width: "100px",
-							height: "100px",
+							width: "80px",
+							height: "80px",
 							background: "rgba(255,255,255,0.15)",
 							borderRadius: "50%",
-							marginBottom: "32px",
+							marginBottom: "20px",
 							backdropFilter: "blur(10px)",
 						}}>
 						<img
 							src={canojaLogo}
 							alt="Canoja Logo"
 							style={{
-								width: 60,
-								height: 60,
+								width: 50,
+								height: 50,
 								borderRadius: 12,
 								objectFit: "cover",
 							}}
@@ -228,20 +228,20 @@ const Login = () => {
 					</div>
 					<h1
 						style={{
-							fontSize: "48px",
+							fontSize: "42px",
 							fontWeight: "800",
-							margin: "0 0 20px 0",
+							margin: "0 0 12px 0",
 							letterSpacing: "-1.5px",
 						}}>
 						Welcome back!
 					</h1>
 					<p
 						style={{
-							fontSize: "20px",
+							fontSize: "18px",
 							opacity: 0.95,
 							margin: "0",
 							maxWidth: "360px",
-							lineHeight: "1.6",
+							lineHeight: "1.5",
 							fontWeight: "300",
 						}}>
 						Sign in to access your Canoja account and manage your cannabis business operations
@@ -253,22 +253,25 @@ const Login = () => {
 			<div
 				style={{
 					flex: 1,
+					minHeight: "100vh",
+					boxSizing: "border-box",
 					background: "#f8fafc",
 					display: "flex",
 					alignItems: "center",
 					justifyContent: "center",
-					padding: "60px 40px",
+					padding: "28px 40px",
+					overflowY: "auto",
 				}}>
 				<div style={{ width: "100%", maxWidth: "420px" }}>
 					{/* Canoja Logo */}
-					<div style={{ display: "flex", justifyContent: "center", marginBottom: 40 }}>
+					<div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
 						<img
 							src={canojaLogo}
 							alt="Canoja Logo"
 							style={{
-								width: 72,
-								height: 72,
-								borderRadius: 18,
+								width: 56,
+								height: 56,
+								borderRadius: 14,
 								objectFit: "cover",
 								background: "#fff",
 								boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
@@ -294,13 +297,13 @@ const Login = () => {
 					)}
 
 					{/* Header */}
-					<div style={{ marginBottom: "40px" }}>
+					<div style={{ marginBottom: "24px" }}>
 						<h2
 							style={{
-								fontSize: "36px",
+								fontSize: "32px",
 								fontWeight: "800",
 								color: "#0f172a",
-								margin: "0 0 12px 0",
+								margin: "0 0 6px 0",
 								letterSpacing: "-1px",
 							}}>
 							Sign In
@@ -319,7 +322,7 @@ const Login = () => {
 					{/* Form */}
 					<form onSubmit={handleSubmit}>
 						{/* Email field */}
-						<div style={{ marginBottom: "24px" }}>
+						<div style={{ marginBottom: "16px" }}>
 							<label
 								style={{
 									display: "block",
@@ -337,7 +340,7 @@ const Login = () => {
 								placeholder="you@example.com"
 								style={{
 									width: "100%",
-									padding: "16px 18px",
+									padding: "13px 16px",
 									borderRadius: "12px",
 									border: "2px solid #e2e8f0",
 									fontSize: "16px",
@@ -359,7 +362,7 @@ const Login = () => {
 						</div>
 
 						{/* Password field */}
-						<div style={{ position: "relative", marginBottom: "32px" }}>
+						<div style={{ position: "relative", marginBottom: "18px" }}>
 							<label
 								style={{
 									display: "block",
@@ -377,8 +380,10 @@ const Login = () => {
 								placeholder="Enter your password"
 								style={{
 									width: "100%",
-									padding: "16px 18px",
+									paddingTop: "13px",
 									paddingRight: "50px",
+									paddingBottom: "13px",
+									paddingLeft: "16px",
 									borderRadius: "12px",
 									border: "2px solid #e2e8f0",
 									fontSize: "16px",
@@ -403,7 +408,7 @@ const Login = () => {
 								style={{
 									position: "absolute",
 									right: 12,
-									top: 42,
+									top: 38,
 									height: 40,
 									width: 40,
 									display: "flex",
@@ -455,7 +460,7 @@ const Login = () => {
 					</div>
 
 					{/* Forgot Password Link */}
-					<div style={{ textAlign: "right", marginBottom: "24px" }}>
+					<div style={{ textAlign: "right", marginBottom: "16px" }}>
 						<Link
 							to="/forgot-password"
 							style={{
@@ -483,7 +488,7 @@ const Login = () => {
 								? "linear-gradient(135deg, #059669 60%, #10b981 100%)"
 								: "linear-gradient(135deg, #059669, #10b981)",
 							color: "#ffffff",
-							padding: "18px 24px",
+							padding: "15px 24px",
 							border: "none",
 							borderRadius: "12px",
 							fontWeight: "700",
@@ -531,8 +536,29 @@ const Login = () => {
 					</button>
 					</form>
 
+					<div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
+						<span style={{ flex: 1, height: 1, background: "#e2e8f0" }} />
+						<span style={{ color: "#94a3b8", fontSize: 13, fontWeight: 600 }}>NEW TO CANOJA?</span>
+						<span style={{ flex: 1, height: 1, background: "#e2e8f0" }} />
+					</div>
+					<button
+						type="button"
+						onClick={() => navigate("/age-verification")}
+						style={{
+							width: "100%",
+							padding: "14px 24px",
+							border: "2px solid #10b981",
+							borderRadius: 12,
+							background: "#fff",
+							color: "#047857",
+							fontSize: 16,
+							fontWeight: 700,
+						}}>
+						New User — Explore Canoja
+					</button>
+
 					{/* Footer text */}
-					<div style={{ textAlign: "center", marginTop: "40px" }}>
+					<div style={{ textAlign: "center", marginTop: "24px" }}>
 						<p
 							style={{
 								color: "#94a3b8",
@@ -559,4 +585,3 @@ style.innerHTML = `
 	100% { transform: rotate(360deg); }
 }`;
 document.head.appendChild(style);
-

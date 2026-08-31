@@ -1,21 +1,23 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from "react";
-import { getToken, removeToken, setToken, setRefreshToken, removeRefreshToken } from "../services/admin";
+import { getActiveBusinessId, getToken, setActiveBusinessId as persistActiveBusinessId } from "../services/api";
+import { clearSession, persistSession, persistUser, readStoredUser, selectInitialBusiness } from "../services/authStorage";
 import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
 	const [user, setUser] = useState(null);
+	const [activeBusinessId, setActiveBusinessId] = useState(getActiveBusinessId());
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const token = getToken();
 		if (token) {
 			try {
-				const decoded = jwtDecode(token);
-				setUser(decoded);
+				setUser(readStoredUser() || jwtDecode(token));
 			} catch {
-				removeToken();
+				clearSession();
 				setUser(null);
 			}
 		}
@@ -23,20 +25,24 @@ export function AuthProvider({ children }) {
 	}, []);
 
 	const login = (token, userData, refreshToken) => {
-		setToken(token);
-		if (refreshToken) {
-			setRefreshToken(refreshToken);
-		}
+		persistSession(token, userData, refreshToken);
 		setUser(userData);
+		setActiveBusinessId(selectInitialBusiness(userData?.businesses));
 	};
 
 	const updateUser = (userData) => {
+		persistUser(userData);
 		setUser(userData);
 	};
 
+	const selectBusiness = (businessId) => {
+		persistActiveBusinessId(businessId);
+		setActiveBusinessId(businessId);
+	};
+
 	const logout = () => {
-		removeToken();
-		removeRefreshToken();
+		clearSession();
+		setActiveBusinessId(null);
 		setUser(null);
 	};
 
@@ -45,7 +51,18 @@ export function AuthProvider({ children }) {
 	}
 
 	return (
-		<AuthContext.Provider value={{ user, login, logout, updateUser, isAuthenticated: !!user }}>{children}</AuthContext.Provider>
+		<AuthContext.Provider value={{
+			user,
+			login,
+			logout,
+			updateUser,
+			activeBusinessId,
+			selectBusiness,
+			businesses: user?.businesses || [],
+			isAuthenticated: !!user,
+		}}>
+			{children}
+		</AuthContext.Provider>
 	);
 }
 
