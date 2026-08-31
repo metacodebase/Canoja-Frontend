@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ForcedPasswordChange from "./ForcedPasswordChange";
+import "./loginTheme.css";
 
 const Login = () => {
 	const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ const Login = () => {
 	const [error, setError] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const [needsPasswordChange, setNeedsPasswordChange] = useState(false);
+	const [theme, setTheme] = useState(() => localStorage.getItem("canoja-login-theme") || "dark");
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const { login, isAuthenticated, user } = useAuth();
@@ -23,6 +25,10 @@ const Login = () => {
 			toast.error("Your account has been deactivated.");
 		}
 	}, [searchParams]);
+
+	useEffect(() => {
+		localStorage.setItem("canoja-login-theme", theme);
+	}, [theme]);
 
 	// Redirect based on role if already authenticated (but not if password change is required)
 	useEffect(() => {
@@ -101,6 +107,7 @@ const Login = () => {
 
 	return (
 		<div
+			className={`login-page login-page--${theme}`}
 			style={{
 				minHeight: "100vh",
 				width: "100%",
@@ -111,6 +118,20 @@ const Login = () => {
 				fontFamily: "system-ui, -apple-system, sans-serif",
 			}}>
 			<ToastContainer position="top-center" autoClose={3000} />
+			<button
+				type="button"
+				className="login-theme-toggle"
+				onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")}
+				aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+				aria-pressed={theme === "light"}>
+				<svg className={`theme-icon theme-icon--sun${theme === "dark" ? " active" : ""}`} aria-hidden="true" viewBox="0 0 24 24">
+						<circle cx="12" cy="12" r="4" />
+						<path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+				</svg>
+				<svg className={`theme-icon theme-icon--moon${theme === "light" ? " active" : ""}`} aria-hidden="true" viewBox="0 0 24 24">
+					<path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5a8.5 8.5 0 1 0 11.7 11.7Z" />
+				</svg>
+			</button>
 			{/* Left Side - Welcome Section */}
 			<div
 				style={{
@@ -263,22 +284,6 @@ const Login = () => {
 					overflowY: "auto",
 				}}>
 				<div style={{ width: "100%", maxWidth: "420px" }}>
-					{/* Canoja Logo */}
-					<div style={{ display: "flex", justifyContent: "center", marginBottom: 20 }}>
-						<img
-							src={canojaLogo}
-							alt="Canoja Logo"
-							style={{
-								width: 56,
-								height: 56,
-								borderRadius: 14,
-								objectFit: "cover",
-								background: "#fff",
-								boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-							}}
-						/>
-					</div>
-
 					{/* Error message */}
 					{error && (
 						<div
