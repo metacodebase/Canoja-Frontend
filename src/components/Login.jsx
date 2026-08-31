@@ -14,7 +14,7 @@ const Login = () => {
 	const [error, setError] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const [needsPasswordChange, setNeedsPasswordChange] = useState(false);
-	const [theme, setTheme] = useState(() => localStorage.getItem("canoja-theme") || localStorage.getItem("canoja-login-theme") || "dark");
+	const [theme, setTheme] = useState(() => localStorage.getItem("canoja-theme") || "dark");
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const { login, isAuthenticated, user, activeBusinessId } = useAuth();
@@ -28,7 +28,7 @@ const Login = () => {
 
 	useEffect(() => {
 		localStorage.setItem("canoja-theme", theme);
-		localStorage.setItem("canoja-login-theme", theme);
+		localStorage.removeItem("canoja-login-theme");
 	}, [theme]);
 
 	// Redirect based on role if already authenticated (but not if password change is required)

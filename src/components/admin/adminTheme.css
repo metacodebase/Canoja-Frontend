@@ -101,6 +101,11 @@
   border: 0 !important;
   box-shadow: none !important;
 }
+.operator-theme main > .operator-dashboard-page {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
 .operator-theme.admin-theme--light .operator-spotlight-card { background: #fff !important; border-color: #cfe0d8 !important; }
 .operator-theme.admin-theme--light .operator-spotlight-card h1 { color: #17372c !important; }
 .operator-theme.admin-theme--light .operator-spotlight-info { color: #526f64 !important; background: #effaf4 !important; }

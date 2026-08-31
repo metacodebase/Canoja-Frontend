@@ -2,6 +2,17 @@
 
 set -Eeuo pipefail
 
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+project_dir="$(cd -- "${script_dir}/.." && pwd)"
+deploy_env_file="${DEPLOY_ENV_FILE:-${project_dir}/.env.deploy}"
+
+if [[ -f "${deploy_env_file}" ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "${deploy_env_file}"
+  set +a
+fi
+
 required_vars=(DEPLOY_HOST DEPLOY_USER DEPLOY_PATH)
 for var_name in "${required_vars[@]}"; do
   if [[ -z "${!var_name:-}" ]]; then
@@ -15,21 +26,20 @@ if [[ "${DEPLOY_PATH}" != /* || "${DEPLOY_PATH}" == "/" ]]; then
   exit 1
 fi
 
-command -v yarn >/dev/null || { echo "yarn is required." >&2; exit 1; }
+command -v npm >/dev/null || { echo "npm is required." >&2; exit 1; }
 command -v ssh >/dev/null || { echo "ssh is required." >&2; exit 1; }
 command -v rsync >/dev/null || { echo "rsync is required." >&2; exit 1; }
 
-script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-project_dir="$(cd -- "${script_dir}/.." && pwd)"
 release_id="$(date -u +%Y%m%d%H%M%S)"
-release_dir="${DEPLOY_PATH}/releases/${release_id}"
+backup_dir="${DEPLOY_PATH}-releases/${release_id}"
 remote="${DEPLOY_USER}@${DEPLOY_HOST}"
 
-ssh_args=()
+ssh_args=("-o" "BatchMode=yes" "-o" "ConnectTimeout=10")
 if [[ -n "${DEPLOY_PORT:-}" ]]; then
   ssh_args+=("-p" "${DEPLOY_PORT}")
 fi
 if [[ -n "${DEPLOY_SSH_KEY:-}" ]]; then
+  [[ -f "${DEPLOY_SSH_KEY}" ]] || { echo "SSH key not found: ${DEPLOY_SSH_KEY}" >&2; exit 1; }
   ssh_args+=("-i" "${DEPLOY_SSH_KEY}")
 fi
 
@@ -37,18 +47,19 @@ rsync_ssh=(ssh "${ssh_args[@]}")
 
 cd "${project_dir}"
 echo "Building production frontend..."
-yarn build
+npm run build
 
 [[ -f dist/index.html ]] || { echo "Production build did not create dist/index.html." >&2; exit 1; }
 
-echo "Creating release ${release_id} on ${DEPLOY_HOST}..."
-ssh "${ssh_args[@]}" "${remote}" "mkdir -p '${release_dir}'"
+echo "Backing up the currently served frontend..."
+ssh "${ssh_args[@]}" "${remote}" \
+  "mkdir -p '${DEPLOY_PATH}' '${backup_dir}' && if test -f '${DEPLOY_PATH}/index.html'; then cp -a '${DEPLOY_PATH}/.' '${backup_dir}/'; fi"
 
 echo "Uploading production assets..."
-rsync -az --checksum -e "${rsync_ssh[*]}" dist/ "${remote}:${release_dir}/"
+rsync -az --checksum --delete -e "${rsync_ssh[*]}" dist/ "${remote}:${DEPLOY_PATH}/"
 
-echo "Activating release..."
+echo "Verifying deployed frontend..."
 ssh "${ssh_args[@]}" "${remote}" \
-  "test -f '${release_dir}/index.html' && ln -sfn '${release_dir}' '${DEPLOY_PATH}/current'"
+  "test -f '${DEPLOY_PATH}/index.html'"
 
 echo "Production deployment complete: ${release_id}"

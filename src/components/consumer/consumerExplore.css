@@ -24,6 +24,22 @@
 .explore-controls > button, .explore-controls select { border: 0; border-radius: 14px; background: #1b2927; color: #eef5f1; font-weight: 700; }
 .explore-controls > button.active { color: #40ea54; box-shadow: inset 0 0 0 1px #40ea54; }
 .explore-controls select { padding: 0 12px; }
+.operator-theme.admin-theme--dark .consumer-search,
+.operator-theme.admin-theme--dark .explore-controls > button,
+.operator-theme.admin-theme--dark .explore-controls select {
+  border: 1px solid #35534c;
+  background: #102724;
+  color: #eef5f1;
+}
+.operator-theme.admin-theme--dark main .consumer-search input {
+  background: transparent !important;
+  color: #eef5f1 !important;
+}
+.operator-theme.admin-theme--dark main .consumer-search input::placeholder { color: #829990 !important; }
+.operator-theme.admin-theme--dark .explore-controls select option {
+  background: #102724;
+  color: #eef5f1;
+}
 .quick-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 .quick-filters label { display: flex; align-items: center; gap: 7px; padding: 9px 13px; border: 1px solid #344b46; border-radius: 999px; background: #132522; color: #becdc8; font-size: 13px; }
 .consumer-section { margin-top: 24px; }

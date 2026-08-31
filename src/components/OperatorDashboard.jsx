@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { BarChart3, Building2, ChevronRight, CreditCard, Crosshair, Globe2, House, LockKeyhole, Mailbox, MapPin, Star, X } from "lucide-react";
+import { ArrowLeftRight, BarChart3, Building2, ChevronRight, CreditCard, Crosshair, Globe2, House, LockKeyhole, Mailbox, MapPin, Star, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import OperatorLayout from "./OperatorLayout";
+import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import {
   useBusinessDashboard,
@@ -37,6 +38,7 @@ const DashboardActionRow = ({ icon, iconColor, title, description, badge, locked
 
 const OperatorDashboard = () => {
   const navigate = useNavigate();
+  const { businesses } = useAuth();
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showMenuUpload, setShowMenuUpload] = useState(false);
@@ -199,7 +201,7 @@ const OperatorDashboard = () => {
 
   return (
     <OperatorLayout>
-      <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      <div className="operator-dashboard-page" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
         {/* Header */}
         <div style={{
           background: "#ffffff",
@@ -208,14 +210,10 @@ const OperatorDashboard = () => {
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
         }}>
-          <h1 style={{
-            fontSize: "32px",
-            fontWeight: "700",
-            color: "#1e293b",
-            // margin: "0 0 8px 0",
-          }}>
-               {businessName || "Business Dashboard"}
-          </h1>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "20px" }}>
+            <h1 style={{ fontSize: "32px", fontWeight: "700", color: "#1e293b", margin: 0 }}>{businessName || "Business Dashboard"}</h1>
+            {businesses.length > 1 && <button type="button" onClick={() => navigate("/operator/switch-business")} aria-label="Switch business" title="Switch business" style={{ width: "42px", height: "42px", flexShrink: 0, display: "grid", placeItems: "center", borderRadius: "11px", border: "1px solid rgba(16,185,129,.45)", background: "rgba(16,185,129,.1)", color: "#10b981", cursor: "pointer" }}><ArrowLeftRight size={21} strokeWidth={2.2} /></button>}
+          </div>
         </div>
 
         {/* Business Health Section */}
@@ -608,7 +606,7 @@ const OperatorDashboard = () => {
             title="Analytics"
             description={planTier === "free" ? "Upgrade to Starter to unlock insights" : "Views, clicks, search appearances & more"}
             locked={planTier === "free"}
-            onClick={() => planTier === "free" ? navigate("/operator/billing") : toast.info("Analytics is coming soon")}
+            onClick={() => planTier === "free" ? navigate("/operator/billing") : navigate("/operator/analytics")}
           />
         </div>
 
