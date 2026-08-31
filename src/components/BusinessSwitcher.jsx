@@ -17,7 +17,6 @@ const BusinessSwitcher = () => {
   return (
     <main style={styles.page}>
       <section style={styles.panel}>
-        <div style={styles.brand}>🌿 <span>Canoja</span></div>
         <header style={styles.header}>
           <h1 style={styles.title}>Switch Business</h1>
           <p style={styles.subtitle}>

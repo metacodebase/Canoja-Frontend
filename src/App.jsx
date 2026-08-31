@@ -48,7 +48,7 @@ function App() {
       <AuthProvider>
         <div style={{ minHeight: "100vh" }}>
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="/explore" element={<ConsumerExplore />} />
             <Route path="/explore/all" element={<ConsumerAllShops />} />
             <Route path="/shop-finder" element={<Navigate to="/explore" replace />} />
