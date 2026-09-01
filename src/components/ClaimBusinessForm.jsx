@@ -5,8 +5,10 @@ import "react-toastify/dist/ReactToastify.css";
 import canojaLogo from "../assets/canojaLogo.png";
 import bannerBoxesImage from "../assets/bannerBoxes.png";
 import api from "../services/api";
+import "./claimBusinessForm.css";
 
 const ClaimBusinessForm = () => {
+  const theme = localStorage.getItem("canoja-theme") || "dark";
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
@@ -23,7 +25,8 @@ const ClaimBusinessForm = () => {
     website_or_social_media_link: "",
 
     // Step 2: Owner/Representative Information
-    full_name: "",
+    first_name: "",
+    last_name: "",
     email_address: "",
     phone_number: "",
     role_or_position: "",
@@ -99,7 +102,8 @@ const ClaimBusinessForm = () => {
       }
     } else if (currentStep === 2) {
       if (
-        !formData.full_name ||
+        !formData.first_name ||
+        !formData.last_name ||
         !formData.email_address ||
         !formData.phone_number ||
         !formData.role_or_position
@@ -126,7 +130,8 @@ const ClaimBusinessForm = () => {
       !formData.legal_business_name ||
       !formData.physical_address ||
       !formData.business_phone_number ||
-      !formData.full_name ||
+      !formData.first_name ||
+      !formData.last_name ||
       !formData.email_address ||
       !formData.phone_number ||
       !formData.role_or_position
@@ -155,7 +160,9 @@ const ClaimBusinessForm = () => {
 
       // Contact Person Information
       const contactPerson = {
-        full_name: formData.full_name,
+        first_name: formData.first_name.trim(),
+        last_name: formData.last_name.trim(),
+        full_name: `${formData.first_name} ${formData.last_name}`.trim(),
         email_address: formData.email_address,
         phone_number: formData.phone_number,
         role_or_position: formData.role_or_position,
@@ -407,14 +414,40 @@ const ClaimBusinessForm = () => {
                   fontWeight: "600",
                   fontSize: "14px",
                 }}>
-                Full Name *
+                First Name *
               </label>
               <input
                 type="text"
-                name="full_name"
-                value={formData.full_name}
+                name="first_name"
+                value={formData.first_name}
                 onChange={handleInputChange}
-                placeholder="Enter Full Name"
+                placeholder="Enter First Name"
+                autoComplete="given-name"
+                required
+                style={inputStyle}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+              />
+            </div>
+
+            <div style={{ marginBottom: "24px" }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: "8px",
+                  color: "#374151",
+                  fontWeight: "600",
+                  fontSize: "14px",
+                }}>
+                Last Name *
+              </label>
+              <input
+                type="text"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleInputChange}
+                placeholder="Enter Last Name"
+                autoComplete="family-name"
                 required
                 style={inputStyle}
                 onFocus={handleInputFocus}
@@ -801,6 +834,7 @@ const ClaimBusinessForm = () => {
 
             {/* Ownership Attestation Checkbox */}
             <div
+              className="claim-attestation"
               style={{
                 marginTop: "48px",
                 padding: "24px",
@@ -850,6 +884,7 @@ const ClaimBusinessForm = () => {
 
   return (
     <div
+      className={`claim-business-form claim-business-form--${theme}`}
       style={{
         minHeight: "100vh",
         background: "#ffffff",
@@ -901,6 +936,7 @@ const ClaimBusinessForm = () => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path
+            className="claim-banner-curve"
             d="M0,0 Q360,40 720,45 T1440,40 L1440,50 L0,50 Z"
             fill="#ffffff"
           />
@@ -955,6 +991,7 @@ const ClaimBusinessForm = () => {
           }}>
           {currentStep > 1 && (
             <button
+              className="claim-back-button"
               type="button"
               onClick={handleBack}
               style={{
@@ -1084,4 +1121,3 @@ const handleInputBlur = (e) => {
 };
 
 export default ClaimBusinessForm;
-

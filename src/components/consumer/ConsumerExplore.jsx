@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { searchShops } from "../../services/api";
 import ExploreControls from "./ExploreControls";
 import ExploreFilterPanel from "./ExploreFilterPanel";
 import ExploreHeader from "./ExploreHeader";
+import ExploreMap from "./ExploreMap";
 import ExploreSection from "./ExploreSection";
 import { getCachedResults, setCachedResults } from "./exploreCache";
 import { buildSearchPayload, hasActiveFilters } from "./filterConfig";
@@ -20,6 +21,11 @@ const ConsumerExplore = () => {
   const { filters, setFilters, query, setQuery, view, setView, sort, setSort } = useExploreState();
   const { coords, locating, locationError } = useBrowserLocation();
   const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords);
+  const openShop = useCallback((shop) => {
+    const businessId = shop._id || shop.place_id || shop.id || "selected";
+    sessionStorage.setItem("selectedBusiness", JSON.stringify(shop));
+    navigate(`/business/${encodeURIComponent(businessId)}`, { state: { business: shop } });
+  }, [navigate]);
 
   useEffect(() => {
     const payload = buildSearchPayload(filters, sort);
@@ -64,7 +70,7 @@ const ConsumerExplore = () => {
         <ExploreHeader view={view} onViewChange={setView} />
         <ExploreControls query={query} onQueryChange={setQuery} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
         {filtersOpen && <ExploreFilterPanel value={filters} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setFilters(nextFilters); setFiltersOpen(false); }} />}
-        {view === "map" ? <div className="consumer-map"><span>⌖</span><p>Map results</p><small>{visibleShops.length} operators in this area</small></div> : <>
+        {view === "map" ? <ExploreMap shops={visibleShops} coords={coords} locating={locating} locationError={locationError} onShopSelect={openShop} /> : <>
           <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={locationError || "No spotlight operators yet."} loading={spotlightLoading || locating} />
           <ExploreSection
             title="All"
