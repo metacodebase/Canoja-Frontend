@@ -51,15 +51,23 @@ const ChangeEmailModal = ({ onClose }) => {
 
         {step === "email" ? <>
           <label style={styles.label}>Current Email</label>
-          <span style={{ ...styles.inputWrap, opacity: .55 }}><input style={styles.input} value={user?.email || ""} disabled /><LockKeyhole size={16} /></span>
+          <span style={styles.inputWrap}>
+            <input style={{ ...styles.input, ...styles.disabledInput }} value={user?.email || ""} disabled />
+            <LockKeyhole size={16} color="rgba(255,255,255,.38)" />
+          </span>
           <label style={styles.label}>New Email Address</label>
           <span style={styles.inputWrap}><Mail size={18} /><input style={styles.input} value={newEmail} onChange={(event) => setNewEmail(event.target.value)} type="email" placeholder="Enter new email" autoFocus /></span>
         </> : <>
           <label style={styles.label}>Verification Code</label>
-          <span style={styles.inputWrap}><LockKeyhole size={18} /><input style={{ ...styles.input, letterSpacing: "5px" }} value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))} inputMode="numeric" placeholder="000000" autoFocus /></span>
+          <span style={styles.inputWrap}><LockKeyhole size={18} />
+            <input style={{ ...styles.input, letterSpacing: "5px" }} value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))}
+              inputMode="numeric" placeholder="000000" autoFocus />
+          </span>
           <button type="button" onClick={() => setStep("email")} style={styles.back}>Change email address</button>
         </>}
-        <button type="submit" disabled={loading} style={{ ...styles.submit, opacity: loading ? .6 : 1 }}>{loading ? "PLEASE WAIT..." : step === "email" ? "SEND VERIFICATION CODE" : "VERIFY & UPDATE EMAIL"}</button>
+        <button type="submit" disabled={loading} style={{ ...styles.submit, opacity: loading ? .6 : 1 }}>
+          {loading ? "PLEASE WAIT..." : step === "email" ? "SEND VERIFICATION CODE" : "VERIFY & UPDATE EMAIL"}
+        </button>
       </form>
     </div>
   );
@@ -71,8 +79,14 @@ const styles = {
   close: { position: "absolute", top: "17px", right: "17px", width: "36px", height: "36px", display: "grid", placeItems: "center", borderRadius: "10px", border: "1px solid rgba(64,234,84,.35)", background: "transparent", color: "#fff", cursor: "pointer" },
   icon: { width: "70px", height: "70px", margin: "0 auto 17px", display: "grid", placeItems: "center", borderRadius: "20px", background: "rgba(64,234,84,.12)", color: "#40ea54" },
   title: { margin: "0 0 8px", textAlign: "center", fontSize: "25px" }, subtitle: { margin: "0 auto 27px", maxWidth: "350px", color: "rgba(255,255,255,.55)", textAlign: "center", lineHeight: 1.5 },
-  label: { display: "block", margin: "14px 0 7px", color: "#fff", fontSize: "13px", fontWeight: 700 }, inputWrap: { display: "flex", alignItems: "center", gap: "9px", padding: "0 13px", border: "1px solid #17644b", borderRadius: "11px", color: "rgba(255,255,255,.5)", background: "rgba(0,34,30,.65)" },
-  input: { width: "100%", padding: "13px 0", border: 0, outline: 0, background: "transparent", color: "#fff", fontSize: "14px" }, submit: { width: "100%", marginTop: "24px", padding: "14px", border: 0, borderRadius: "11px", background: "linear-gradient(90deg,#40ea54,#04ca8f)", color: "#021c15", fontWeight: 900, cursor: "pointer" }, back: { marginTop: "10px", border: 0, background: "transparent", color: "#40ea54", cursor: "pointer" },
+  label: { display: "block", margin: "14px 0 7px", color: "#fff", fontSize: "13px", fontWeight: 700 },
+  inputWrap: {
+    display: "flex", alignItems: "center", gap: "9px", padding: "0 13px", border: "1px solid #17644b",
+    borderRadius: "11px", color: "rgba(255,255,255,.5)", background: "#102724"
+  },
+  input: { width: "100%", padding: "13px 0", border: 0, outline: 0, background: "transparent", color: "#fff", fontSize: "14px" },
+  disabledInput: { color: "rgba(255,255,255,.5)", WebkitTextFillColor: "rgba(255,255,255,.5)", opacity: 1 },
+  submit: { width: "100%", marginTop: "24px", padding: "14px", border: 0, borderRadius: "11px", background: "linear-gradient(90deg,#40ea54,#04ca8f)", color: "#021c15", fontWeight: 900, cursor: "pointer" }, back: { marginTop: "10px", border: 0, background: "transparent", color: "#40ea54", cursor: "pointer" },
 };
 
 export default ChangeEmailModal;
