@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Menu, X } from "lucide-react";
 import canojaLogo from "../../assets/canojaLogo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -33,6 +34,7 @@ export default function AdminShell({ children }) {
   const { logout } = useAuth();
   const queryClient = useQueryClient();
   const [showCP, setShowCP] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { theme, toggleTheme } = useAdminTheme();
 
   const handleLogout = async () => {
@@ -68,7 +70,7 @@ export default function AdminShell({ children }) {
     }
     return (
       <button
-        onClick={() => navigate(path)}
+        onClick={() => { setMenuOpen(false); navigate(path); }}
         className="flex items-center w-full px-[14px] py-[12px] rounded-[14px] text-[16px] transition-all text-left cursor-pointer"
         style={{
           background: active ? "rgba(255,255,255,0.10)" : "transparent",
@@ -103,16 +105,19 @@ export default function AdminShell({ children }) {
   );
 
   return (
-    <div className={`admin-theme admin-theme--${theme} flex min-h-screen`} style={{ background: "#f6f9f8", fontFamily: "Inter, sans-serif" }}>
+    <div className={`admin-theme admin-shell admin-theme--${theme} flex min-h-screen`} style={{ background: "#f6f9f8", fontFamily: "Inter, sans-serif" }}>
+      <button type="button" className="admin-menu-trigger" aria-label="Open admin menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><Menu size={22} /></button>
+      {menuOpen && <button type="button" className="admin-sidebar-backdrop" aria-label="Close admin menu" onClick={() => setMenuOpen(false)} />}
       {/* Sidebar */}
       <aside
-        className="sticky top-0 h-screen shrink-0 flex flex-col"
+        className={`admin-sidebar sticky top-0 h-screen shrink-0 flex flex-col${menuOpen ? " admin-sidebar--open" : ""}`}
         style={{
           width: "279px",
           background: "linear-gradient(180deg, #0d3b2a 0%, #145237 100%)",
           borderRight: "0.8px solid rgba(255,255,255,0.08)",
         }}
       >
+        <button type="button" className="admin-sidebar-close" aria-label="Close admin menu" onClick={() => setMenuOpen(false)}><X size={21} /></button>
         {/* Brand */}
         <div className="flex items-center gap-[12px]" style={{ padding: "24px 24px 0 24px" }}>
           <div
@@ -224,7 +229,7 @@ export default function AdminShell({ children }) {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 min-w-0 p-6">
+      <main className="admin-main flex-1 min-w-0 p-6">
         {children}
       </main>
 
