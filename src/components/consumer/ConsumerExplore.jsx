@@ -5,6 +5,7 @@ import ExploreControls from "./ExploreControls";
 import ExploreFilterPanel from "./ExploreFilterPanel";
 import ExploreHeader from "./ExploreHeader";
 import ExploreSection from "./ExploreSection";
+import { getCachedResults, setCachedResults } from "./exploreCache";
 import { buildSearchPayload, hasActiveFilters } from "./filterConfig";
 import useBrowserLocation from "./useBrowserLocation";
 import useExploreState from "./useExploreState";
@@ -13,8 +14,8 @@ import "./consumerExplore.css";
 
 const ConsumerExplore = () => {
   const navigate = useNavigate();
-  const [shops, setShops] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [shops, setShops] = useState(() => getCachedResults("all") || []);
+  const [loading, setLoading] = useState(() => !getCachedResults("all"));
   const [filtersOpen, setFiltersOpen] = useState(false);
   const { filters, setFilters, query, setQuery, view, setView, sort, setSort } = useExploreState();
   const { coords, locating, locationError } = useBrowserLocation();
@@ -24,17 +25,27 @@ const ConsumerExplore = () => {
     const payload = buildSearchPayload(filters, sort);
     const hasFilterLocation = filters.region || filters.zipCode || filters.state;
     if (!hasFilterLocation && !coords) {
-      setShops([]);
-      setLoading(locating);
+      setLoading(locating && shops.length === 0);
       return;
     }
     if (!hasFilterLocation) Object.assign(payload, coords);
+    const requestKey = JSON.stringify(payload);
+    const cached = getCachedResults("all", requestKey);
+    if (cached) {
+      setShops(cached);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     searchShops(payload)
-      .then((result) => setShops(result?.data?.shops || []))
+      .then((result) => {
+        const nextShops = result?.data?.shops || [];
+        setCachedResults("all", requestKey, nextShops);
+        setShops(nextShops);
+      })
       .catch(() => setShops([]))
       .finally(() => setLoading(false));
-  }, [coords, filters, locating, sort]);
+  }, [coords, filters, locating, shops.length, sort]);
 
   const visibleShops = useMemo(() => {
     const term = query.trim().toLowerCase();
