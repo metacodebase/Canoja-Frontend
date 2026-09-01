@@ -52,3 +52,21 @@
   background: #18332e !important;
   color: #e8f3ef !important;
 }
+
+@media (min-width: 800px) {
+  .claim-fields-step {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 24px;
+  }
+
+  .claim-fields-step > h2,
+  .claim-fields-step > .claim-attestation {
+    flex: 1 1 100%;
+  }
+
+  .claim-fields-step > div:not(.claim-attestation) {
+    min-width: 0;
+    flex: 1 1 calc(50% - 12px);
+  }
+}

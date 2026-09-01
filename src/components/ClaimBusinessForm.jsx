@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ArrowRight } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -121,7 +122,9 @@ const ClaimBusinessForm = () => {
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+      return;
     }
+    navigate("/explore");
   };
 
   const handleSubmit = async () => {
@@ -281,7 +284,7 @@ const ClaimBusinessForm = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div>
+          <div className="claim-fields-step">
             <h2
               style={{
                 fontSize: "28px",
@@ -391,7 +394,7 @@ const ClaimBusinessForm = () => {
 
       case 2:
         return (
-          <div>
+          <div className="claim-fields-step">
             <h2
               style={{
                 fontSize: "28px",
@@ -576,7 +579,7 @@ const ClaimBusinessForm = () => {
 
       case 3:
         return (
-          <div>
+          <div className="claim-fields-step">
             <h2
               style={{
                 fontSize: "28px",
@@ -710,7 +713,7 @@ const ClaimBusinessForm = () => {
 
       case 4:
         return (
-          <div>
+          <div className="claim-fields-step">
             <h2
               style={{
                 fontSize: "28px",
@@ -972,7 +975,7 @@ const ClaimBusinessForm = () => {
       {/* Form Container */}
       <div
         style={{
-          maxWidth: "600px",
+          maxWidth: "960px",
           margin: "0 auto",
           padding: "0 24px 80px 24px",
         }}>
@@ -983,35 +986,33 @@ const ClaimBusinessForm = () => {
           style={{
             display: "flex",
             gap: "16px",
-            marginTop: "48px",
-            justifyContent: currentStep === 1 ? "flex-end" : "space-between",
+            marginTop: "20px",
+            justifyContent: "space-between",
           }}>
-          {currentStep > 1 && (
-            <button
-              className="claim-back-button"
-              type="button"
-              onClick={handleBack}
-              style={{
-                flex: currentStep === totalSteps ? 1 : "none",
-                padding: "14px 32px",
-                background: "#f3f4f6",
-                color: "#374151",
-                border: "none",
-                borderRadius: "12px",
-                fontWeight: "600",
-                fontSize: "16px",
-                cursor: "pointer",
-                transition: "all 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "#e5e7eb";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "#f3f4f6";
-              }}>
-              Back
-            </button>
-          )}
+          <button
+            className="claim-back-button"
+            type="button"
+            onClick={handleBack}
+            style={{
+              flex: currentStep === totalSteps ? 1 : "none",
+              padding: "14px 32px",
+              background: "#f3f4f6",
+              color: "#374151",
+              border: "none",
+              borderRadius: "12px",
+              fontWeight: "600",
+              fontSize: "16px",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = "#e5e7eb";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "#f3f4f6";
+            }}>
+            Back
+          </button>
 
           {currentStep < totalSteps ? (
             <button
@@ -1019,6 +1020,10 @@ const ClaimBusinessForm = () => {
               onClick={handleNext}
               style={{
                 flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
                 padding: "14px 32px",
                 background: "linear-gradient(135deg, #059669, #10b981)",
                 color: "#ffffff",
@@ -1038,7 +1043,7 @@ const ClaimBusinessForm = () => {
                 e.target.style.transform = "translateY(0)";
                 e.target.style.boxShadow = "0 4px 6px -1px rgba(16, 185, 129, 0.2)";
               }}>
-              Next
+              Next <ArrowRight size={18} strokeWidth={2.25} />
             </button>
           ) : (
             <button
