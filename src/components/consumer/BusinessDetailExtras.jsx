@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import BusinessDetailMap from "./BusinessDetailMap";
 import MaterialIcon from "./MaterialIcon";
 
 const getMapUrl = (business) => {
@@ -23,7 +24,7 @@ const BusinessDetailExtras = ({ business }) => {
     <>
       {services.length > 0 && <section className="detail-extra-section"><h2>Products/Services Offered</h2><div className="service-chips">{services.map((service) => <span key={service}>{service}</span>)}</div></section>}
       <a className="directions-card" href={mapUrl} target="_blank" rel="noreferrer"><strong>Directions</strong><span><MaterialIcon name="location-pin" size={18} />Go To Map</span></a>
-      <a className="map-preview" href={mapUrl} target="_blank" rel="noreferrer" aria-label="Open directions in Google Maps"><span><MaterialIcon name="location-pin" size={34} /></span></a>
+      <BusinessDetailMap business={business} mapUrl={mapUrl} />
       <section className="detail-extra-section reviews-section">
         <h2>Reviews</h2>
         <p>{hasReviews ? "More reviews are available on Google." : "No reviews available."}</p>
