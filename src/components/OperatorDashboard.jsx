@@ -7,8 +7,6 @@ import { toast } from "react-toastify";
 import {
   useBusinessDashboard,
   useBusinessLocation,
-  useBusinessProfile,
-  useUpdateBusinessProfile,
   useToggleBusinessVisibility,
   useUploadMenu,
 } from "../services/business";
@@ -24,12 +22,12 @@ const LocationRow = ({ icon, label, value, last = false }) => (
 );
 
 const DashboardActionRow = ({ icon, iconColor, title, description, badge, locked, onClick }) => (
-  <button type="button" onClick={onClick} style={{ width: "100%", display: "flex", alignItems: "center", gap: "16px", padding: "16px 20px", background: "#f9fafb", borderRadius: "12px", border: "1px solid #e5e7eb", color: "inherit", font: "inherit", textAlign: "left", cursor: "pointer", transition: "all .2s ease" }}
-    onMouseEnter={(e) => { e.currentTarget.style.background = "#f3f4f6"; e.currentTarget.style.borderColor = "#10b981"; }}
-    onMouseLeave={(e) => { e.currentTarget.style.background = "#f9fafb"; e.currentTarget.style.borderColor = "#e5e7eb"; }}>
-    <span style={{ width: "40px", height: "40px", display: "grid", placeItems: "center", flexShrink: 0, borderRadius: "10px", background: `${iconColor}20`, color: iconColor }}>{icon}</span>
+  <button type="button" onClick={locked ? undefined : onClick} disabled={locked} style={{ width: "100%", display: "flex", alignItems: "center", gap: "16px", padding: "16px 20px", background: "#f9fafb", borderRadius: "12px", border: "1px solid #e5e7eb", color: "inherit", font: "inherit", textAlign: "left", cursor: locked ? "not-allowed" : "pointer", opacity: locked ? 0.58 : 1, transition: "all .2s ease" }}
+    onMouseEnter={(e) => { if (!locked) { e.currentTarget.style.background = "#f3f4f6"; e.currentTarget.style.borderColor = "#10b981"; } }}
+    onMouseLeave={(e) => { if (!locked) { e.currentTarget.style.background = "#f9fafb"; e.currentTarget.style.borderColor = "#e5e7eb"; } }}>
+    <span style={{ width: "40px", height: "40px", display: "grid", placeItems: "center", flexShrink: 0, borderRadius: "10px", background: locked ? "#e5e7eb" : `${iconColor}20`, color: locked ? "#6b7280" : iconColor }}>{icon}</span>
     <span style={{ minWidth: 0, flex: 1 }}>
-      <span style={{ display: "flex", alignItems: "center", gap: "8px" }}><strong style={{ color: "#1e293b", fontSize: "16px" }}>{title}</strong>{badge && <small style={{ padding: "2px 8px", borderRadius: "4px", background: "#10b981", color: "#fff", fontSize: "11px", fontWeight: 700 }}>{badge}</small>}</span>
+      <span style={{ display: "flex", alignItems: "center", gap: "8px" }}><strong style={{ color: "#1e293b", fontSize: "16px" }}>{title}</strong>{(locked || badge) && <small style={{ padding: "2px 8px", borderRadius: "4px", background: locked ? "#64748b" : "#10b981", color: "#fff", fontSize: "11px", fontWeight: 700 }}>{locked ? "STARTER ONLY" : badge}</small>}</span>
       <small style={{ display: "block", marginTop: "4px", color: "#6b7280", fontSize: "14px" }}>{description}</small>
     </span>
     {locked ? <LockKeyhole size={18} color="#8fa99f" /> : <ChevronRight size={20} color="#6b7280" />}
@@ -39,17 +37,13 @@ const DashboardActionRow = ({ icon, iconColor, title, description, badge, locked
 const OperatorDashboard = () => {
   const navigate = useNavigate();
   const { businesses } = useAuth();
-  const [showProfileModal, setShowProfileModal] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showMenuUpload, setShowMenuUpload] = useState(false);
   const [showMenuViewer, setShowMenuViewer] = useState(false);
-  const [profileFormData, setProfileFormData] = useState({});
 
   // API Hooks
   const { data: dashboardData, isLoading: dashboardLoading, error: dashboardError } = useBusinessDashboard();
   const { data: locationData, isLoading: locationLoading } = useBusinessLocation();
-  const { data: profileData } = useBusinessProfile();
-  const updateProfileMutation = useUpdateBusinessProfile();
   const toggleVisibilityMutation = useToggleBusinessVisibility();
   const uploadMenuMutation = useUploadMenu();
 
@@ -95,22 +89,6 @@ const OperatorDashboard = () => {
       setShowMenuUpload(false);
     } catch (error) {
       toast.error(error.message || "Failed to upload menu");
-    }
-  };
-
-  // Handle profile update
-  const handleProfileUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      // Remove email from update data - it cannot be changed
-      const updateData = { ...profileFormData };
-      delete updateData.email;
-      await updateProfileMutation.mutateAsync(updateData);
-      toast.success("Profile updated successfully!");
-      setShowProfileModal(false);
-      setProfileFormData({});
-    } catch (error) {
-      toast.error(error.message || "Failed to update profile");
     }
   };
 
@@ -416,12 +394,7 @@ const OperatorDashboard = () => {
 
             {/* Profile Information */}
             <div
-              onClick={() => {
-                if (profileData?.data) {
-                  setProfileFormData(profileData.data);
-                }
-                setShowProfileModal(true);
-              }}
+              onClick={() => navigate("/operator/profile")}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -480,6 +453,7 @@ const OperatorDashboard = () => {
                 borderRadius: "12px",
                 border: "1px solid #e5e7eb",
                 transition: "all 0.2s ease",
+                opacity: planTier === "free" ? 0.58 : 1,
               }}>
               <div style={{ display: "flex", alignItems: "center", gap: "16px", flex: 1 }}>
                 <div style={{
@@ -500,7 +474,7 @@ const OperatorDashboard = () => {
                     <h3 style={{ fontSize: "16px", fontWeight: "600", color: "#1e293b", margin: 0 }}>
                       Menu Snapshot
                     </h3>
-                    {businessHealth?.menu_freshness?.status === "no_menu" && (
+                    {planTier !== "free" && businessHealth?.menu_freshness?.status === "no_menu" && (
                       <span style={{
                         fontSize: "12px",
                         fontWeight: "600",
@@ -514,11 +488,13 @@ const OperatorDashboard = () => {
                     )}
                   </div>
                   <p style={{ fontSize: "14px", color: "#6b7280", margin: 0 }}>
-                    {menuUrl ? "View or update your menu" : "Upload your latest menu image or PDF"}
+                    {planTier === "free" ? "Upgrade to Starter to upload menu snapshots" : menuUrl ? "View or update your menu" : "Upload your latest menu image or PDF"}
                   </p>
                 </div>
               </div>
-              <div style={{ display: "flex", gap: "8px" }}>
+              {planTier === "free" ? (
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "#64748b" }}><span style={{ padding: "3px 8px", borderRadius: "5px", background: "#64748b", color: "#fff", fontSize: "11px", fontWeight: 700 }}>STARTER ONLY</span><LockKeyhole size={18} /></div>
+              ) : <div style={{ display: "flex", gap: "8px" }}>
                 {menuUrl && (
                   <button
                     onClick={() => setShowMenuViewer(true)}
@@ -571,7 +547,7 @@ const OperatorDashboard = () => {
                   }}>
                   {menuUrl ? "Update" : "Upload"}
                 </button>
-              </div>
+              </div>}
             </div>
 
             <DashboardActionRow
@@ -581,7 +557,7 @@ const OperatorDashboard = () => {
               description={planTier === "free" ? "Upgrade to Starter to unlock Spotlight" : isSpotlighted ? "Your business is featured in Spotlight" : "Feature your business in the Spotlight section"}
               badge={planTier === "free" ? undefined : isSpotlighted ? "ON" : "OFF"}
               locked={planTier === "free"}
-              onClick={() => planTier === "free" ? navigate("/operator/billing") : navigate("/operator/spotlight")}
+              onClick={() => navigate("/operator/spotlight")}
             />
           </div>
         </div>
@@ -606,7 +582,7 @@ const OperatorDashboard = () => {
             title="Analytics"
             description={planTier === "free" ? "Upgrade to Starter to unlock insights" : "Views, clicks, search appearances & more"}
             locked={planTier === "free"}
-            onClick={() => planTier === "free" ? navigate("/operator/billing") : navigate("/operator/analytics")}
+            onClick={() => navigate("/operator/analytics")}
           />
         </div>
 
@@ -659,169 +635,6 @@ const OperatorDashboard = () => {
             ) : (
               <p style={{ color: "rgba(255,255,255,.6)", padding: "30px 0", textAlign: "center" }}>No location data available</p>
             )}
-          </div>
-        </div>
-      )}
-
-      {/* Profile Modal */}
-      {showProfileModal && (
-        <div style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: "rgba(0, 0, 0, 0.5)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          zIndex: 1000,
-        }}
-        onClick={() => setShowProfileModal(false)}>
-          <div style={{
-            background: "#ffffff",
-            borderRadius: "16px",
-            padding: "24px",
-            maxWidth: "600px",
-            width: "90%",
-            maxHeight: "80vh",
-            overflow: "auto",
-          }}
-          onClick={(e) => e.stopPropagation()}>
-            <h2 style={{ fontSize: "24px", fontWeight: "700", margin: "0 0 20px 0" }}>
-              Profile Information
-            </h2>
-            <form onSubmit={handleProfileUpdate}>
-              <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-                <div>
-                  <label style={{ fontSize: "14px", fontWeight: "600", color: "#374151", display: "block", marginBottom: "4px" }}>
-                    Business Name
-                  </label>
-                  <input
-                    type="text"
-                    value={profileFormData.business_name || ""}
-                    onChange={(e) => setProfileFormData({ ...profileFormData, business_name: e.target.value })}
-                    style={{
-                      width: "100%",
-                      padding: "10px 12px",
-                      border: "1px solid #d1d5db",
-                      borderRadius: "8px",
-                      fontSize: "16px",
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontSize: "14px", fontWeight: "600", color: "#374151", display: "block", marginBottom: "4px" }}>
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={profileFormData.phone || ""}
-                    onChange={(e) => setProfileFormData({ ...profileFormData, phone: e.target.value })}
-                    style={{
-                      width: "100%",
-                      padding: "10px 12px",
-                      border: "1px solid #d1d5db",
-                      borderRadius: "8px",
-                      fontSize: "16px",
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontSize: "14px", fontWeight: "600", color: "#374151", display: "block", marginBottom: "4px" }}>
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={profileFormData.email || ""}
-                    disabled
-                    readOnly
-                    style={{
-                      width: "100%",
-                      padding: "10px 12px",
-                      border: "1px solid #d1d5db",
-                      borderRadius: "8px",
-                      fontSize: "16px",
-                      background: "#f3f4f6",
-                      color: "#6b7280",
-                      cursor: "not-allowed",
-                    }}
-                  />
-                  <p style={{ fontSize: "12px", color: "#6b7280", margin: "4px 0 0 0" }}>
-                    Email cannot be changed 
-                  </p>
-                </div>
-                <div>
-                  <label style={{ fontSize: "14px", fontWeight: "600", color: "#374151", display: "block", marginBottom: "4px" }}>
-                    Website
-                  </label>
-                  <input
-                    type="url"
-                    value={profileFormData.website || ""}
-                    onChange={(e) => setProfileFormData({ ...profileFormData, website: e.target.value })}
-                    style={{
-                      width: "100%",
-                      padding: "10px 12px",
-                      border: "1px solid #d1d5db",
-                      borderRadius: "8px",
-                      fontSize: "16px",
-                    }}
-                  />
-                </div>
-                <div>
-                  <label style={{ fontSize: "14px", fontWeight: "600", color: "#374151", display: "block", marginBottom: "4px" }}>
-                    Description
-                  </label>
-                  <textarea
-                    value={profileFormData.description || ""}
-                    onChange={(e) => setProfileFormData({ ...profileFormData, description: e.target.value })}
-                    rows={4}
-                    style={{
-                      width: "100%",
-                      padding: "10px 12px",
-                      border: "1px solid #d1d5db",
-                      borderRadius: "8px",
-                      fontSize: "16px",
-                      resize: "vertical",
-                    }}
-                  />
-                </div>
-              </div>
-              <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
-                <button
-                  type="button"
-                  onClick={() => setShowProfileModal(false)}
-                  style={{
-                    flex: 1,
-                    padding: "12px",
-                    background: "#f3f4f6",
-                    border: "none",
-                    borderRadius: "8px",
-                    fontSize: "16px",
-                    fontWeight: "600",
-                    color: "#374151",
-                    cursor: "pointer",
-                  }}>
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={updateProfileMutation.isPending}
-                  style={{
-                    flex: 1,
-                    padding: "12px",
-                    background: updateProfileMutation.isPending ? "#9ca3af" : "linear-gradient(135deg, #10b981, #059669)",
-                    border: "none",
-                    borderRadius: "8px",
-                    fontSize: "16px",
-                    fontWeight: "600",
-                    color: "#ffffff",
-                    cursor: updateProfileMutation.isPending ? "not-allowed" : "pointer",
-                  }}>
-                  {updateProfileMutation.isPending ? "Saving..." : "Save Changes"}
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}

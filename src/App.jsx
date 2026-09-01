@@ -13,6 +13,7 @@ import OperatorBilling from "./components/OperatorBilling";
 import OperatorSettings from "./components/OperatorSettings";
 import OperatorSpotlight from "./components/OperatorSpotlight";
 import OperatorAnalytics from "./components/OperatorAnalytics";
+import OperatorProfile from "./components/OperatorProfile";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -112,6 +113,7 @@ function App() {
             <Route path="/operator/settings" element={<RoleRoute allowedRoles={["operator"]}><OperatorSettings /></RoleRoute>} />
             <Route path="/operator/spotlight" element={<RoleRoute allowedRoles={["operator"]}><OperatorSpotlight /></RoleRoute>} />
             <Route path="/operator/analytics" element={<RoleRoute allowedRoles={["operator"]}><OperatorAnalytics /></RoleRoute>} />
+            <Route path="/operator/profile" element={<RoleRoute allowedRoles={["operator"]}><OperatorProfile /></RoleRoute>} />
             <Route 
               path="/operator/dashboard" 
               element={

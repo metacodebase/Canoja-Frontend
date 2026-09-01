@@ -1,7 +1,9 @@
+import { Search } from "lucide-react";
+
 const ExploreControls = ({ query, onQueryChange, filtersOpen, onFiltersToggle, sort, onSortChange }) => (
   <div className="explore-controls">
     <label className="consumer-search">
-      <span>⌕</span>
+      <Search aria-hidden="true" size={16} strokeWidth={2} />
       <input value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder="Search" />
     </label>
     <button className={filtersOpen ? "active" : ""} onClick={onFiltersToggle} aria-label="Filters">☷</button>

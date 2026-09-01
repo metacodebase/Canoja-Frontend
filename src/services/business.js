@@ -77,6 +77,29 @@ export const useUpdateBusinessProfile = () => {
   });
 };
 
+export const uploadBusinessPhoto = async (photoFile) => {
+  try {
+    const formData = new FormData();
+    formData.append("photo", photoFile);
+    const response = await api.post("/business/photo", formData);
+    return response.data;
+  } catch (error) {
+    console.error("Error uploading business photo:", error);
+    throw new Error(error.response?.data?.error || "Failed to upload business photo");
+  }
+};
+
+export const useUploadBusinessPhoto = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: uploadBusinessPhoto,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["businessProfile"] });
+      queryClient.invalidateQueries({ queryKey: ["businessDashboard"] });
+    },
+  });
+};
+
 // Toggle Business Visibility
 export const toggleBusinessVisibility = async (visibility) => {
   try {

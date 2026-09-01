@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Pagination, ConfigProvider, Drawer } from "antd";
 import AdminShell from "./AdminShell";
 import { useCompareShops, useAdminCanojaVerified } from "../../services/admin";
+import { Search } from "lucide-react";
 
 const C = {
   border: "#dce7e1",
@@ -489,10 +490,10 @@ export default function AdminVerifiedPharmacies() {
               Search by name, city, or license number. Verification is visible by default so consumers quickly understand who is licensed, active, and trusted on Canoja.
             </p>
             <div style={{ position: "relative", maxWidth: "520px" }}>
-              <span style={{
+              <Search aria-hidden="true" size={16} strokeWidth={2} style={{
                 position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)",
-                color: "#8090a3", fontSize: "14.4px", pointerEvents: "none",
-              }}>⌕</span>
+                color: "#8090a3", pointerEvents: "none",
+              }} />
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}

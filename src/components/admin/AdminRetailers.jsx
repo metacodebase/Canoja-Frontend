@@ -4,6 +4,7 @@ import AdminShell from "./AdminShell";
 import { useAdminRetailers, useAdminAuditLog, useRecentAuditLog, useCreateRetailer } from "../../services/admin";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { Search } from "lucide-react";
 
 // ── Design tokens (exact from Figma) ─────────────────────────────────────────
 const C = {
@@ -876,15 +877,15 @@ export default function AdminRetailers() {
             <div className="admin-queue-search-wrap" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               {/* Search pill */}
               <div style={{ position: "relative", width: "100%" }}>
-                <span
+                <Search
+                  aria-hidden="true"
+                  size={16}
+                  strokeWidth={2}
                   style={{
                     position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)",
-                    color: "#8090a3", fontSize: "14.4px", pointerEvents: "none",
-                    fontFamily: "Inter, 'Noto Sans', sans-serif",
+                    color: "#8090a3", pointerEvents: "none",
                   }}
-                >
-                  ⌕
-                </span>
+                />
                 <input
                   value={search}
                   onChange={e => setSearch(e.target.value)}

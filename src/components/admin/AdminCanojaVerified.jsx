@@ -12,6 +12,7 @@ import {
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import api from "../../services/api";
 import { toast } from "react-toastify";
+import { Search } from "lucide-react";
 
 const C = {
   border: "#dce7e1",
@@ -662,7 +663,7 @@ export default function AdminCanojaVerified() {
           </div>
           <div className="admin-queue-search-wrap" style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
             <div style={{ position: "relative", width: "100%" }}>
-              <span style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", fontSize: "14.4px", pointerEvents: "none" }}>⌕</span>
+              <Search aria-hidden="true" size={16} strokeWidth={2} style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", pointerEvents: "none" }} />
               <input
                 value={search}
                 onChange={e => setSearch(e.target.value)}
