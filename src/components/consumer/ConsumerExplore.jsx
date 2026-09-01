@@ -11,10 +11,12 @@ import { buildSearchPayload, hasActiveFilters } from "./filterConfig";
 import useBrowserLocation from "./useBrowserLocation";
 import useExploreState from "./useExploreState";
 import useSpotlightShops from "./useSpotlightShops";
+import useAdminTheme from "../admin/useAdminTheme";
 import "./consumerExplore.css";
 
 const ConsumerExplore = () => {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useAdminTheme();
   const [shops, setShops] = useState(() => getCachedResults("all") || []);
   const [loading, setLoading] = useState(() => !getCachedResults("all"));
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -65,9 +67,10 @@ const ConsumerExplore = () => {
   }, [query, shops, sort]);
 
   return (
-    <main className="consumer-explore">
-      <div className="consumer-shell">
-        <ExploreHeader view={view} onViewChange={setView} />
+    <div className={`admin-theme operator-theme admin-theme--${theme}`}>
+      <main className="consumer-explore">
+        <div className="consumer-shell">
+        <ExploreHeader view={view} onViewChange={setView} theme={theme} onThemeToggle={toggleTheme} />
         <ExploreControls query={query} onQueryChange={setQuery} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
         {filtersOpen && <ExploreFilterPanel value={filters} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setFilters(nextFilters); setFiltersOpen(false); }} />}
         {view === "map" ? <ExploreMap shops={visibleShops} coords={coords} locating={locating} locationError={locationError} onShopSelect={openShop} /> : <>
@@ -80,8 +83,9 @@ const ConsumerExplore = () => {
             onSeeAll={() => navigate("/explore/all", { state: { filters, sort, query } })}
           />
         </>}
-      </div>
-    </main>
+        </div>
+      </main>
+    </div>
   );
 };
 

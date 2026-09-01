@@ -5,12 +5,14 @@ import BusinessCard from "./BusinessCard";
 import ExploreHeader from "./ExploreHeader";
 import { buildSearchPayload, EMPTY_FILTERS } from "./filterConfig";
 import useBrowserLocation from "./useBrowserLocation";
+import useAdminTheme from "../admin/useAdminTheme";
 import "./consumerExplore.css";
 
 const getShopKey = (shop) => shop._id || shop.place_id || shop.id;
 
 const ConsumerAllShops = () => {
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useAdminTheme();
   const { state } = useLocation();
   const filters = state?.filters || EMPTY_FILTERS;
   const sort = state?.sort || "";
@@ -66,9 +68,10 @@ const ConsumerAllShops = () => {
   }, [hasMore, loading]);
 
   return (
-    <main className="consumer-explore">
-      <div className="consumer-shell">
-        <ExploreHeader view="list" onViewChange={() => navigate("/explore")} />
+    <div className={`admin-theme operator-theme admin-theme--${theme}`}>
+      <main className="consumer-explore">
+        <div className="consumer-shell">
+        <ExploreHeader view="list" onViewChange={() => navigate("/explore")} theme={theme} onThemeToggle={toggleTheme} />
         <div className="all-shops-heading">
           <button onClick={() => navigate(-1)} aria-label="Back to Explore">‹</button>
           <h2>All operators</h2>
@@ -78,8 +81,9 @@ const ConsumerAllShops = () => {
         </div>
         {loading && <div className="consumer-state all-shops-loading">Loading more operators…</div>}
         {!loading && !shops.length && <div className="consumer-state">{locationError || "No operators found near this location."}</div>}
-      </div>
-    </main>
+        </div>
+      </main>
+    </div>
   );
 };
 
