@@ -23,7 +23,7 @@ export const hasActiveFilters = (filters) => Object.entries(filters).some(([key,
 });
 
 export const buildSearchPayload = (filters, sortBy) => {
-  const payload = { page: 1, limit: 30, sortBy: sortBy || undefined };
+  const payload = { page: 1, limit: 10, sortBy: sortBy || undefined };
   if (!filters.region) payload.radius = filters.radius;
   if (filters.region) payload.country = filters.region;
   if (filters.searchType === "zip" && filters.zipCode) payload.zipCode = filters.zipCode.trim();

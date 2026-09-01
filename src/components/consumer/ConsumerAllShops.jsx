@@ -4,6 +4,7 @@ import { searchShops } from "../../services/api";
 import BusinessCard from "./BusinessCard";
 import ExploreHeader from "./ExploreHeader";
 import { buildSearchPayload, EMPTY_FILTERS } from "./filterConfig";
+import useBrowserLocation from "./useBrowserLocation";
 import "./consumerExplore.css";
 
 const getShopKey = (shop) => shop._id || shop.place_id || shop.id;
@@ -19,16 +20,19 @@ const ConsumerAllShops = () => {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
   const observer = useRef(null);
+  const { coords, locating, locationError } = useBrowserLocation();
 
   const loadPage = useCallback(async (pageNumber, cancelled = () => false) => {
     setLoading(true);
     const payload = { ...buildSearchPayload(filters, sort), page: pageNumber, limit: 10 };
     if (query) payload.keyword = query;
     const hasFilterLocation = filters.region || filters.zipCode || filters.state;
-    const lat = Number(localStorage.getItem("userLatitude"));
-    const lng = Number(localStorage.getItem("userLongitude"));
-    if (!query && !hasFilterLocation && lat && lng) Object.assign(payload, { lat, lng });
-    else if (!query && !hasFilterLocation) { delete payload.radius; payload.country = "US"; }
+    if (!query && !hasFilterLocation && !coords) {
+      setLoading(locating);
+      setHasMore(false);
+      return;
+    }
+    if (!query && !hasFilterLocation) Object.assign(payload, coords);
 
     try {
       const result = await searchShops(payload);
@@ -44,7 +48,7 @@ const ConsumerAllShops = () => {
     } finally {
       if (!cancelled()) setLoading(false);
     }
-  }, [filters, query, sort]);
+  }, [coords, filters, locating, query, sort]);
 
   useEffect(() => {
     let cancelled = false;
@@ -73,7 +77,7 @@ const ConsumerAllShops = () => {
           {shops.map((shop, index) => <div key={getShopKey(shop) || index} ref={index === shops.length - 1 ? lastCardRef : null}><BusinessCard shop={shop} /></div>)}
         </div>
         {loading && <div className="consumer-state all-shops-loading">Loading more operators…</div>}
-        {!loading && !shops.length && <div className="consumer-state">No operators found near this location.</div>}
+        {!loading && !shops.length && <div className="consumer-state">{locationError || "No operators found near this location."}</div>}
       </div>
     </main>
   );

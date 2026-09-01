@@ -5,39 +5,36 @@ import ExploreControls from "./ExploreControls";
 import ExploreFilterPanel from "./ExploreFilterPanel";
 import ExploreHeader from "./ExploreHeader";
 import ExploreSection from "./ExploreSection";
-import { buildSearchPayload, EMPTY_FILTERS, hasActiveFilters } from "./filterConfig";
+import { buildSearchPayload, hasActiveFilters } from "./filterConfig";
+import useBrowserLocation from "./useBrowserLocation";
+import useExploreState from "./useExploreState";
+import useSpotlightShops from "./useSpotlightShops";
 import "./consumerExplore.css";
-
-const getCoordinates = () => ({
-  lat: Number(localStorage.getItem("userLatitude")),
-  lng: Number(localStorage.getItem("userLongitude")),
-});
 
 const ConsumerExplore = () => {
   const navigate = useNavigate();
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState("");
-  const [view, setView] = useState("list");
-  const [sort, setSort] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [filters, setFilters] = useState({ ...EMPTY_FILTERS });
+  const { filters, setFilters, query, setQuery, view, setView, sort, setSort } = useExploreState();
+  const { coords, locating, locationError } = useBrowserLocation();
+  const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords);
 
   useEffect(() => {
-    const { lat, lng } = getCoordinates();
     const payload = buildSearchPayload(filters, sort);
     const hasFilterLocation = filters.region || filters.zipCode || filters.state;
-    if (!hasFilterLocation && lat && lng) Object.assign(payload, { lat, lng });
-    else if (!hasFilterLocation) {
-      delete payload.radius;
-      Object.assign(payload, { country: "US" });
+    if (!hasFilterLocation && !coords) {
+      setShops([]);
+      setLoading(locating);
+      return;
     }
+    if (!hasFilterLocation) Object.assign(payload, coords);
     setLoading(true);
     searchShops(payload)
       .then((result) => setShops(result?.data?.shops || []))
       .catch(() => setShops([]))
       .finally(() => setLoading(false));
-  }, [filters, sort]);
+  }, [coords, filters, locating, sort]);
 
   const visibleShops = useMemo(() => {
     const term = query.trim().toLowerCase();
@@ -50,8 +47,6 @@ const ConsumerExplore = () => {
       : sort === "alphabetical" ? (a.name || "").localeCompare(b.name || "") : 0);
   }, [query, shops, sort]);
 
-  const spotlight = visibleShops.filter((shop) => shop.featured || shop.spotlight).slice(0, 5);
-
   return (
     <main className="consumer-explore">
       <div className="consumer-shell">
@@ -59,11 +54,11 @@ const ConsumerExplore = () => {
         <ExploreControls query={query} onQueryChange={setQuery} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
         {filtersOpen && <ExploreFilterPanel value={filters} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setFilters(nextFilters); setFiltersOpen(false); }} />}
         {view === "map" ? <div className="consumer-map"><span>⌖</span><p>Map results</p><small>{visibleShops.length} operators in this area</small></div> : <>
-          <ExploreSection title="Spotlight" shops={spotlight} spotlight emptyText="No spotlight operators yet." loading={loading} />
+          <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={locationError || "No spotlight operators yet."} loading={spotlightLoading || locating} />
           <ExploreSection
             title="All"
             shops={visibleShops.slice(0, 6)}
-            emptyText="No operators found near this location."
+            emptyText={locationError || "No operators found near this location."}
             loading={loading}
             onSeeAll={() => navigate("/explore/all", { state: { filters, sort, query } })}
           />
