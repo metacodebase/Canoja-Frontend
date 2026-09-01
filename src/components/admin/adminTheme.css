@@ -215,6 +215,19 @@
 .canoja-admin-dark .change-password-sheet input::placeholder { color: #718b81; }
 .canoja-admin-dark .change-password-sheet button[type="button"] { color: #9db4ab !important; }
 
+.operator-menu-trigger,
+.operator-sidebar-close,
+.operator-sidebar-backdrop { display: none; }
+
 @media (max-width: 760px) {
   .admin-theme-toggle { top: 12px; right: 12px; }
+  .operator-menu-trigger { position: fixed; z-index: 1002; top: 14px; left: 14px; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid rgba(64, 234, 84, .35); border-radius: 12px; background: rgba(7, 35, 29, .94); color: #e8f4ef; box-shadow: 0 8px 24px rgba(0, 0, 0, .28); cursor: pointer; }
+  .operator-sidebar { position: fixed !important; z-index: 1004; top: 0; left: 0; width: min(86vw, 300px) !important; height: 100dvh !important; transform: translateX(-105%); transition: transform .22s ease; box-shadow: 18px 0 45px rgba(0, 0, 0, .38); }
+  .operator-sidebar--open { transform: translateX(0); }
+  .operator-sidebar-close { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, .18); border-radius: 10px; background: rgba(255, 255, 255, .08); color: #fff; cursor: pointer; }
+  .operator-sidebar-backdrop { position: fixed; z-index: 1003; inset: 0; display: block; border: 0; background: rgba(1, 15, 17, .72); backdrop-filter: blur(3px); }
+  .operator-main { width: 100% !important; padding: 78px 16px 28px !important; }
+  .operator-billing-page { width: 100%; min-width: 0; }
+  .operator-plan-card { min-width: 0; min-height: 0 !important; padding: 22px 18px !important; overflow-wrap: anywhere; }
+  .operator-plan-card svg { flex-shrink: 0; }
 }

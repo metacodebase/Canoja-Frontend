@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Compass, CreditCard, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { Compass, CreditCard, LayoutDashboard, LogOut, Menu, Settings, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import canojaLogo from "../assets/canojaLogo.png";
@@ -25,6 +25,7 @@ const OperatorLayout = ({ children }) => {
   const { logout, user } = useAuth();
   const { theme, toggleTheme } = useAdminTheme();
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await api.post("/users/logout").catch(() => {});
@@ -36,7 +37,10 @@ const OperatorLayout = ({ children }) => {
 
   return (
     <div className={`admin-theme operator-theme admin-theme--${theme}`} style={styles.shell}>
-      <aside style={styles.sidebar}>
+      <button type="button" className="operator-menu-trigger" aria-label="Open operator menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><Menu size={22} /></button>
+      {menuOpen && <button type="button" className="operator-sidebar-backdrop" aria-label="Close operator menu" onClick={() => setMenuOpen(false)} />}
+      <aside className={`operator-sidebar${menuOpen ? " operator-sidebar--open" : ""}`} style={styles.sidebar}>
+        <button type="button" className="operator-sidebar-close" aria-label="Close operator menu" onClick={() => setMenuOpen(false)}><X size={21} /></button>
         <div style={styles.brand}>
           <span style={styles.logoWrap}><img src={canojaLogo} alt="Canoja" style={styles.logo} /></span>
           <span><strong style={styles.brandName}>Canoja</strong><small style={styles.brandRole}>Operator Dashboard</small></span>
@@ -53,7 +57,7 @@ const OperatorLayout = ({ children }) => {
           {NAV_ITEMS.map(({ label, path, icon }) => {
             const active = location.pathname === path;
             return (
-              <button key={path} type="button" onClick={() => navigate(path)} style={{ ...styles.navItem, ...(active ? styles.navItemActive : {}) }}>
+              <button key={path} type="button" onClick={() => { setMenuOpen(false); navigate(path); }} style={{ ...styles.navItem, ...(active ? styles.navItemActive : {}) }}>
                 {icon}<span>{label}</span>
               </button>
             );
@@ -65,7 +69,7 @@ const OperatorLayout = ({ children }) => {
           <button type="button" onClick={handleLogout} style={styles.bottomButton}><LogOut size={20} /><span>Logout</span></button>
         </div>
       </aside>
-      <main style={styles.main}>{children}</main>
+      <main className="operator-main" style={styles.main}>{children}</main>
       {showChangePassword && <ChangePasswordModal onClose={() => setShowChangePassword(false)} />}
     </div>
   );
