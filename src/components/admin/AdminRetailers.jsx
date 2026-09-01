@@ -491,7 +491,7 @@ function FilterRow({ label, count, active, onClick }) {
 // ── Stat card — exact Figma ───────────────────────────────────────────────────
 function StatCard({ label, value, delta, deltaBg, deltaColor }) {
   return (
-    <div
+    <div className="admin-queue-stat"
       style={{
         background: "#fff",
         border: "0.8px solid #dce7e1",
@@ -817,7 +817,7 @@ export default function AdminRetailers() {
   return (
     <AdminShell>
       {/* ── Outer frosted card (Figma: rounded-28, border rgba(194,210,202,0.5)) */}
-      <div
+      <div className="admin-queue-page"
         style={{
           background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.96) 100%)",
           border: "0.8px solid rgba(194,210,202,0.5)",
@@ -828,7 +828,7 @@ export default function AdminRetailers() {
         }}
       >
         {/* ── Sticky header bar ─────────────────────────────────────────── */}
-        <div
+        <div className="admin-queue-header"
           style={{
             position: "sticky",
             top: 0,
@@ -872,10 +872,10 @@ export default function AdminRetailers() {
           </div>
 
           {/* Right: search + buttons */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "15px", flexShrink: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div className="admin-retailer-controls" style={{ display: "flex", flexDirection: "column", gap: "15px", flexShrink: 0 }}>
+            <div className="admin-queue-search-wrap" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               {/* Search pill */}
-              <div style={{ position: "relative" }}>
+              <div style={{ position: "relative", width: "100%" }}>
                 <span
                   style={{
                     position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)",
@@ -999,7 +999,7 @@ export default function AdminRetailers() {
         </div>
 
         {/* ── Body ──────────────────────────────────────────────────────── */}
-        <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
+        <div className="admin-queue-body" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
 
           {/* ── Hero banner — commented out
           <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: "18px" }}>
@@ -1008,17 +1008,17 @@ export default function AdminRetailers() {
           </div> */}
 
           {/* ── Stat cards ──────────────────────────────────────────────── */}
-          <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
+          <div className="admin-queue-stats-wrap" style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+            <div className="admin-queue-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
               {STATS.map(s => <StatCard key={s.label} {...s} />)}
             </div>
           </div>
 
           {/* ── Content grid: filter panel + right side ──────────────────── */}
-          <div style={{ display: "grid", gridTemplateColumns: "300px minmax(0,1fr)", gap: "18px" }}>
+          <div className="admin-queue-content" style={{ display: "grid", gridTemplateColumns: "300px minmax(0,1fr)", gap: "18px" }}>
 
             {/* Filter panel */}
-            <div
+            <div className="admin-queue-filters"
               style={{
                 position: "sticky",
                 top: "24px",
@@ -1198,10 +1198,10 @@ export default function AdminRetailers() {
             </div>
 
             {/* Right side: table + split panel */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+            <div className="admin-queue-results" style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
 
               {/* ── Retailer Master Table ──────────────────────────────── */}
-              <div
+              <div className="admin-queue-table-card"
                 style={{
                   background: "#fff",
                   border: "0.8px solid #dce7e1",
@@ -1212,7 +1212,7 @@ export default function AdminRetailers() {
                 }}
               >
                 {/* Table header row */}
-                <div
+                <div className="admin-queue-table-header"
                   style={{
                     display: "flex", alignItems: "center", justifyContent: "space-between",
                     padding: "20px 20px 20.8px 20px",
@@ -1227,7 +1227,7 @@ export default function AdminRetailers() {
                       Sorted by risk, verification state, and marketplace readiness.
                     </p>
                   </div>
-                  <div style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
+                  <div className="admin-queue-actions" style={{ display: "flex", gap: "10px", flexShrink: 0 }}>
                     {/* <button style={{ height: "42px", padding: "0 16px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}>
                       Bulk Assign
                     </button> */}

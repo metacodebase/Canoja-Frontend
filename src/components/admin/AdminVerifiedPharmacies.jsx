@@ -117,7 +117,7 @@ function PharmacyCard({ shop: record, onViewProfile }) {
   const tags = buildTags(record);
 
   return (
-    <div style={{
+    <div className="admin-directory-card" style={{
       background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "20px",
       boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)",
       padding: "20px", display: "flex", flexDirection: "column", gap: "12px",
@@ -282,7 +282,7 @@ function ProfileDrawer({ record, onClose }) {
 
 function StatCard({ label, value, delta, deltaBg, deltaColor }) {
   return (
-    <div style={{
+    <div className="admin-queue-stat" style={{
       background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px",
       boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)",
       padding: "20px", overflow: "clip", position: "relative",
@@ -422,14 +422,14 @@ export default function AdminVerifiedPharmacies() {
 
   return (
     <AdminShell>
-      <div style={{
+      <div className="admin-directory-page" style={{
         background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.96) 100%)",
         border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px",
         boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)",
         overflow: "clip", position: "relative",
       }}>
         {/* Header */}
-        <div style={{
+        <div className="admin-directory-header" style={{
           position: "sticky", top: 0, zIndex: 10,
           background: "rgba(255,255,255,0.76)", borderBottom: "0.8px solid #dce7e1",
           padding: "24px 24px 24.8px 24px",
@@ -460,10 +460,10 @@ export default function AdminVerifiedPharmacies() {
           </div> */}
         </div>
 
-        <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
+        <div className="admin-directory-body" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
 
           {/* Hero search card */}
-          <div style={{
+          <div className="admin-directory-hero" style={{
             borderRadius: "24px",
             backgroundImage: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
             padding: "28px 32px", overflow: "clip",
@@ -510,10 +510,10 @@ export default function AdminVerifiedPharmacies() {
           </div>
 
           {/* Content grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "300px minmax(0,1fr)", gap: "18px" }}>
+          <div className="admin-directory-content" style={{ display: "grid", gridTemplateColumns: "300px minmax(0,1fr)", gap: "18px" }}>
 
             {/* Filters panel */}
-            <div style={{
+            <div className="admin-directory-filters" style={{
               position: "sticky", top: "24px", alignSelf: "start",
               background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px",
               boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px",
@@ -661,11 +661,11 @@ export default function AdminVerifiedPharmacies() {
             </div>
 
             {/* Right column */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+            <div className="admin-directory-results" style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
 
               {/* Stat cards */}
-              <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
+              <div className="admin-directory-stats-wrap" style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+              <div className="admin-directory-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
                 <StatCard
                   label="Verified Results"
                   value={typeof totalVerified === "number" ? totalVerified.toLocaleString() : totalVerified}
@@ -701,7 +701,7 @@ export default function AdminVerifiedPharmacies() {
               )}
 
               {!isLoading && (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "18px" }}>
+                <div className="admin-directory-cards" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: "18px" }}>
                   {shops.length === 0 ? (
                     <div style={{ gridColumn: "1 / -1", textAlign: "center", padding: "40px", color: C.textSecondary, fontSize: "14px" }}>
                       No results found.

@@ -389,7 +389,7 @@ function IssueVerificationModal({ onClose, onSuccess }) {
 // ── Sub-components ────────────────────────────────────────────────────────────
 function StatCard({ label, value, delta, deltaBg, deltaColor }) {
   return (
-    <div style={{ background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px", position: "relative", overflow: "clip" }}>
+    <div className="admin-queue-stat" style={{ background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px", position: "relative", overflow: "clip" }}>
       <div style={{ position: "absolute", right: "-12px", top: "-12px", width: "80px", height: "80px", borderRadius: "50%", background: "radial-gradient(circle,rgba(45,169,109,0.13) 0%,rgba(45,169,109,0) 70%)", pointerEvents: "none" }} />
       <p style={{ fontSize: "14.08px", fontWeight: 400, color: C.textSecondary, marginBottom: "8px" }}>{label}</p>
       <p style={{ fontSize: "30.4px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.912px", margin: 0 }}>{value}</p>
@@ -650,18 +650,18 @@ export default function AdminCanojaVerified() {
 
   return (
     <AdminShell>
-      <div style={{ background: "linear-gradient(180deg,rgba(255,255,255,0.72) 0%,rgba(255,255,255,0.96) 100%)", border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px", boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)", overflow: "clip" }}>
+      <div className="admin-queue-page" style={{ background: "linear-gradient(180deg,rgba(255,255,255,0.72) 0%,rgba(255,255,255,0.96) 100%)", border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px", boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)", overflow: "clip" }}>
 
         {/* Sticky header */}
-        <div style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(255,255,255,0.76)", borderBottom: "0.8px solid #dce7e1", padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", backdropFilter: "blur(8px)" }}>
+        <div className="admin-queue-header" style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(255,255,255,0.76)", borderBottom: "0.8px solid #dce7e1", padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", backdropFilter: "blur(8px)" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <h1 style={{ fontSize: "28.8px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.576px", margin: 0 }}>Canoja Verified</h1>
             <p style={{ fontSize: "15.36px", color: C.textSecondary, maxWidth: "620px", margin: 0 }}>
               Trust layer for active verified businesses — badge lifecycle, renewal status, and compliance signals.
             </p>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
-            <div style={{ position: "relative" }}>
+          <div className="admin-queue-search-wrap" style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
+            <div style={{ position: "relative", width: "100%" }}>
               <span style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", fontSize: "14.4px", pointerEvents: "none" }}>⌕</span>
               <input
                 value={search}
@@ -680,7 +680,7 @@ export default function AdminCanojaVerified() {
         </div>
 
         {/* Body */}
-        <div style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
+        <div className="admin-queue-body" style={{ padding: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
 
           {/* Hero — Layer 1 & Layer 2 cards commented out */}
           {/* <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: "18px" }}>
@@ -708,17 +708,17 @@ export default function AdminCanojaVerified() {
           </div> */}
 
           {/* Stat cards */}
-          <div style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
+          <div className="admin-queue-stats-wrap" style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+            <div className="admin-queue-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
               {STATS.map(s => <StatCard key={s.label} {...s} />)}
             </div>
           </div>
 
           {/* Content grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "300px minmax(0,1fr)", gap: "18px" }}>
+          <div className="admin-queue-content" style={{ display: "grid", gridTemplateColumns: "300px minmax(0,1fr)", gap: "18px" }}>
 
             {/* Filter panel */}
-            <div style={{ position: "sticky", top: "24px", alignSelf: "start", background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px" }}>
+            <div className="admin-queue-filters" style={{ position: "sticky", top: "24px", alignSelf: "start", background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "24px" }}>
                 <span style={{ fontSize: "16px", fontWeight: 800, color: C.textPrimary }}>Badge Filters</span>
                 <button onClick={handleReset} style={{ fontSize: "14.08px", fontWeight: 700, color: "#1b6b46", background: "none", border: "none", cursor: "pointer", padding: 0 }}>Reset</button>
@@ -784,14 +784,14 @@ export default function AdminCanojaVerified() {
             </div>
 
             {/* Right: table */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
-              <div style={{ background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", overflow: "clip", padding: "0.8px" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px", borderBottom: "0.8px solid #dce7e1" }}>
+            <div className="admin-queue-results" style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+              <div className="admin-queue-table-card" style={{ background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", overflow: "clip", padding: "0.8px" }}>
+                <div className="admin-queue-table-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px", borderBottom: "0.8px solid #dce7e1" }}>
                   <div>
                     <p style={{ fontSize: "16.32px", fontWeight: 800, color: C.textPrimary, margin: 0 }}>Verified Businesses</p>
                     <p style={{ fontSize: "14.4px", color: C.textSecondary, margin: "4px 0 0" }}>Businesses with active Canoja verification. Click any row for full details.</p>
                   </div>
-                  <div style={{ display: "flex", gap: "10px" }}>
+                  <div className="admin-queue-actions" style={{ display: "flex", gap: "10px" }}>
                     <button onClick={handleExport} style={{ height: "42px", padding: "0 16px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}>Export Badge Log</button>
                   </div>
                 </div>

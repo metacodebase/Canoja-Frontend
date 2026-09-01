@@ -246,4 +246,50 @@
   .admin-main [style*="overflow-x"] { max-width: 100%; }
   .admin-main input[style*="width: 320px"],
   .admin-main input[style*="width: 340px"] { width: 100% !important; }
+  .admin-queue-page { overflow: visible !important; border-radius: 20px !important; }
+  .admin-queue-header { position: relative !important; flex-direction: column; align-items: stretch !important; gap: 18px !important; padding: 20px 16px !important; }
+  .admin-queue-header h1 { max-width: 12ch; font-size: 28px !important; line-height: 1.04; }
+  .admin-queue-header p { font-size: 14px !important; line-height: 1.55; }
+  .admin-queue-search-wrap { width: 100%; }
+  .admin-queue-search-wrap input { width: 100% !important; box-sizing: border-box; }
+  .admin-queue-search-wrap button { flex: 0 0 auto; white-space: nowrap; }
+  .admin-retailer-controls { width: 100%; }
+  .admin-retailer-controls > div:last-child { justify-content: stretch !important; }
+  .admin-retailer-controls > div:last-child button { width: 100%; }
+  .admin-queue-body { padding: 16px !important; gap: 18px !important; }
+  .admin-queue-stats-wrap { position: relative !important; padding: 0 !important; margin: 0 !important; background: transparent !important; }
+  .admin-queue-stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
+  .admin-queue-stat { min-width: 0; padding: 16px !important; border-radius: 18px !important; }
+  .admin-queue-stat span { max-width: 100%; white-space: normal !important; }
+  .admin-queue-content { grid-template-columns: minmax(0, 1fr) !important; gap: 16px !important; }
+  .admin-queue-filters { position: relative !important; top: auto !important; width: auto; padding: 16px !important; border-radius: 18px !important; }
+  .admin-queue-results,
+  .admin-queue-table-card { min-width: 0; width: 100%; }
+  .admin-queue-table-card { overflow-x: auto !important; border-radius: 18px !important; }
+  .admin-queue-table-header { min-width: 0; flex-direction: column; align-items: stretch !important; gap: 16px; padding: 16px !important; }
+  .admin-queue-actions { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+  .admin-queue-actions button { width: 100%; min-width: 0; padding: 0 10px !important; }
+  .admin-queue-table-card .ant-table-wrapper { min-width: 720px; }
+  .admin-queue-table-card .ant-pagination { position: sticky; left: 0; width: calc(100vw - 58px); justify-content: center; }
+  .admin-directory-page { overflow: visible !important; border-radius: 20px !important; }
+  .admin-directory-header { position: relative !important; padding: 20px 16px !important; }
+  .admin-directory-header h1 { font-size: 28px !important; line-height: 1.1 !important; }
+  .admin-directory-body { padding: 16px !important; gap: 18px !important; }
+  .admin-directory-hero { padding: 24px 20px !important; border-radius: 20px !important; }
+  .admin-directory-hero h2 { font-size: 28px !important; }
+  .admin-directory-content { grid-template-columns: minmax(0, 1fr) !important; gap: 16px !important; }
+  .admin-directory-filters { position: relative !important; top: auto !important; width: auto; padding: 16px !important; border-radius: 18px !important; }
+  .admin-directory-results { min-width: 0; width: 100%; }
+  .admin-directory-stats-wrap { position: relative !important; padding: 0 !important; margin: 0 !important; background: transparent !important; }
+  .admin-directory-stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px !important; }
+  .admin-directory-cards { grid-template-columns: 1fr !important; gap: 12px !important; }
+  .admin-directory-card { min-width: 0; padding: 16px !important; border-radius: 18px !important; }
+}
+
+@media (max-width: 420px) {
+  .admin-queue-stats { grid-template-columns: 1fr !important; }
+  .admin-queue-actions { grid-template-columns: 1fr !important; }
+  .admin-queue-search-wrap { flex-direction: column; align-items: stretch !important; }
+  .admin-queue-search-wrap button { width: 100%; }
+  .admin-directory-stats { grid-template-columns: 1fr !important; }
 }
