@@ -17,7 +17,7 @@ const OperatorSpotlight = () => {
   const toggleSpotlight = useToggleSpotlight();
   const dashboard = data?.data;
   const active = dashboard?.spotlight === true;
-  const hasAccess = dashboard?.plan_tier === "starter";
+  const hasAccess = ["starter", "pro"].includes(dashboard?.plan_tier);
 
   const handleToggle = async () => {
     if (!hasAccess) return navigate("/operator/billing");

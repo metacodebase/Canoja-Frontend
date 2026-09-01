@@ -2,11 +2,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Store } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import useAdminTheme from "./admin/useAdminTheme";
 
 const BusinessSwitcher = () => {
   const { businesses, selectBusiness } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { theme } = useAdminTheme();
+  const light = theme === "light";
 
   const handleSelect = (businessId) => {
     selectBusiness(businessId);
@@ -15,11 +18,11 @@ const BusinessSwitcher = () => {
   };
 
   return (
-    <main style={styles.page}>
+    <main style={{ ...styles.page, ...(light ? lightStyles.page : {}) }}>
       <section style={styles.panel}>
         <header style={styles.header}>
-          <h1 style={styles.title}>Switch Business</h1>
-          <p style={styles.subtitle}>
+          <h1 style={{ ...styles.title, ...(light ? lightStyles.title : {}) }}>Switch Business</h1>
+          <p style={{ ...styles.subtitle, ...(light ? lightStyles.subtitle : {}) }}>
             Choose which of your {businesses.length} linked businesses you want to manage.
           </p>
         </header>
@@ -34,18 +37,18 @@ const BusinessSwitcher = () => {
               <button
                 key={business._id}
                 type="button"
-                style={styles.card}
+                style={{ ...styles.card, ...(light ? lightStyles.card : {}) }}
                 onClick={() => handleSelect(business._id)}
               >
-                <span style={styles.icon} aria-hidden="true">
+                <span style={{ ...styles.icon, ...(light ? lightStyles.icon : {}) }} aria-hidden="true">
                   <Store size={22} strokeWidth={2} />
                 </span>
                 <span style={styles.details}>
-                  <strong style={styles.name}>{business.business_name || "Unnamed Business"}</strong>
-                  {location && <span style={styles.meta}>{location}</span>}
-                  {business.license_type && <span style={styles.type}>{business.license_type}</span>}
+                  <strong style={{ ...styles.name, ...(light ? lightStyles.name : {}) }}>{business.business_name || "Unnamed Business"}</strong>
+                  {location && <span style={{ ...styles.meta, ...(light ? lightStyles.meta : {}) }}>{location}</span>}
+                  {business.license_type && <span style={{ ...styles.type, ...(light ? lightStyles.type : {}) }}>{business.license_type}</span>}
                 </span>
-                <span style={styles.arrow} aria-hidden="true">›</span>
+                <span style={{ ...styles.arrow, ...(light ? lightStyles.arrow : {}) }} aria-hidden="true">›</span>
               </button>
             );
           })}
@@ -70,6 +73,18 @@ const styles = {
   meta: { maxWidth: "100%", color: "rgba(255,255,255,0.5)", fontSize: "13px", lineHeight: 1.4, overflowWrap: "anywhere" },
   type: { maxWidth: "100%", color: "rgba(255,255,255,0.38)", fontSize: "12px", lineHeight: 1.4, overflowWrap: "anywhere" },
   arrow: { color: "rgba(255,255,255,0.4)", fontSize: "30px", lineHeight: 1, flexShrink: 0 },
+};
+
+const lightStyles = {
+  page: { background: "radial-gradient(circle at top, #f7fcf9 0%, #edf6f1 100%)" },
+  title: { color: "#17372c" },
+  subtitle: { color: "#617a70" },
+  card: { border: "1px solid #c9ddd4", background: "#fff", color: "#17372c", boxShadow: "0 8px 24px rgba(21,82,57,.08)" },
+  icon: { background: "#e5f7ee", color: "#159653" },
+  name: { color: "#17372c" },
+  meta: { color: "#607a70" },
+  type: { color: "#80978e" },
+  arrow: { color: "#6f8b81" },
 };
 
 export default BusinessSwitcher;

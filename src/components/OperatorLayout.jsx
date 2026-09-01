@@ -18,7 +18,7 @@ const NAV_ITEMS = [
   { label: "Settings", path: "/operator/settings", icon: <Settings size={20} strokeWidth={2} /> },
 ];
 
-const OperatorLayout = ({ children }) => {
+const OperatorLayout = ({ children, mainClassName = "" }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
@@ -69,7 +69,7 @@ const OperatorLayout = ({ children }) => {
           <button type="button" onClick={handleLogout} style={styles.bottomButton}><LogOut size={20} /><span>Logout</span></button>
         </div>
       </aside>
-      <main className="operator-main" style={styles.main}>{children}</main>
+      <main className={`operator-main ${mainClassName}`.trim()} style={styles.main}>{typeof children === "function" ? children({ theme }) : children}</main>
       {showChangePassword && <ChangePasswordModal onClose={() => setShowChangePassword(false)} />}
     </div>
   );

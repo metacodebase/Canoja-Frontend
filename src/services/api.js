@@ -146,6 +146,11 @@ export const searchShops = async (searchPayload) => {
   }
 };
 
+export const getSpotlightShops = async (params = {}) => {
+  const response = await api.get("/shops/spotlight", { params });
+  return response.data;
+};
+
 export const loadMoreShops = async (searchPayload) => {
   try {
     const response = await api.post("/shops/compare-shops/more", searchPayload);

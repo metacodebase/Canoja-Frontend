@@ -3,6 +3,8 @@ import canojaLogo from "../../assets/canojaLogo.png";
 import MapShopCard from "./MapShopCard";
 import { hasGoogleMapsKey, loadGoogleMaps, positionOf } from "./googleMaps";
 
+const DARK_MAP_STYLES = [{ elementType: "geometry", stylers: [{ color: "#17201f" }] }, { elementType: "labels.text.fill", stylers: [{ color: "#91a59e" }] }, { elementType: "labels.text.stroke", stylers: [{ color: "#17201f" }] }, { featureType: "road", elementType: "geometry", stylers: [{ color: "#2a3532" }] }, { featureType: "water", elementType: "geometry", stylers: [{ color: "#071a19" }] }, { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] }];
+
 const addShopMarker = (maps, map, item, onSelect) => {
   class CanojaMarker extends maps.OverlayView {
     onAdd() {
@@ -27,7 +29,7 @@ const addShopMarker = (maps, map, item, onSelect) => {
   return marker;
 };
 
-const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect }) => {
+const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect, theme }) => {
   const mapNode = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
@@ -44,7 +46,7 @@ const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect }) =>
       if (disposed || !mapNode.current) return;
       const userPosition = coords ? { lat: coords.lat, lng: coords.lng } : null;
       const center = userPosition || mappedShops[0]?.position || { lat: 18.3358, lng: -64.8963 };
-      const map = new maps.Map(mapNode.current, { center, zoom: 12, minZoom: 3, maxZoom: 18, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, gestureHandling: "greedy", styles: [{ elementType: "geometry", stylers: [{ color: "#17201f" }] }, { elementType: "labels.text.fill", stylers: [{ color: "#91a59e" }] }, { elementType: "labels.text.stroke", stylers: [{ color: "#17201f" }] }, { featureType: "road", elementType: "geometry", stylers: [{ color: "#2a3532" }] }, { featureType: "water", elementType: "geometry", stylers: [{ color: "#071a19" }] }, { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] }] });
+      const map = new maps.Map(mapNode.current, { center, zoom: 12, minZoom: 3, maxZoom: 18, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, gestureHandling: "greedy", styles: theme === "light" ? null : DARK_MAP_STYLES });
       mapRef.current = map;
       const bounds = new maps.LatLngBounds();
       mappedShops.forEach((item, index) => {
@@ -58,7 +60,7 @@ const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect }) =>
       if (!bounds.isEmpty()) { map.fitBounds(bounds, 54); maps.event.addListenerOnce(map, "idle", () => { if (map.getZoom() > 14) map.setZoom(14); }); }
     }).catch(() => setMapError("Google Maps could not be loaded."));
     return () => { disposed = true; overlays.forEach((overlay) => overlay.setMap(null)); markersRef.current = []; };
-  }, [coords, mappedShops]);
+  }, [coords, mappedShops, theme]);
 
   useEffect(() => {
     selectedIndexRef.current = selectedIndex;

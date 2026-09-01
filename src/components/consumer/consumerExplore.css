@@ -4,7 +4,19 @@
   color: #f5f8f6;
 }
 
+.operator-theme.admin-theme--dark .consumer-explore {
+  background: linear-gradient(180deg, rgba(17, 42, 34, .96), rgba(8, 28, 23, .98)) !important;
+}
+
+.operator-theme.admin-theme--dark .consumer-shell {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 .consumer-shell { width: min(100%, 1180px); margin: auto; padding: 28px 32px 64px; box-sizing: border-box; }
+@media (min-width: 761px) {
+  .operator-main--explore { padding: 0 !important; }
+}
 .consumer-header { display: flex; align-items: center; justify-content: space-between; }
 .consumer-header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-left: auto; }
 .consumer-header-actions .admin-theme-toggle { position: relative; inset: auto; flex: 0 0 42px; }
@@ -46,6 +58,19 @@
 .operator-theme.admin-theme--dark .explore-controls select option {
   background: #102724;
   color: #eef5f1;
+}
+.operator-theme.admin-theme--dark .map-shop-card {
+  border-color: #35534c;
+  background: #102724;
+  color: #9cafaa;
+}
+.operator-theme.admin-theme--dark .map-shop-card h3 { color: #40ea54; }
+.operator-theme.admin-theme--dark .map-card-peek { background: #18352f; }
+.operator-theme.admin-theme--dark .map-card-open,
+.operator-theme.admin-theme--dark .map-card-pagination button {
+  border-color: #35534c;
+  background: #17332d;
+  color: #40ea54;
 }
 .quick-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
 .quick-filters label { display: flex; align-items: center; gap: 7px; padding: 9px 13px; border: 1px solid #344b46; border-radius: 999px; background: #132522; color: #becdc8; font-size: 13px; }
