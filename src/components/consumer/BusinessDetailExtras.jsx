@@ -12,10 +12,7 @@ const BusinessDetailExtras = ({ business }) => {
   const services = Array.isArray(business.services) ? business.services.filter(Boolean) : [];
   const mapUrl = business.location_link || getMapUrl(business);
   const reviewsLink = business.reviews_link;
-  const reviewCount = Array.isArray(business.reviews)
-    ? business.reviews.length
-    : Number(business.user_ratings_total ?? business.reviews_count ?? business.review_count ?? business.reviews ?? 0);
-  const hasReviews = Number.isFinite(reviewCount) && reviewCount > 0;
+  const hasReviews = Array.isArray(business.reviews) && business.reviews.length > 0;
   const claimQuery = new URLSearchParams({
     pharmacyId: business._id || "",
     businessName: business.name || business.business_name || "",
