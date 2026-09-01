@@ -237,10 +237,7 @@ const ClaimBusinessForm = () => {
           );
         }
 
-        // Optionally redirect after a delay
-        // setTimeout(() => {
-        //   navigate("/claim-success");
-        // }, 3000);
+        navigate("/explore", { replace: true });
       }
     } catch (error) {
       console.error("Submission error:", error);
