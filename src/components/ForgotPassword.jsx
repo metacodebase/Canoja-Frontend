@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useRequestPasswordReset } from "../services/admin";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ForgotPassword = () => {
@@ -207,18 +207,6 @@ const ForgotPassword = () => {
           </div>
         </form>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }
@@ -230,4 +218,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-

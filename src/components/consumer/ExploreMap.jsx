@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import canojaLogo from "../../assets/canojaLogo.png";
 import MapShopCard from "./MapShopCard";
-import { hasGoogleMapsKey, loadGoogleMaps, positionOf } from "./googleMaps";
-
-const DARK_MAP_STYLES = [{ elementType: "geometry", stylers: [{ color: "#17201f" }] }, { elementType: "labels.text.fill", stylers: [{ color: "#91a59e" }] }, { elementType: "labels.text.stroke", stylers: [{ color: "#17201f" }] }, { featureType: "road", elementType: "geometry", stylers: [{ color: "#2a3532" }] }, { featureType: "water", elementType: "geometry", stylers: [{ color: "#071a19" }] }, { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] }];
+import { DARK_MAP_STYLES, hasGoogleMapsKey, loadGoogleMaps, positionOf } from "./googleMaps";
 
 const addShopMarker = (maps, map, item, onSelect) => {
   class CanojaMarker extends maps.OverlayView {

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { hasGoogleMapsKey, loadGoogleMaps, positionOf } from "./googleMaps";
+import { DARK_MAP_STYLES, hasGoogleMapsKey, loadGoogleMaps, positionOf } from "./googleMaps";
 
 const resolvePosition = (maps, business) => {
   const position = positionOf(business);
@@ -17,7 +17,7 @@ const resolvePosition = (maps, business) => {
   });
 };
 
-const BusinessDetailMap = ({ business, mapUrl }) => {
+const BusinessDetailMap = ({ business, mapUrl, theme }) => {
   const mapNode = useRef(null);
   const [error, setError] = useState("");
 
@@ -38,13 +38,14 @@ const BusinessDetailMap = ({ business, mapUrl }) => {
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: false,
+          styles: theme === "dark" ? DARK_MAP_STYLES : null,
         });
         new maps.Marker({ map, position, title: business.name || business.business_name });
       })
       .catch((mapError) => !disposed && setError(mapError.message || "Google Maps could not be loaded."));
 
     return () => { disposed = true; };
-  }, [business]);
+  }, [business, theme]);
 
   return (
     <div className="map-preview">

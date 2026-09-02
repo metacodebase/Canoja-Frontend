@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import canojaLogo from "../assets/canojaLogo.png";
 import { useAdminLogin } from "../services/admin";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -119,7 +119,6 @@ const Login = () => {
 				position: "relative",
 				fontFamily: "system-ui, -apple-system, sans-serif",
 			}}>
-			<ToastContainer position="top-center" autoClose={3000} />
 			<button
 				type="button"
 				className="login-theme-toggle"

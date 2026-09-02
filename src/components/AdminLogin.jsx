@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import canojaLogo from "../assets/canojaLogo.png";
 import { useAdminLogin } from "../services/admin";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -60,7 +60,6 @@ const AdminLogin = () => {
 				left: 0,
 				fontFamily: "system-ui, -apple-system, sans-serif",
 			}}>
-			<ToastContainer position="top-center" autoClose={3000} />
 			{/* Left Side - Welcome Section */}
 			<div
 				style={{

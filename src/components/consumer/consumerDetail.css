@@ -43,6 +43,23 @@
 .empty-detail { display: grid; place-content: center; text-align: center; }
 .empty-detail button { padding: 13px 20px; border: 0; border-radius: 12px; background: #40ea54; font-weight: 800; }
 
+.consumer-detail--light { background: radial-gradient(circle at 75% 8%, #effcf6 0, #f7fbf9 34%, #eef4f1 100%); color: #17372c; }
+.consumer-detail--light .business-info-card { border-color: #32b66e; background: linear-gradient(135deg, #fff, #eaf8f0); box-shadow: 0 10px 28px rgba(21,82,57,.09); }
+.consumer-detail--light .business-info-heading p,
+.consumer-detail--light .business-contacts span,
+.consumer-detail--light .hours-list div,
+.consumer-detail--light .reviews-section p { color: #607a70; }
+.consumer-detail--light .business-contacts a { color: #285e4b; }
+.consumer-detail--light .detail-hours h2,
+.consumer-detail--light .detail-extra-section h2 { color: #17372c; }
+.consumer-detail--light .hours-list,
+.consumer-detail--light .directions-card { border-color: #b8dcca; background: #fff; color: #17372c; box-shadow: 0 8px 24px rgba(21,82,57,.07); }
+.consumer-detail--light .service-chips span { color: #063b2c; }
+.consumer-detail--light .claim-footer { border-color: #c9ddd4; background: transparent; }
+.consumer-detail--light .claim-footer div { background: #e3f1ea; color: #607a70; }
+.consumer-detail--light .map-preview { border-color: #b8dcca; background: #e3f1ea; }
+.consumer-detail--light .map-preview > a { background: rgba(247,251,249,.92); color: #138a4d; }
+
 @media (min-width: 900px) {
   .detail-primary-grid { grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr); align-items: stretch; }
   .business-info-card { display: flex; flex-direction: column; }

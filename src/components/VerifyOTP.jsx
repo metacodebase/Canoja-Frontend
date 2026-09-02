@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useResetPassword, useVerifyOTP } from "../services/admin";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const VerifyOTP = () => {
@@ -542,18 +542,6 @@ const VerifyOTP = () => {
           </div>
         )}
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
       <style>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }
@@ -565,4 +553,3 @@ const VerifyOTP = () => {
 };
 
 export default VerifyOTP;
-

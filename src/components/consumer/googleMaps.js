@@ -2,6 +2,8 @@ const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 export const hasGoogleMapsKey = Boolean(apiKey);
 
+export const DARK_MAP_STYLES = [{ elementType: "geometry", stylers: [{ color: "#17201f" }] }, { elementType: "labels.text.fill", stylers: [{ color: "#91a59e" }] }, { elementType: "labels.text.stroke", stylers: [{ color: "#17201f" }] }, { featureType: "road", elementType: "geometry", stylers: [{ color: "#2a3532" }] }, { featureType: "water", elementType: "geometry", stylers: [{ color: "#071a19" }] }, { featureType: "poi", elementType: "labels", stylers: [{ visibility: "off" }] }];
+
 export const loadGoogleMaps = () => {
   if (window.google?.maps) return Promise.resolve(window.google.maps);
   if (window.canojaGoogleMapsPromise) return window.canojaGoogleMapsPromise;

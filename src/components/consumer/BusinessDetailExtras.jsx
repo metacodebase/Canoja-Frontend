@@ -9,7 +9,7 @@ const getMapUrl = (business) => {
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination || "")}`;
 };
 
-const BusinessDetailExtras = ({ business }) => {
+const BusinessDetailExtras = ({ business, theme }) => {
   const services = Array.isArray(business.services) ? business.services.filter(Boolean) : [];
   const mapUrl = business.location_link || getMapUrl(business);
   const reviewsLink = business.reviews_link;
@@ -24,7 +24,7 @@ const BusinessDetailExtras = ({ business }) => {
     <>
       {services.length > 0 && <section className="detail-extra-section"><h2>Products/Services Offered</h2><div className="service-chips">{services.map((service) => <span key={service}>{service}</span>)}</div></section>}
       <a className="directions-card" href={mapUrl} target="_blank" rel="noreferrer"><strong>Directions</strong><span><MaterialIcon name="location-pin" size={18} />Go To Map</span></a>
-      <BusinessDetailMap business={business} mapUrl={mapUrl} />
+      <BusinessDetailMap business={business} mapUrl={mapUrl} theme={theme} />
       <section className="detail-extra-section reviews-section">
         <h2>Reviews</h2>
         <p>{hasReviews ? "More reviews are available on Google." : "No reviews available."}</p>

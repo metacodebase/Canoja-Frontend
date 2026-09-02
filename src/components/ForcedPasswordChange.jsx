@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useChangePassword } from "../services/admin";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../context/AuthContext";
 
@@ -447,18 +447,6 @@ const ForcedPasswordChange = () => {
           </button>
         </form>
       </div>
-      <ToastContainer 
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </div>
   );
 };

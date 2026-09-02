@@ -3,6 +3,7 @@ import canojaShop from "../../assets/canoja-shop.png";
 import BusinessActions from "./BusinessActions";
 import BusinessDetailExtras from "./BusinessDetailExtras";
 import BusinessHours from "./BusinessHours";
+import useAdminTheme from "../admin/useAdminTheme";
 import "./consumerDetail.css";
 
 const readStoredBusiness = () => {
@@ -12,14 +13,15 @@ const readStoredBusiness = () => {
 const ConsumerBusinessDetail = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { theme } = useAdminTheme();
   const business = location.state?.business || readStoredBusiness();
-  if (!business) return <main className="consumer-detail empty-detail"><h1>Business unavailable</h1><button onClick={() => navigate("/explore")}>Back to Explore</button></main>;
+  if (!business) return <main className={`consumer-detail empty-detail consumer-detail--${theme}`}><h1>Business unavailable</h1><button onClick={() => navigate("/explore")}>Back to Explore</button></main>;
   const image = business.photo_url || business.photos?.[0]?.url || canojaShop;
   const name = business.name || business.business_name || "Canoja operator";
   const address = business.address || business.business_address;
 
   return (
-    <main className="consumer-detail">
+    <main className={`consumer-detail consumer-detail--${theme}`}>
       <header className="detail-hero">
         <img src={image} alt="" onError={({ currentTarget }) => { currentTarget.onerror = null; currentTarget.src = canojaShop; }} />
         <button className="detail-back" onClick={() => navigate(-1)} aria-label="Back">‹</button>
@@ -33,7 +35,7 @@ const ConsumerBusinessDetail = () => {
           </section>
           <BusinessHours value={business.working_hours || business.opening_hours} />
         </div>
-        <BusinessDetailExtras business={business} />
+        <BusinessDetailExtras business={business} theme={theme} />
       </div>
     </main>
   );
