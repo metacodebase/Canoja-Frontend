@@ -223,7 +223,7 @@
 .admin-sidebar-backdrop { display: none; }
 
 @media (max-width: 760px) {
-  .admin-theme-toggle { top: 12px; right: 12px; }
+  .admin-theme-toggle:not(.admin-theme-toggle--sidebar) { top: 12px; right: 12px; }
   .operator-menu-trigger { position: fixed; z-index: 1002; top: 14px; left: 14px; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid rgba(64, 234, 84, .35); border-radius: 12px; background: rgba(7, 35, 29, .94); color: #e8f4ef; box-shadow: 0 8px 24px rgba(0, 0, 0, .28); cursor: pointer; }
   .operator-theme.admin-theme--light .operator-menu-trigger { border-color: #b8d5c9; background: rgba(255, 255, 255, .96); color: #145237; box-shadow: 0 8px 24px rgba(13, 59, 42, .14); }
   .operator-sidebar { position: fixed !important; z-index: 1004; top: 0; left: 0; width: min(86vw, 300px) !important; height: 100dvh !important; transform: translateX(-105%); transition: transform .22s ease; box-shadow: 18px 0 45px rgba(0, 0, 0, .38); }
