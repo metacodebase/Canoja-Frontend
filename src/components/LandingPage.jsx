@@ -33,6 +33,7 @@ export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   return <main className="landing">
     <LandingAgeGate />
+    <div className="landing-strip">Verified. Trusted. Connected. · Cannabis Discovery · License Visibility · Operator Profiles</div>
     <header className="landing-header">
       <Link className="landing-brand" to="/" aria-label="Canoja home"><img className="wordmark-image" src={canojaWordmark} alt="Canoja" /></Link>
       <nav className={menuOpen ? "open" : ""}>{navItems.map((item, index) => <a className={index === 0 ? "active" : ""} href={index === 0 ? "#home" : index < 3 ? "/explore" : `#${item.toLowerCase().replaceAll(" ", "-")}`} key={item}>{item}</a>)}</nav>
