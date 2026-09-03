@@ -5,6 +5,10 @@ import { useAdminRetailers, useAdminAuditLog, useRecentAuditLog, useCreateRetail
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Search } from "lucide-react";
+import retailersTotalIcon from "../../assets/admin-retailers-total.png";
+import retailersVerifiedIcon from "../../assets/admin-retailers-verified.png";
+import retailersExpiringIcon from "../../assets/admin-retailers-expiring.png";
+import retailersGapsIcon from "../../assets/admin-retailers-gaps.png";
 
 // ── Design tokens (exact from Figma) ─────────────────────────────────────────
 const C = {
@@ -490,7 +494,7 @@ function FilterRow({ label, count, active, onClick }) {
 }
 
 // ── Stat card — exact Figma ───────────────────────────────────────────────────
-function StatCard({ label, value, delta, deltaBg, deltaColor }) {
+function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
   return (
     <div className="admin-queue-stat"
       style={{
@@ -503,28 +507,12 @@ function StatCard({ label, value, delta, deltaBg, deltaColor }) {
         position: "relative",
       }}
     >
-      <p style={{ fontSize: "14.08px", fontWeight: 400, color: C.textSecondary, lineHeight: "20.416px", marginBottom: "8px" }}>
-        {label}
-      </p>
-      <p style={{ fontSize: "30.4px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.912px", lineHeight: "44.08px" }}>
-        {value}
-      </p>
-      <span
-        style={{
-          display: "inline-flex", alignItems: "center",
-          marginTop: "10px",
-          padding: "6px 10px",
-          borderRadius: "999px",
-          background: deltaBg,
-          color: deltaColor,
-          fontSize: "13.12px",
-          fontWeight: 800,
-          lineHeight: "19.024px",
-          whiteSpace: "nowrap",
-        }}
-      >
-        {delta}
-      </span>
+      <div className="admin-queue-stat__content">
+        <p className="admin-queue-stat__label" style={{ color: C.textSecondary }}>{label}</p>
+        <p className="admin-queue-stat__value" style={{ color: C.textPrimary }}>{value}</p>
+        <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
+      </div>
+      <img className="admin-queue-stat__icon" src={icon} alt="" aria-hidden="true" />
     </div>
   );
 }
@@ -665,10 +653,10 @@ export default function AdminRetailers() {
   const filteredDataGaps      = stats.dataGaps        ?? 0;
 
   const STATS = [
-    { label: "Total Retailers",  value: total.toLocaleString(),                    delta: "In database",           deltaBg: "#edf9f2", deltaColor: "#1f9d61" },
-    { label: "Verified",         value: filteredVerified.toLocaleString(),          delta: `${total ? Math.round(filteredVerified / total * 100) : 0}% of total`, deltaBg: "#edf5ff", deltaColor: "#2f80ed" },
-    { label: "Expiring Soon",    value: filteredExpiringSoon.toLocaleString(),      delta: "Needs attention",       deltaBg: "#fff5eb", deltaColor: "#d9822b" },
-    { label: "Data Gaps",        value: filteredDataGaps.toLocaleString(),          delta: "Owner/contact missing", deltaBg: "#fff1f1", deltaColor: "#d64545" },
+    { label: "Total Retailers", value: total.toLocaleString(), delta: "In database", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersTotalIcon },
+    { label: "Verified", value: filteredVerified.toLocaleString(), delta: `${total ? Math.round(filteredVerified / total * 100) : 0}% of total`, deltaBg: "#edf5ff", deltaColor: "#2f80ed", icon: retailersVerifiedIcon },
+    { label: "Expiring Soon", value: filteredExpiringSoon.toLocaleString(), delta: "Needs attention", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: retailersExpiringIcon },
+    { label: "Data Gaps", value: filteredDataGaps.toLocaleString(), delta: "Owner/contact missing", deltaBg: "#fff1f1", deltaColor: "#d64545", icon: retailersGapsIcon },
   ];
 
   // ── Filter handlers ──────────────────────────────────────────────────────────
@@ -838,14 +826,14 @@ export default function AdminRetailers() {
             borderBottom: "0.8px solid #dce7e1",
             padding: "24px 24px 24.8px 24px",
             display: "flex",
-            alignItems: "center",
+            alignItems: "flex-start",
             justifyContent: "space-between",
             gap: "24px",
             backdropFilter: "blur(8px)",
           }}
         >
           {/* Left: title + subtitle */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+          <div className="admin-retailer-heading" style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <h1
               style={{
                 fontSize: "28.8px",
@@ -873,7 +861,7 @@ export default function AdminRetailers() {
           </div>
 
           {/* Right: search + buttons */}
-          <div className="admin-retailer-controls" style={{ display: "flex", flexDirection: "column", gap: "15px", flexShrink: 0 }}>
+          <div className="admin-retailer-controls" style={{ display: "flex", alignItems: "flex-start", gap: "16px", flex: 1, minWidth: 0 }}>
             <div className="admin-queue-search-wrap" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               {/* Search pill */}
               <div style={{ position: "relative", width: "100%" }}>
@@ -977,7 +965,6 @@ export default function AdminRetailers() {
                 )}
               </div>
             </div>
-            {/* Add Retailer — right-aligned */}
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <button
                 onClick={() => setShowAddModal(true)}
@@ -1010,7 +997,7 @@ export default function AdminRetailers() {
 
           {/* ── Stat cards ──────────────────────────────────────────────── */}
           <div className="admin-queue-stats-wrap" style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
-            <div className="admin-queue-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
+            <div className="admin-queue-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "18px" }}>
               {STATS.map(s => <StatCard key={s.label} {...s} />)}
             </div>
           </div>

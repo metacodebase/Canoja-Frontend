@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { LockKeyhole, LogOut, Menu, X } from "lucide-react";
 import canojaLogo from "../../assets/canojaLogo.png";
+import canojaHeroBg from "../../assets/canoja-hero-bg.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../context/AuthContext";
@@ -73,12 +74,13 @@ export default function AdminShell({ children }) {
         onClick={() => { setMenuOpen(false); navigate(path); }}
         className="flex items-center w-full px-[14px] py-[12px] rounded-[14px] text-[16px] transition-all text-left cursor-pointer"
         style={{
-          background: active ? "rgba(255,255,255,0.10)" : "transparent",
+          background: active ? "linear-gradient(110deg, rgba(22,119,60,.72), rgba(6,79,49,.58))" : "transparent",
           color: "rgba(255,255,255,0.92)",
           fontFamily: "Inter, sans-serif",
           fontWeight: 400,
           lineHeight: "23.2px",
           border: "none",
+          boxShadow: active ? "inset 0 0 0 1px rgba(45,211,101,.16), 0 8px 24px rgba(0,0,0,.14)" : "none",
         }}
       >
         {label}
@@ -94,7 +96,7 @@ export default function AdminShell({ children }) {
         fontWeight: 400,
         fontSize: "11.84px",
         lineHeight: "17.168px",
-        color: "rgba(255,255,255,0.68)",
+        color: "#2dca61",
         letterSpacing: "1.4208px",
         padding: "0",
         marginBottom: "4px",
@@ -112,33 +114,37 @@ export default function AdminShell({ children }) {
       <aside
         className={`admin-sidebar sticky top-0 h-screen shrink-0 flex flex-col${menuOpen ? " admin-sidebar--open" : ""}`}
         style={{
-          width: "279px",
-          background: "linear-gradient(180deg, #0d3b2a 0%, #145237 100%)",
-          borderRight: "0.8px solid rgba(255,255,255,0.08)",
+          width: "248px",
+          backgroundImage: `linear-gradient(180deg, rgba(0,30,28,.84) 0%, rgba(0,38,34,.78) 54%, rgba(0,26,27,.76) 100%), url(${canojaHeroBg})`,
+          backgroundPosition: "center bottom",
+          backgroundSize: "auto 100%, auto 100%",
+          borderRight: "1px solid rgba(25,197,100,.24)",
+          boxShadow: "8px 0 32px rgba(0,18,17,.16)",
         }}
       >
         <button type="button" className="admin-sidebar-close" aria-label="Close admin menu" onClick={() => setMenuOpen(false)}><X size={21} /></button>
         {/* Brand */}
-        <div className="flex items-center gap-[12px]" style={{ padding: "24px 24px 0 24px" }}>
+        <div className="flex items-center gap-[10px]" style={{ padding: "20px 22px 0" }}>
           <div
             className="shrink-0"
             style={{
-              width: "44px", height: "44px",
-              borderRadius: "12px",
-              background: "rgba(255,255,255,0.15)",
+              width: "36px", height: "36px",
+              borderRadius: "10px",
+              background: "linear-gradient(145deg, rgba(20,128,58,.44), rgba(3,63,45,.72))",
+              border: "1px solid rgba(42,211,102,.24)",
               display: "flex", alignItems: "center", justifyContent: "center",
             }}
           >
-            <img src={canojaLogo} alt="Canoja" style={{ width: "32px", height: "32px", objectFit: "contain" }} />
+            <img src={canojaLogo} alt="Canoja" style={{ width: "28px", height: "28px", objectFit: "contain" }} />
           </div>
           <div className="flex flex-col gap-[2px]">
             <p
               style={{
                 fontFamily: "Inter, sans-serif",
                 fontWeight: 800,
-                fontSize: "16px",
+                fontSize: "15px",
                 lineHeight: "23.2px",
-                color: "#f8fffb",
+                color: "#35d15e",
                 whiteSpace: "nowrap",
               }}
             >
@@ -148,9 +154,9 @@ export default function AdminShell({ children }) {
               style={{
                 fontFamily: "Inter, sans-serif",
                 fontWeight: 400,
-                fontSize: "13.12px",
+                fontSize: "10px",
                 lineHeight: "19.024px",
-                color: "rgba(255,255,255,0.72)",
+                color: "rgba(223,240,234,0.58)",
                 whiteSpace: "nowrap",
               }}
             >
@@ -160,7 +166,7 @@ export default function AdminShell({ children }) {
         </div>
 
         {/* Nav */}
-        <div className="flex flex-col flex-1 overflow-y-auto" style={{ padding: "24px 24px 0 24px", gap: "20px" }}>
+        <div className="flex flex-col flex-1 overflow-y-auto" style={{ padding: "20px 22px 0", gap: "22px" }}>
           {/* Admin Pages */}
           <div>
             <SectionLabel>Admin Pages</SectionLabel>
@@ -189,9 +195,14 @@ export default function AdminShell({ children }) {
         <div
           className="flex flex-col"
           style={{
-            padding: "12px 24px 24px 24px",
-            borderTop: "1px solid rgba(255,255,255,0.10)",
+            padding: "12px 22px 22px",
+            borderTop: "1px solid rgba(37,207,103,.65)",
             marginTop: "auto",
+            borderRadius: "0 24px 0 0",
+            background: "linear-gradient(135deg, rgba(10,84,65,.58), rgba(0,28,29,.48))",
+            boxShadow: "0 -18px 42px rgba(0,18,18,.28), inset 0 1px 0 rgba(255,255,255,.08)",
+            backdropFilter: "blur(22px) saturate(145%)",
+            WebkitBackdropFilter: "blur(22px) saturate(145%)",
           }}
         >
           <AdminThemeToggle theme={theme} onToggle={toggleTheme} sidebar />
@@ -208,6 +219,7 @@ export default function AdminShell({ children }) {
               border: "none",
             }}
           >
+            <LockKeyhole size={16} style={{ marginRight: "10px", color: "#26cd68" }} />
             Change Password
           </button>
           <button
@@ -223,6 +235,7 @@ export default function AdminShell({ children }) {
               border: "none",
             }}
           >
+            <LogOut size={16} style={{ marginRight: "10px", color: "#26cd68" }} />
             Logout
           </button>
         </div>
