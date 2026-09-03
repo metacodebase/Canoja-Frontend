@@ -1,7 +1,9 @@
-import { ArrowRight, Check, ChevronDown, Menu, Search, ShieldCheck, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import canojaMark from "../assets/canojaLogo.png";
+import canojaWordmark from "../assets/canoja-wordmark.png";
+import LandingSections from "./LandingSections";
+import LandingMoreSections from "./LandingMoreSections";
 import "./landingPage.css";
 
 const navItems = ["Home", "Discover", "License Search", "Why Canoja", "For Operators", "Mobile App", "Platform Roadmap"];
@@ -21,7 +23,7 @@ function SearchPanel() {
       <label>Operator type<span className="select-field">All Operators <ChevronDown size={19} /></span></label>
       <label>Distance<span className="select-field">Within 10 Miles <ChevronDown size={19} /></span></label>
     </div>
-    <button className="primary-button landing-search__submit" type="submit"><Search size={19} />{tab === "operators" ? "Explore Operators" : "Search Licenses"}</button>
+    <button className="primary-button landing-search__submit" type="submit">{tab === "operators" ? "Explore Operators" : "Search Licenses"}</button>
     <p>Canoja does not issue cannabis licenses. Official determinations remain with the applicable regulatory authority.</p>
   </form>;
 }
@@ -30,7 +32,7 @@ export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
   return <main className="landing">
     <header className="landing-header">
-      <Link className="landing-brand" to="/" aria-label="Canoja home">Canoja<img src={canojaMark} alt="" /></Link>
+      <Link className="landing-brand" to="/" aria-label="Canoja home"><img className="wordmark-image" src={canojaWordmark} alt="Canoja" /></Link>
       <nav className={menuOpen ? "open" : ""}>{navItems.map((item, index) => <a className={index === 0 ? "active" : ""} href={index === 0 ? "#home" : index < 3 ? "/explore" : `#${item.toLowerCase().replaceAll(" ", "-")}`} key={item}>{item}</a>)}</nav>
       <Link className="login-button" to="/login">Operator Login <ArrowRight size={22} /></Link>
       <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X /> : <Menu />}</button>
@@ -40,10 +42,12 @@ export default function LandingPage() {
         <div className="eyebrow"><span />Verified. Trusted. Connected.</div>
         <h1>Discover licensed<br />cannabis businesses<br />with <em>confidence.</em></h1>
         <p>Canoja is a compliance-first cannabis technology platform that helps adult consumers discover licensed dispensaries and operators, review public license information, and connect directly with trusted cannabis businesses.</p>
-        <div className="landing-actions"><Link className="primary-button" to="/explore">Explore Operators <ArrowRight size={20} /></Link><a href="/explore">Verify a License</a><a href="#mobile-app">Get the Mobile App</a></div>
-        <div className="landing-trust"><span><Check />Public license visibility</span><span><ShieldCheck />Clear verification indicators</span><span><Check />Built for future compliance</span></div>
+        <div className="landing-actions"><Link className="primary-button" to="/explore">Explore Operators</Link><a href="/explore">Verify a License</a><a href="#mobile-app">Get the Mobile App</a></div>
+        <div className="landing-trust"><span><i />Public license visibility</span><span><i />Clear verification indicators</span><span><i />Built for future compliance</span></div>
       </div>
       <SearchPanel />
     </section>
+    <LandingSections />
+    <LandingMoreSections />
   </main>;
 }
