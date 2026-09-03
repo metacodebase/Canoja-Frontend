@@ -6,11 +6,17 @@
 .admin-sidebar-collapse:hover { background: linear-gradient(145deg, rgba(22, 119, 60, .98), rgba(6, 79, 49, .98)); color: #fff; }
 @media (min-width: 761px) {
   .admin-sidebar--collapsed { border-right-color: transparent !important; box-shadow: none !important; }
-  .admin-sidebar--collapsed .admin-sidebar-collapse { position: fixed; top: 62px; left: 64px; right: auto; width: 36px; height: 36px; border-radius: 10px; }
+  .admin-sidebar--collapsed .admin-sidebar-collapse { position: fixed; top: 50px; left: 48px; right: auto; width: 36px; height: 36px; border-radius: 10px; }
   .admin-sidebar--collapsed > :not(.admin-sidebar-collapse):not(.admin-sidebar-close) { visibility: hidden; opacity: 0; pointer-events: none; }
   .admin-shell--sidebar-collapsed .admin-main { padding-left: 24px !important; }
   .admin-shell--sidebar-collapsed .admin-queue-header,
   .admin-shell--sidebar-collapsed .admin-directory-header { padding-left: 72px !important; }
+}
+
+@media (min-width: 761px) and (max-width: 1180px) {
+  .admin-sidebar--collapsed .admin-sidebar-collapse { top: 42px; left: 40px; }
+  .admin-shell--sidebar-collapsed .admin-queue-header,
+  .admin-shell--sidebar-collapsed .admin-directory-header { padding-left: 64px !important; }
 }
 .admin-main,
 .operator-main {
