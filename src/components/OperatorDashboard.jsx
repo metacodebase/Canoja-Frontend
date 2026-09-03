@@ -248,8 +248,8 @@ const OperatorDashboard = () => {
               border: "1px solid #e5e7eb",
               cursor: "pointer",
             }}
-            onClick={handleToggleVisibility}
-            title="Click to toggle visibility">
+              onClick={handleToggleVisibility}
+              title="Click to toggle visibility">
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                 {getStatusIcon("visibility", businessHealth?.visibility?.status)}
                 <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#374151", margin: 0 }}>
@@ -603,7 +603,7 @@ const OperatorDashboard = () => {
           justifyContent: "center",
           zIndex: 1000,
         }}
-        onClick={() => setShowLocationModal(false)}>
+          onClick={() => setShowLocationModal(false)}>
           <div style={{
             position: "relative",
             background: "linear-gradient(155deg, rgba(21, 43, 36, .98), rgba(8, 27, 23, .99))",
@@ -616,7 +616,7 @@ const OperatorDashboard = () => {
             overflow: "auto",
             boxShadow: "0 28px 80px rgba(0,0,0,.52)",
           }}
-          onClick={(e) => e.stopPropagation()}>
+            onClick={(e) => e.stopPropagation()}>
             <button type="button" onClick={() => setShowLocationModal(false)} aria-label="Close" style={{ position: "absolute", top: "18px", right: "18px", width: "38px", height: "38px", display: "grid", placeItems: "center", borderRadius: "10px", border: "1px solid rgba(52,211,153,.4)", background: "rgba(1,25,29,.65)", color: "#fff", cursor: "pointer" }}><X size={19} /></button>
             <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "25px", paddingRight: "45px" }}>
               <span style={{ width: "50px", height: "50px", borderRadius: "14px", display: "grid", placeItems: "center", background: "rgba(16,185,129,.14)", color: "#34d399" }}><MapPin size={27} fill="currentColor" /></span>
@@ -653,7 +653,7 @@ const OperatorDashboard = () => {
           justifyContent: "center",
           zIndex: 1000,
         }}
-        onClick={() => setShowMenuUpload(false)}>
+          onClick={() => setShowMenuUpload(false)}>
           <div style={{
             background: "#ffffff",
             borderRadius: "16px",
@@ -661,7 +661,7 @@ const OperatorDashboard = () => {
             maxWidth: "500px",
             width: "90%",
           }}
-          onClick={(e) => e.stopPropagation()}>
+            onClick={(e) => e.stopPropagation()}>
             <h2 style={{ fontSize: "24px", fontWeight: "700", margin: "0 0 20px 0" }}>
               Upload Menu
             </h2>
@@ -715,7 +715,7 @@ const OperatorDashboard = () => {
           justifyContent: "center",
           zIndex: 1000,
         }}
-        onClick={() => setShowMenuViewer(false)}>
+          onClick={() => setShowMenuViewer(false)}>
           <div style={{
             background: "#1e293b",
             borderRadius: "16px",
@@ -727,11 +727,11 @@ const OperatorDashboard = () => {
             flexDirection: "column",
             overflow: "hidden",
           }}
-          onClick={(e) => e.stopPropagation()}>
-            <div style={{ 
-              display: "flex", 
-              justifyContent: "space-between", 
-              alignItems: "center", 
+            onClick={(e) => e.stopPropagation()}>
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
               padding: "16px 24px",
               background: "#1e293b",
               borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
@@ -788,9 +788,9 @@ const OperatorDashboard = () => {
                 />
               )}
             </div>
-            <div style={{ 
-              display: "flex", 
-              gap: "12px", 
+            <div style={{
+              display: "flex",
+              gap: "12px",
               padding: "16px 24px",
               background: "#1e293b",
               borderTop: "1px solid rgba(255, 255, 255, 0.1)",

@@ -166,7 +166,8 @@ export default function AdminShell({ children }) {
         </div>
 
         {/* Nav */}
-        <div className="flex flex-col flex-1 overflow-y-auto" style={{ padding: "20px 22px 0", gap: "22px" }}>
+        <div className="flex flex-col flex-1 overflow-y-auto" style={{ padding: "20px 22px 0", gap: "22px", background: "linear-gradient(180deg, rgba(0,30,28,.84) 0%, rgba(0,38,34,.78) 54%, rgba(0,26,27,.76) 100%), url(" + canojaHeroBg + ")"
+              }}>
           {/* Admin Pages */}
           <div>
             <SectionLabel>Admin Pages</SectionLabel>

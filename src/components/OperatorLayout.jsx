@@ -29,7 +29,7 @@ const OperatorLayout = ({ children, mainClassName = "" }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
-    await api.post("/users/logout").catch(() => {});
+    await api.post("/users/logout").catch(() => { });
     queryClient.clear();
     logout();
     toast.success("Logged out successfully");
@@ -40,7 +40,11 @@ const OperatorLayout = ({ children, mainClassName = "" }) => {
     <div className={`admin-theme operator-theme admin-theme--${theme}`} style={styles.shell}>
       <button type="button" className="operator-menu-trigger" aria-label="Open operator menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><Menu size={22} /></button>
       {menuOpen && <button type="button" className="operator-sidebar-backdrop" aria-label="Close operator menu" onClick={() => setMenuOpen(false)} />}
-      <aside className={`operator-sidebar${menuOpen ? " operator-sidebar--open" : ""}`} style={styles.sidebar}>
+      <aside className={`operator-sidebar${menuOpen ? " operator-sidebar--open" : ""}`} style={{
+            width: "248px", height: "100vh", position: "sticky", top: 0, flexShrink: 0, display: "flex",
+      flexDirection: "column", padding: "20px 22px 22px", boxSizing: "border-box",
+      gap: "22px", background: "linear-gradient(180deg, rgba(0,30,28,.84) 0%, rgba(0,38,34,.78) 54%, rgba(0,26,27,.76) 100%), url(" + canojaHeroBg + ")"
+      }}>
         <button type="button" className="operator-sidebar-close" aria-label="Close operator menu" onClick={() => setMenuOpen(false)}><X size={21} /></button>
         <div style={styles.brand}>
           <span style={styles.logoWrap}><img src={canojaLogo} alt="Canoja" style={styles.logo} /></span>
@@ -78,7 +82,14 @@ const OperatorLayout = ({ children, mainClassName = "" }) => {
 
 const styles = {
   shell: { minHeight: "100vh", display: "flex", background: "#f6f9f8", fontFamily: "Inter, system-ui, sans-serif" },
-  sidebar: { width: "248px", height: "100vh", position: "sticky", top: 0, flexShrink: 0, display: "flex", flexDirection: "column", padding: "20px 22px 22px", boxSizing: "border-box", backgroundImage: `linear-gradient(180deg, rgba(0,30,28,.84), rgba(0,38,34,.78) 54%, rgba(0,26,27,.76)), url(${canojaHeroBg})`, backgroundPosition: "center bottom", backgroundSize: "auto 100%, auto 100%", borderRight: "1px solid rgba(25,197,100,.24)", boxShadow: "8px 0 32px rgba(0,18,17,.16)" },
+  sidebar: {
+    width: "248px", height: "100vh", position: "sticky", top: 0, flexShrink: 0, display: "flex",
+    flexDirection: "column", padding: "20px 22px 22px", boxSizing: "border-box",
+    backgroundImage: `linear-gradient(180deg, rgba(0,30,28,.62), rgba(0,38,34,.56) 54%, rgba(0,26,27,.58)), url(${canojaHeroBg})`,
+    backgroundPosition: "center bottom", backgroundSize: "cover", backgroundRepeat: "no-repeat",
+    borderRight: "1px solid rgba(25,197,100,.24)",
+    boxShadow: "8px 0 32px rgba(0,18,17,.16)"
+  },
   brand: { display: "flex", alignItems: "center", gap: "12px", color: "#fff" },
   logoWrap: { width: "44px", height: "44px", borderRadius: "12px", background: "rgba(255,255,255,.15)", display: "grid", placeItems: "center", flexShrink: 0 },
   logo: { width: "32px", height: "32px", objectFit: "contain" },

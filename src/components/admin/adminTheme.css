@@ -88,7 +88,7 @@
 }
 .admin-theme--dark { background: #061713 !important; color: #e8f4ef; color-scheme: dark; }
 .admin-theme--dark > main,
-.admin-theme--dark > div > main { background: #061713 !important; }
+.admin-theme--dark > div > main { background-color: #061713 !important; }
 .admin-theme--dark main > div { background: linear-gradient(180deg, rgba(17, 42, 34, .96), rgba(8, 28, 23, .98)) !important; border-color: #29463d !important; box-shadow: 0 16px 40px rgba(0, 0, 0, .28) !important; }
 .admin-theme--dark main > div > div:first-child { background: rgba(13, 33, 28, .9) !important; border-color: #29463d !important; }
 .admin-theme--dark main h1,
@@ -297,6 +297,9 @@
 .admin-menu-trigger,
 .admin-sidebar-close,
 .admin-sidebar-backdrop { display: none; }
+
+.operator-nav-item:hover,
+.operator-bottom-button:hover { background: rgba(255, 255, 255, .1) !important; }
 
 @media (max-width: 760px) {
   .admin-theme-toggle:not(.admin-theme-toggle--sidebar) { top: 12px; right: 12px; }
