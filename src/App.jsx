@@ -30,6 +30,7 @@ import AgeVerification from "./components/AgeVerification";
 import ConsumerExplore from "./components/consumer/ConsumerExplore";
 import ConsumerAllShops from "./components/consumer/ConsumerAllShops";
 import ConsumerBusinessDetail from "./components/consumer/ConsumerBusinessDetail";
+import LandingPage from "./components/LandingPage";
 
 // Create QueryClient with sensible defaults
 const queryClient = new QueryClient({
@@ -49,7 +50,7 @@ function App() {
       <AuthProvider>
         <div style={{ minHeight: "100vh" }}>
           <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/explore" element={<ConsumerExplore />} />
             <Route path="/explore/all" element={<ConsumerAllShops />} />
             <Route path="/shop-finder" element={<Navigate to="/explore" replace />} />
