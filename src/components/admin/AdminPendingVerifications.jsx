@@ -11,8 +11,12 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Search } from "lucide-react";
+import retailersTotalIcon from "../../assets/admin-retailers-total.png";
+import retailersVerifiedIcon from "../../assets/admin-retailers-verified.png";
+import retailersExpiringIcon from "../../assets/admin-retailers-expiring.png";
+import retailersGapsIcon from "../../assets/admin-retailers-gaps.png";
 
-const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC"];
+const US_STATES = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC"];
 
 // ── Design tokens ─────────────────────────────────────────────────────────────
 const C = {
@@ -37,36 +41,36 @@ function getPriority(r) {
 
 function getEvidence(r) {
   const hasDocs = !!(r.uploaded_documents?.state_license_document);
-  const hasId   = !!(r.contact_person?.government_issued_id_document);
+  const hasId = !!(r.contact_person?.government_issued_id_document);
   if (hasDocs && hasId) return "Docs complete";
-  if (!hasId)           return "Missing owner ID";
-  if (!hasDocs)         return "Missing license doc";
+  if (!hasId) return "Missing owner ID";
+  if (!hasDocs) return "Missing license doc";
   return "State data matched";
 }
 
 function mapVerification(r) {
   const h = getAgeHours(r.createdAt);
   return {
-    key:          r._id,
-    name:         r.legal_business_name || "—",
-    sub:          r.verification_method === "auto" ? "AI confidence match" : "Manual review required",
+    key: r._id,
+    name: r.legal_business_name || "—",
+    sub: r.verification_method === "auto" ? "AI confidence match" : "Manual review required",
     submissionId: `PV-${r._id.toString().slice(-7).toUpperCase()}`,
-    region:       r.license_information?.jurisdiction || r.license_information?.issuing_authority || "—",
-    priority:     getPriority(r),
+    region: r.license_information?.jurisdiction || r.license_information?.issuing_authority || "—",
+    priority: getPriority(r),
     requestedDate: new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-    slaBreach:    h >= 72,
-    evidence:     getEvidence(r),
-    method:       r.verification_method,
-    reviewer:     r.verification_method === "auto" ? "AI Bot" : "Admin",
+    slaBreach: h >= 72,
+    evidence: getEvidence(r),
+    method: r.verification_method,
+    reviewer: r.verification_method === "auto" ? "AI Bot" : "Admin",
   };
 }
 
 // ── Badges ────────────────────────────────────────────────────────────────────
 function PriorityBadge({ priority }) {
   const map = {
-    High:   { bg: "#fff1f1", color: "#d64545" },
+    High: { bg: "#fff1f1", color: "#d64545" },
     Medium: { bg: "#fff5eb", color: "#d9822b" },
-    Low:    { bg: "#f4f7fa", color: "#617182" },
+    Low: { bg: "#f4f7fa", color: "#617182" },
   };
   const s = map[priority] || map.Low;
   return (
@@ -86,7 +90,7 @@ function EvidenceBadge({ text }) {
   const isWarn = text.includes("Missing");
   const s = isGood ? { bg: "#edf9f2", color: "#1f9d61" }
     : isWarn ? { bg: "#fff5eb", color: "#d9822b" }
-    : { bg: "#f4f7fa", color: "#617182" };
+      : { bg: "#f4f7fa", color: "#617182" };
   return (
     <span style={{
       display: "inline-flex", alignItems: "center",
@@ -284,10 +288,10 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Contact Person</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <VRDetailRow label="Name"     value={record.contact_person?.full_name} />
-              <VRDetailRow label="Role"     value={record.contact_person?.role_or_position} />
-              <VRDetailRow label="Email"    value={record.contact_person?.email_address} />
-              <VRDetailRow label="Phone"    value={record.contact_person?.phone_number} />
+              <VRDetailRow label="Name" value={record.contact_person?.full_name} />
+              <VRDetailRow label="Role" value={record.contact_person?.role_or_position} />
+              <VRDetailRow label="Email" value={record.contact_person?.email_address} />
+              <VRDetailRow label="Phone" value={record.contact_person?.phone_number} />
             </div>
           </div>
 
@@ -295,9 +299,9 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Business</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <VRDetailRow label="Phone"    value={record.business_phone_number} />
-              <VRDetailRow label="Website"  value={record.website_or_social_media_link} />
-              <VRDetailRow label="Address"  value={record.physical_address} />
+              <VRDetailRow label="Phone" value={record.business_phone_number} />
+              <VRDetailRow label="Website" value={record.website_or_social_media_link} />
+              <VRDetailRow label="Address" value={record.physical_address} />
             </div>
           </div>
 
@@ -305,11 +309,11 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <VRDetailRow label="License #"    value={record.license_information?.license_number} />
-              <VRDetailRow label="Type"         value={record.license_information?.license_type} />
-              <VRDetailRow label="Authority"    value={record.license_information?.issuing_authority} />
+              <VRDetailRow label="License #" value={record.license_information?.license_number} />
+              <VRDetailRow label="Type" value={record.license_information?.license_type} />
+              <VRDetailRow label="Authority" value={record.license_information?.issuing_authority} />
               <VRDetailRow label="Jurisdiction" value={record.license_information?.jurisdiction} />
-              <VRDetailRow label="Expires"      value={record.license_information?.expiration_date ? new Date(record.license_information.expiration_date).toLocaleDateString() : null} />
+              <VRDetailRow label="Expires" value={record.license_information?.expiration_date ? new Date(record.license_information.expiration_date).toLocaleDateString() : null} />
             </div>
           </div>
 
@@ -319,8 +323,8 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {[
                 ["State License Doc", record.uploaded_documents?.state_license_document],
-                ["Utility Bill",      record.uploaded_documents?.utility_bill],
-                ["Govt. Issued ID",   record.contact_person?.government_issued_id_document],
+                ["Utility Bill", record.uploaded_documents?.utility_bill],
+                ["Govt. Issued ID", record.contact_person?.government_issued_id_document],
               ].map(([label, url]) => (
                 <div className="admin-document-row" key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", borderRadius: "10px", background: "#f4f7fa" }}>
                   <span style={{ fontSize: "13px", color: C.textPrimary }}>{label}</span>
@@ -361,10 +365,10 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Submission</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <VRDetailRow label="Submitted"  value={new Date(record.createdAt).toLocaleString()} />
-              <VRDetailRow label="Method"     value={record.verification_method} />
+              <VRDetailRow label="Submitted" value={new Date(record.createdAt).toLocaleString()} />
+              <VRDetailRow label="Method" value={record.verification_method} />
               <VRDetailRow label="GPS Status" value={record.gps_validation_status} />
-              <VRDetailRow label="Notes"      value={record.notes} />
+              <VRDetailRow label="Notes" value={record.notes} />
             </div>
           </div>
         </div>
@@ -374,22 +378,18 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-function StatCard({ label, value, delta, deltaBg, deltaColor }) {
+function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
   return (
     <div className="admin-queue-stat" style={{
-      background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px",
+      backgroundImage: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
+      border: "0.8px solid #dce7e1", borderRadius: "24px",
       boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px",
     }}>
-      <p style={{ fontSize: "14.08px", fontWeight: 400, color: C.textSecondary, marginBottom: "8px" }}>{label}</p>
-      <p style={{ fontSize: "30.4px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.912px", margin: 0 }}>{value}</p>
-      <span style={{
-        display: "inline-flex", alignItems: "center", marginTop: "10px",
-        padding: "6px 10px", borderRadius: "999px",
-        background: deltaBg, color: deltaColor,
-        fontSize: "13.12px", fontWeight: 800, whiteSpace: "nowrap",
-      }}>
-        {delta}
-      </span>
+      <div className="admin-queue-stat__content">
+        <p className="admin-queue-stat__label" style={{ color: 'white' }}>{label}</p>
+        <p className="admin-queue-stat__value" style={{ color: 'white' }}>{value}</p>
+        <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
+      </div>
     </div>
   );
 }
@@ -443,25 +443,25 @@ function FilterRow({ label, count, active, onClick }) {
 export default function AdminPendingVerifications() {
   const queryClient = useQueryClient();
 
-  const [search, setSearch]               = useState("");
-  const [apiParams, setApiParams]         = useState({ limit: 50, page: 1 });
-  const [ageFilter, setAgeFilter]         = useState("");
-  const [regionDraft, setRegionDraft]     = useState("");
+  const [search, setSearch] = useState("");
+  const [apiParams, setApiParams] = useState({ limit: 50, page: 1 });
+  const [ageFilter, setAgeFilter] = useState("");
+  const [regionDraft, setRegionDraft] = useState("");
   const [priorityDraft, setPriorityDraft] = useState("");
 
   // Drawer + actions
-  const [drawerRecord, setDrawerRecord]       = useState(null);
-  const [rejectTarget, setRejectTarget]       = useState(null);
-  const [escalateTarget, setEscalateTarget]   = useState(null);
-  const [approvingId, setApprovingId]         = useState(null);
-  const [rejectingId, setRejectingId]         = useState(null);
-  const [escalatingId, setEscalatingId]       = useState(null);
+  const [drawerRecord, setDrawerRecord] = useState(null);
+  const [rejectTarget, setRejectTarget] = useState(null);
+  const [escalateTarget, setEscalateTarget] = useState(null);
+  const [approvingId, setApprovingId] = useState(null);
+  const [rejectingId, setRejectingId] = useState(null);
+  const [escalatingId, setEscalatingId] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-  const [bulkApproving, setBulkApproving]     = useState(false);
+  const [bulkApproving, setBulkApproving] = useState(false);
 
-  const { mutateAsync: approve   } = useApproveVerificationRequest();
-  const { mutateAsync: reject    } = useRejectVerificationRequest();
-  const { mutateAsync: escalate  } = useEscalatePendingVerification();
+  const { mutateAsync: approve } = useApproveVerificationRequest();
+  const { mutateAsync: reject } = useRejectVerificationRequest();
+  const { mutateAsync: escalate } = useEscalatePendingVerification();
 
   // Debounce search
   useEffect(() => {
@@ -477,17 +477,17 @@ export default function AdminPendingVerifications() {
 
   const { data: apiData, isLoading, isError } = useAdminPendingVerifications(apiParams);
 
-  const rawRecords  = apiData?.data || [];
-  const records     = rawRecords.map(mapVerification);
-  const pagination  = apiData?.pagination || {};
-  const apiStats    = apiData?.stats || {};
-  const stateOptions  = apiData?.facets?.states || [];
+  const rawRecords = apiData?.data || [];
+  const records = rawRecords.map(mapVerification);
+  const pagination = apiData?.pagination || {};
+  const apiStats = apiData?.stats || {};
+  const stateOptions = apiData?.facets?.states || [];
 
   const STATS = [
-    { label: "Pending Total",      value: (apiStats.pendingTotal ?? "—").toString(), delta: "Backlog",               deltaBg: "#fff5eb", deltaColor: "#d9822b" },
-    { label: "High Priority",      value: (apiStats.highPriority  ?? "—").toString(), delta: "Needs same-day review", deltaBg: "#fff5eb", deltaColor: "#d9822b" },
-    { label: "SLA Breaches",       value: (apiStats.slaBreaches   ?? "—").toString(), delta: "Older than 72h",        deltaBg: "#fff1f1", deltaColor: "#d64545" },
-    { label: "Avg Time to Verify", value: apiStats.avgTimeToVerify ?? "—",            delta: "Approved + rejected",   deltaBg: "#edf9f2", deltaColor: "#1f9d61" },
+    { label: "Pending Total", value: (apiStats.pendingTotal ?? "—").toString(), delta: "Backlog", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: retailersTotalIcon },
+    { label: "High Priority", value: (apiStats.highPriority ?? "—").toString(), delta: "Needs same-day review", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: retailersVerifiedIcon },
+    { label: "SLA Breaches", value: (apiStats.slaBreaches ?? "—").toString(), delta: "Older than 72h", deltaBg: "#fff1f1", deltaColor: "#d64545", icon: retailersExpiringIcon },
+    { label: "Avg Time to Verify", value: apiStats.avgTimeToVerify ?? "—", delta: "Approved + rejected", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersGapsIcon },
   ];
 
   const handleAgeFilter = (val) => {
@@ -495,9 +495,9 @@ export default function AdminPendingVerifications() {
     setAgeFilter(next);
     setApiParams(p => {
       const u = { ...p, page: 1 };
-      if (next === "lt24")  u.submissionAge = "lt24";
+      if (next === "lt24") u.submissionAge = "lt24";
       else if (next === "24-72") u.submissionAge = "24-72";
-      else if (next === "gt72")  u.submissionAge = "gt72";
+      else if (next === "gt72") u.submissionAge = "gt72";
       else delete u.submissionAge;
       return u;
     });
@@ -608,11 +608,11 @@ export default function AdminPendingVerifications() {
     setBulkApproving(true);
     const results = await Promise.allSettled(selectedRowKeys.map(id => approve(id)));
     const succeeded = results.filter(r => r.status === "fulfilled").length;
-    const failed    = results.filter(r => r.status === "rejected").length;
+    const failed = results.filter(r => r.status === "rejected").length;
     setBulkApproving(false);
     setSelectedRowKeys([]);
     if (succeeded) toast.success(`${succeeded} verification${succeeded > 1 ? "s" : ""} approved`);
-    if (failed)    toast.error(`${failed} approval${failed > 1 ? "s" : ""} failed`);
+    if (failed) toast.error(`${failed} approval${failed > 1 ? "s" : ""} failed`);
     queryClient.invalidateQueries({ queryKey: ["adminPendingVerifications"] });
   };
 
@@ -733,20 +733,20 @@ export default function AdminPendingVerifications() {
             </p>
           </div>
           <div className="admin-queue-search-wrap" style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
-              <div style={{ position: "relative", width: "100%" }}>
-                <Search aria-hidden="true" size={16} strokeWidth={2} style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", pointerEvents: "none" }} />
-                <input
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder="Search business, submission ID, email…"
-                  style={{
-                    width: "320px", height: "48px", paddingLeft: "44px", paddingRight: "18px",
-                    borderRadius: "999px", border: "0.8px solid #dce7e1", background: "#fff",
-                    fontSize: "13.333px", color: C.textPrimary, outline: "none", fontFamily: "inherit",
-                  }}
-                />
-              </div>
-              {/* <button style={{ height: "42px", padding: "0 16px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}>
+            <div style={{ position: "relative", width: "100%" }}>
+              <Search aria-hidden="true" size={16} strokeWidth={2} style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", pointerEvents: "none" }} />
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search business, submission ID, email…"
+                style={{
+                  width: "320px", height: "48px", paddingLeft: "44px", paddingRight: "18px",
+                  borderRadius: "999px", border: "0.8px solid #dce7e1", background: "#fff",
+                  fontSize: "13.333px", color: C.textPrimary, outline: "none", fontFamily: "inherit",
+                }}
+              />
+            </div>
+            {/* <button style={{ height: "42px", padding: "0 16px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}>
                 Auto-Route
               </button>
               <button style={{ height: "42px", padding: "0 16px", borderRadius: "12px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}>
@@ -791,7 +791,7 @@ export default function AdminPendingVerifications() {
                 <div>
                   <label style={{ display: "block", fontSize: "13.76px", fontWeight: 800, color: C.textPrimary, marginBottom: "8px" }}>Submission Age</label>
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <FilterRow label="< 24 Hours"    count={apiStats.lt24Count          ?? "—"} active={ageFilter === "lt24"}  onClick={() => handleAgeFilter("lt24")} />
+                    <FilterRow label="< 24 Hours" count={apiStats.lt24Count ?? "—"} active={ageFilter === "lt24"} onClick={() => handleAgeFilter("lt24")} />
                     <FilterRow label="24 – 72 Hours" count={apiStats.between24and72Count ?? "—"} active={ageFilter === "24-72"} onClick={() => handleAgeFilter("24-72")} />
                     <FilterRow label="> 72 Hours (SLA)" count={apiStats.slaBreaches ?? "—"} active={ageFilter === "gt72"} onClick={() => handleAgeFilter("gt72")} />
                   </div>
@@ -887,6 +887,7 @@ export default function AdminPendingVerifications() {
                       Escalate
                     </button>
                     <button
+                      className="admin-primary-action"
                       onClick={openReviewerView}
                       style={{ height: "42px", padding: "0 16px", borderRadius: "12px", backgroundImage: "linear-gradient(165.51deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}
                     >

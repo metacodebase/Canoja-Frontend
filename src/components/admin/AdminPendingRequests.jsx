@@ -13,6 +13,10 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Search } from "lucide-react";
+import retailersTotalIcon from "../../assets/admin-retailers-total.png";
+import retailersVerifiedIcon from "../../assets/admin-retailers-verified.png";
+import retailersExpiringIcon from "../../assets/admin-retailers-expiring.png";
+import retailersGapsIcon from "../../assets/admin-retailers-gaps.png";
 
 const C = {
   border: "#dce7e1",
@@ -38,11 +42,11 @@ function TypeBadge({ type }) {
 
 function StatusBadge({ status }) {
   const map = {
-    pending:       { label: "New",          bg: "#edf5ff", color: "#2f80ed" },
-    in_review:     { label: "In Review",    bg: "#fff5eb", color: "#d9822b" },
-    approved:      { label: "Approved",     bg: "#edf9f2", color: "#1f9d61" },
-    rejected:      { label: "Rejected",     bg: "#fff1f1", color: "#d64545" },
-    auto_verified: { label: "Auto Verified",bg: "#f4f7fa", color: "#617182" },
+    pending: { label: "New", bg: "#edf5ff", color: "#2f80ed" },
+    in_review: { label: "In Review", bg: "#fff5eb", color: "#d9822b" },
+    approved: { label: "Approved", bg: "#edf9f2", color: "#1f9d61" },
+    rejected: { label: "Rejected", bg: "#fff1f1", color: "#d64545" },
+    auto_verified: { label: "Auto Verified", bg: "#f4f7fa", color: "#617182" },
   };
   const s = map[status] || { label: status, bg: "#f4f7fa", color: "#617182" };
   return (
@@ -98,8 +102,8 @@ function timeAgo(date) {
   return `${d}d ago`;
 }
 
-const US_STATES = ["AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC"];
-const STATE_NAMES = { AL:"Alabama",AK:"Alaska",AZ:"Arizona",AR:"Arkansas",CA:"California",CO:"Colorado",CT:"Connecticut",DE:"Delaware",FL:"Florida",GA:"Georgia",HI:"Hawaii",ID:"Idaho",IL:"Illinois",IN:"Indiana",IA:"Iowa",KS:"Kansas",KY:"Kentucky",LA:"Louisiana",ME:"Maine",MD:"Maryland",MA:"Massachusetts",MI:"Michigan",MN:"Minnesota",MS:"Mississippi",MO:"Missouri",MT:"Montana",NE:"Nebraska",NV:"Nevada",NH:"New Hampshire",NJ:"New Jersey",NM:"New Mexico",NY:"New York",NC:"North Carolina",ND:"North Dakota",OH:"Ohio",OK:"Oklahoma",OR:"Oregon",PA:"Pennsylvania",RI:"Rhode Island",SC:"South Carolina",SD:"South Dakota",TN:"Tennessee",TX:"Texas",UT:"Utah",VT:"Vermont",VA:"Virginia",WA:"Washington",WV:"West Virginia",WI:"Wisconsin",WY:"Wyoming",DC:"District of Columbia" };
+const US_STATES = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC"];
+const STATE_NAMES = { AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas", CA: "California", CO: "Colorado", CT: "Connecticut", DE: "Delaware", FL: "Florida", GA: "Georgia", HI: "Hawaii", ID: "Idaho", IL: "Illinois", IN: "Indiana", IA: "Iowa", KS: "Kansas", KY: "Kentucky", LA: "Louisiana", ME: "Maine", MD: "Maryland", MA: "Massachusetts", MI: "Michigan", MN: "Minnesota", MS: "Mississippi", MO: "Missouri", MT: "Montana", NE: "Nebraska", NV: "Nevada", NH: "New Hampshire", NJ: "New Jersey", NM: "New Mexico", NY: "New York", NC: "North Carolina", ND: "North Dakota", OH: "Ohio", OK: "Oklahoma", OR: "Oregon", PA: "Pennsylvania", RI: "Rhode Island", SC: "South Carolina", SD: "South Dakota", TN: "Tennessee", TX: "Texas", UT: "Utah", VT: "Vermont", VA: "Virginia", WA: "Washington", WV: "West Virginia", WI: "Wisconsin", WY: "Wyoming", DC: "District of Columbia" };
 
 function extractState(address) {
   if (!address) return "";
@@ -111,17 +115,17 @@ function extractState(address) {
 function mapRequest(r) {
   const completeness = computeCompleteness(r);
   return {
-    key:           r._id,
-    name:          r.legal_business_name || "—",
-    sub:           `PR-${r._id.toString().slice(-6).toUpperCase()} · Submitted ${timeAgo(r.createdAt)}`,
-    type:          r.claimRequested ? "Claim Business" : r.verifyRequested ? "Verify Business" : "—",
-    submitted:     new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-    status:        r.status,
-    method:        r.verification_method,
+    key: r._id,
+    name: r.legal_business_name || "—",
+    sub: `PR-${r._id.toString().slice(-6).toUpperCase()} · Submitted ${timeAgo(r.createdAt)}`,
+    type: r.claimRequested ? "Claim Business" : r.verifyRequested ? "Verify Business" : "—",
+    submitted: new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+    status: r.status,
+    method: r.verification_method,
     duplicateFlag: r.duplicateFlag || false,
     completeness,
-    market:        extractState(r.physical_address),
-    leadSource:    r.leadSource || "Website CTA",
+    market: extractState(r.physical_address),
+    leadSource: r.leadSource || "Website CTA",
   };
 }
 
@@ -238,8 +242,8 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Contact Person</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <DetailRow label="Name"  value={record.contact_person?.full_name} />
-              <DetailRow label="Role"  value={record.contact_person?.role_or_position} />
+              <DetailRow label="Name" value={record.contact_person?.full_name} />
+              <DetailRow label="Role" value={record.contact_person?.role_or_position} />
               <DetailRow label="Email" value={record.contact_person?.email_address} />
               <DetailRow label="Phone" value={record.contact_person?.phone_number} />
             </div>
@@ -249,7 +253,7 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Business</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <DetailRow label="Phone"   value={record.business_phone_number} />
+              <DetailRow label="Phone" value={record.business_phone_number} />
               <DetailRow label="Website" value={record.website_or_social_media_link} />
               <DetailRow label="Address" value={record.physical_address} />
             </div>
@@ -259,9 +263,9 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <DetailRow label="License #"    value={record.license_information?.license_number} />
-              <DetailRow label="Type"         value={record.license_information?.license_type} />
-              <DetailRow label="Authority"    value={record.license_information?.issuing_authority} />
+              <DetailRow label="License #" value={record.license_information?.license_number} />
+              <DetailRow label="Type" value={record.license_information?.license_type} />
+              <DetailRow label="Authority" value={record.license_information?.issuing_authority} />
               <DetailRow label="Jurisdiction" value={record.license_information?.jurisdiction} />
             </div>
           </div>
@@ -272,8 +276,8 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {[
                 ["State License Doc", record.uploaded_documents?.state_license_document],
-                ["Utility Bill",      record.uploaded_documents?.utility_bill],
-                ["Govt. Issued ID",   record.contact_person?.government_issued_id_document],
+                ["Utility Bill", record.uploaded_documents?.utility_bill],
+                ["Govt. Issued ID", record.contact_person?.government_issued_id_document],
               ].map(([label, url]) => (
                 <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", borderRadius: "10px", background: "#f4f7fa" }}>
                   <span style={{ fontSize: "13px", color: C.textPrimary }}>{label}</span>
@@ -399,12 +403,12 @@ function NewRequestModal({ onClose, onSuccess }) {
   const validate = () => {
     const e = {};
     if (!form.legal_business_name.trim()) e.legal_business_name = true;
-    if (!form.physical_address.trim())    e.physical_address = true;
+    if (!form.physical_address.trim()) e.physical_address = true;
     if (!form.business_phone_number.trim()) e.business_phone_number = true;
-    if (!form.contact_full_name.trim())   e.contact_full_name = true;
-    if (!form.contact_email.trim())       e.contact_email = true;
-    if (!form.contact_phone.trim())       e.contact_phone = true;
-    if (!form.contact_role.trim())        e.contact_role = true;
+    if (!form.contact_full_name.trim()) e.contact_full_name = true;
+    if (!form.contact_email.trim()) e.contact_email = true;
+    if (!form.contact_phone.trim()) e.contact_phone = true;
+    if (!form.contact_role.trim()) e.contact_role = true;
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -427,10 +431,10 @@ function NewRequestModal({ onClose, onSuccess }) {
           role_or_position: form.contact_role.trim(),
         },
         license_information: {
-          license_number:    form.license_number.trim(),
-          license_type:      form.license_type.trim(),
+          license_number: form.license_number.trim(),
+          license_type: form.license_type.trim(),
           issuing_authority: form.issuing_authority.trim(),
-          jurisdiction:      form.jurisdiction.trim(),
+          jurisdiction: form.jurisdiction.trim(),
         },
       });
       onSuccess();
@@ -551,12 +555,18 @@ function NewRequestModal({ onClose, onSuccess }) {
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-function StatCard({ label, value, delta, deltaBg, deltaColor }) {
+function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
   return (
-    <div className="admin-queue-stat" style={{ background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px" }}>
-      <p style={{ fontSize: "14.08px", fontWeight: 400, color: C.textSecondary, marginBottom: "8px" }}>{label}</p>
-      <p style={{ fontSize: "30.4px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.912px", margin: 0 }}>{value}</p>
-      <span style={{ display: "inline-flex", alignItems: "center", marginTop: "10px", padding: "6px 10px", borderRadius: "999px", background: deltaBg, color: deltaColor, fontSize: "13.12px", fontWeight: 800, whiteSpace: "nowrap" }}>{delta}</span>
+    <div className="admin-queue-stat" style={{
+      backgroundImage: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
+      border: "0.8px solid #dce7e1", borderRadius: "24px",
+      boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px"
+    }}>
+      <div className="admin-queue-stat__content">
+        <p className="admin-queue-stat__label" style={{ color: 'white' }}>{label}</p>
+        <p className="admin-queue-stat__value" style={{ color: 'white' }}>{value}</p>
+        <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
+      </div>
     </div>
   );
 }
@@ -586,22 +596,22 @@ function FilterRow({ label, count, active, onClick }) {
 export default function AdminPendingRequests() {
   const queryClient = useQueryClient();
 
-  const [search, setSearch]         = useState("");
-  const [apiParams, setApiParams]   = useState({ limit: 50, page: 1 });
+  const [search, setSearch] = useState("");
+  const [apiParams, setApiParams] = useState({ limit: 50, page: 1 });
   const [typeFilter, setTypeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [marketFilter, setMarketFilter] = useState("");
-  const [scoreFilter, setScoreFilter]   = useState("");
+  const [scoreFilter, setScoreFilter] = useState("");
 
-  const [drawerRecord, setDrawerRecord]   = useState(null);
-  const [rejectTarget, setRejectTarget]   = useState(null);
-  const [approvingId, setApprovingId]     = useState(null);
-  const [rejectingId, setRejectingId]     = useState(null);
+  const [drawerRecord, setDrawerRecord] = useState(null);
+  const [rejectTarget, setRejectTarget] = useState(null);
+  const [approvingId, setApprovingId] = useState(null);
+  const [rejectingId, setRejectingId] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [showNewRequest, setShowNewRequest] = useState(false);
 
-  const { mutateAsync: approve  } = useApproveVerificationRequest();
-  const { mutateAsync: reject   } = useRejectVerificationRequest();
+  const { mutateAsync: approve } = useApproveVerificationRequest();
+  const { mutateAsync: reject } = useRejectVerificationRequest();
 
   // Debounce search
   useEffect(() => {
@@ -618,25 +628,25 @@ export default function AdminPendingRequests() {
   const { data: apiData, isLoading, isError } = useAdminPendingRequests(apiParams);
 
   const rawRecords = apiData?.data || [];
-  const allMapped    = rawRecords.map(mapRequest);
+  const allMapped = rawRecords.map(mapRequest);
   const stateOptions = apiData?.facets?.states || [];
   const records = allMapped;
   const selectedRecords = selectedRowKeys.map(k => rawRecords.find(r => r._id === k)).filter(Boolean);
   const canApproveSelection = selectedRecords.length > 0 && selectedRecords.every(r => r.status === "pending" || r.status === "in_review");
   const pagination = apiData?.pagination || {};
-  const apiStats   = apiData?.stats || {};
+  const apiStats = apiData?.stats || {};
 
-  const approved    = apiStats.approvedCount     ?? 0;
-  const rejected    = apiStats.rejectedCount     ?? 0;
-  const autoVerif   = apiStats.autoVerifiedCount ?? 0;
-  const decided     = approved + rejected + autoVerif;
+  const approved = apiStats.approvedCount ?? 0;
+  const rejected = apiStats.rejectedCount ?? 0;
+  const autoVerif = apiStats.autoVerifiedCount ?? 0;
+  const decided = approved + rejected + autoVerif;
   const conversionRate = decided > 0 ? Math.round(((approved + autoVerif) / decided) * 100) : null;
 
   const STATS = [
-    { label: "Open Requests",     value: (apiStats.openRequests     ?? "—").toString(),       delta: "Across all request types", deltaBg: "#edf5ff", deltaColor: "#2f80ed" },
-    { label: "Claim Business",    value: (apiStats.claimBusiness    ?? "—").toString(),       delta: "Highest intent",            deltaBg: "#edf9f2", deltaColor: "#1f9d61" },
-    { label: "Duplicate Signals", value: (apiStats.duplicateSignals ?? "—").toString(),       delta: "Review before approval",    deltaBg: "#fff5eb", deltaColor: "#d9822b" },
-    { label: "Conversion Rate",   value: conversionRate !== null ? `${conversionRate}%` : "—", delta: "Verified / Decided",        deltaBg: "#edf9f2", deltaColor: "#1f9d61" },
+    { label: "Open Requests", value: (apiStats.openRequests ?? "—").toString(), delta: "Across all request types", deltaBg: "#edf5ff", deltaColor: "#2f80ed", icon: retailersTotalIcon },
+    { label: "Claim Business", value: (apiStats.claimBusiness ?? "—").toString(), delta: "Highest intent", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersVerifiedIcon },
+    { label: "Duplicate Signals", value: (apiStats.duplicateSignals ?? "—").toString(), delta: "Review before approval", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: retailersGapsIcon },
+    { label: "Conversion Rate", value: conversionRate !== null ? `${conversionRate}%` : "—", delta: "Verified / Decided", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersExpiringIcon },
   ];
 
   const handleTypeFilter = (val) => {
@@ -770,21 +780,22 @@ export default function AdminPendingRequests() {
             </p>
           </div>
           <div className="admin-queue-search-wrap" style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0 }}>
-              <div style={{ position: "relative", width: "100%" }}>
-                <Search aria-hidden="true" size={16} strokeWidth={2} style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", pointerEvents: "none" }} />
-                <input
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder="Search business name, email, phone…"
-                  style={{ width: "320px", height: "48px", paddingLeft: "44px", paddingRight: "18px", borderRadius: "999px", border: "0.8px solid #dce7e1", background: "#fff", fontSize: "13.333px", color: C.textPrimary, outline: "none", fontFamily: "inherit" }}
-                />
-              </div>
-              <button
-                onClick={() => setShowNewRequest(true)}
-                style={{ height: "42px", padding: "0 16px", borderRadius: "12px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}
-              >
-                + New Request
-              </button>
+            <div style={{ position: "relative", width: "100%" }}>
+              <Search aria-hidden="true" size={16} strokeWidth={2} style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", pointerEvents: "none" }} />
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search business name, email, phone…"
+                style={{ width: "320px", height: "48px", paddingLeft: "44px", paddingRight: "18px", borderRadius: "999px", border: "0.8px solid #dce7e1", background: "#fff", fontSize: "13.333px", color: C.textPrimary, outline: "none", fontFamily: "inherit" }}
+              />
+            </div>
+            <button
+              className="admin-primary-action"
+              onClick={() => setShowNewRequest(true)}
+              style={{ height: "42px", padding: "0 16px", borderRadius: "12px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}
+            >
+              + New Request
+            </button>
           </div>
         </div>
 
@@ -830,9 +841,9 @@ export default function AdminPendingRequests() {
                   <label style={{ display: "block", fontSize: "13.76px", fontWeight: 800, color: C.textPrimary, marginBottom: "8px" }}>Status</label>
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     {[
-                      ["New",           "pending",       apiStats.pendingCount],
-                      ["Approved",      "approved",      apiStats.approvedCount],
-                      ["Rejected",      "rejected",      apiStats.rejectedCount],
+                      ["New", "pending", apiStats.pendingCount],
+                      ["Approved", "approved", apiStats.approvedCount],
+                      ["Rejected", "rejected", apiStats.rejectedCount],
                       ["Auto Verified", "auto_verified", apiStats.autoVerifiedCount],
                     ].map(([label, val, count]) => (
                       <FilterRow key={val} label={label} count={count ?? "—"} active={statusFilter === val} onClick={() => handleStatusFilter(val)} />
@@ -902,6 +913,7 @@ export default function AdminPendingRequests() {
                       Message Operator
                     </button> */}
                     <button
+                      className="admin-primary-action"
                       onClick={() => canApproveSelection && handleApprove(selectedRowKeys[0])}
                       disabled={!canApproveSelection}
                       title={!canApproveSelection && selectedRowKeys.length ? "Only pending or in-review requests can be approved" : ""}

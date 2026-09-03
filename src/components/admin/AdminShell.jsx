@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { LockKeyhole, LogOut, Menu, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, LockKeyhole, LogOut, Menu, X } from "lucide-react";
 import canojaLogo from "../../assets/canojaLogo.png";
 import canojaHeroBg from "../../assets/canoja-hero-bg.png";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -36,6 +36,7 @@ export default function AdminShell({ children }) {
   const queryClient = useQueryClient();
   const [showCP, setShowCP] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { theme, toggleTheme } = useAdminTheme();
 
   const handleLogout = async () => {
@@ -107,14 +108,14 @@ export default function AdminShell({ children }) {
   );
 
   return (
-    <div className={`admin-theme admin-shell admin-theme--${theme} flex min-h-screen`} style={{ background: "#f6f9f8", fontFamily: "Inter, sans-serif" }}>
+    <div className={`admin-theme admin-shell admin-theme--${theme}${sidebarCollapsed ? " admin-shell--sidebar-collapsed" : ""} flex min-h-screen`} style={{ background: "#f6f9f8", fontFamily: "Inter, sans-serif" }}>
       <button type="button" className="admin-menu-trigger" aria-label="Open admin menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><Menu size={22} /></button>
       {menuOpen && <button type="button" className="admin-sidebar-backdrop" aria-label="Close admin menu" onClick={() => setMenuOpen(false)} />}
       {/* Sidebar */}
       <aside
-        className={`admin-sidebar sticky top-0 h-screen shrink-0 flex flex-col${menuOpen ? " admin-sidebar--open" : ""}`}
+        className={`admin-sidebar sticky top-0 h-screen shrink-0 flex flex-col${menuOpen ? " admin-sidebar--open" : ""}${sidebarCollapsed ? " admin-sidebar--collapsed" : ""}`}
         style={{
-          width: "248px",
+          width: sidebarCollapsed ? "0" : "248px",
           backgroundImage: `linear-gradient(180deg, rgba(0,30,28,.84) 0%, rgba(0,38,34,.78) 54%, rgba(0,26,27,.76) 100%), url(${canojaHeroBg})`,
           backgroundPosition: "center bottom",
           backgroundSize: "auto 100%, auto 100%",
@@ -122,9 +123,18 @@ export default function AdminShell({ children }) {
           boxShadow: "8px 0 32px rgba(0,18,17,.16)",
         }}
       >
+        <button
+          type="button"
+          className="admin-sidebar-collapse"
+          aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-expanded={!sidebarCollapsed}
+          onClick={() => setSidebarCollapsed(value => !value)}
+        >
+          {sidebarCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
+        </button>
         <button type="button" className="admin-sidebar-close" aria-label="Close admin menu" onClick={() => setMenuOpen(false)}><X size={21} /></button>
         {/* Brand */}
-        <div className="flex items-center gap-[10px]" style={{ padding: "20px 22px 0" }}>
+        <div className="admin-sidebar-brand flex items-center gap-[10px]" style={{ padding: "20px 22px 0" }}>
           <div
             className="shrink-0"
             style={{

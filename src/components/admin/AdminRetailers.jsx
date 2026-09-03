@@ -24,9 +24,9 @@ const C = {
 // ── Status badge — exact Figma: h-28, rounded-full, 12.48px extrabold ─────────
 function StatusBadge({ status }) {
   const map = {
-    Claimed:   { bg: "#edf9f2", color: "#1f9d61" },
-    Pending:    { bg: "#fff5eb", color: "#d9822b" },
-    Expired:    { bg: "#fff1f1", color: "#d64545" },
+    Claimed: { bg: "#edf9f2", color: "#1f9d61" },
+    Pending: { bg: "#fff5eb", color: "#d9822b" },
+    Expired: { bg: "#fff1f1", color: "#d64545" },
     Unclaimed: { bg: "#fff1f1", color: "#d64545" },
   };
   const s = map[status] || { bg: "#f4f7fa", color: "#617182" };
@@ -128,21 +128,21 @@ const SOURCE_LABELS = { state_db: "State DB", manual: "Manual", ai_verified: "AI
 function mapRetailer(r) {
   const now = Date.now();
   const exp = r.expiration_date ? new Date(r.expiration_date) : null;
-  const isExpired   = exp && exp.getTime() < now;
-  const isExpiring  = exp && !isExpired && (exp.getTime() - now) < 30 * 86400000;
-  const isPending  = r._vrStatus?.status === "pending";
+  const isExpired = exp && exp.getTime() < now;
+  const isExpiring = exp && !isExpired && (exp.getTime() - now) < 30 * 86400000;
+  const isPending = r._vrStatus?.status === "pending";
   let verification = isPending ? "Pending" : r.claimed ? "Claimed" : isExpired ? "Expired" : "Unclaimed";
-  let actionStyle   = isExpiring ? "review" : "view";
+  let actionStyle = isExpiring ? "review" : "view";
   return {
-    key:          r._id,
-    name:         r.business_name || "—",
-    sub:          r.dba ? `DBA: ${r.dba}` : r.owner?.name ? `Owner: ${r.owner.name}` : "",
-    license:      r.license_number || "—",
-    market:       r.stateName || r.city || "—",
+    key: r._id,
+    name: r.business_name || "—",
+    sub: r.dba ? `DBA: ${r.dba}` : r.owner?.name ? `Owner: ${r.owner.name}` : "",
+    license: r.license_number || "—",
+    market: r.stateName || r.city || "—",
     verification,
-    expires:      exp ? exp.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }) : "—",
+    expires: exp ? exp.toLocaleDateString("en-US", { month: "2-digit", day: "2-digit", year: "numeric" }) : "—",
     completeness: r.dataCompletenessScore != null ? `${r.dataCompletenessScore}%` : "—",
-    source:       SOURCE_LABELS[r.sourceType] || "—",
+    source: SOURCE_LABELS[r.sourceType] || "—",
     actionStyle,
   };
 }
@@ -162,18 +162,18 @@ function RetailerDrawer({ record, onClose }) {
   const { data: auditData } = useAdminAuditLog(
     record ? { targetType: "LicenseRecord", targetId: record._id, limit: 20 } : {}
   );
-  const auditLogs  = auditData?.data || [];
-  const lifecycle  = record?.verificationLifecycle || [];
-  const vr         = record?._vrStatus;
-  const exp        = record?.expiration_date ? new Date(record.expiration_date) : null;
-  const now        = Date.now();
-  const isExpired  = exp && exp.getTime() < now;
+  const auditLogs = auditData?.data || [];
+  const lifecycle = record?.verificationLifecycle || [];
+  const vr = record?._vrStatus;
+  const exp = record?.expiration_date ? new Date(record.expiration_date) : null;
+  const now = Date.now();
+  const isExpired = exp && exp.getTime() < now;
   const isExpiring = exp && !isExpired && (exp.getTime() - now) < 30 * 86400000;
 
   const vrLabel = vr?.status === "approved" && vr?.method === "manual" ? "Admin Verified"
     : vr?.status === "auto_verified" ? "Auto Verified"
-    : vr?.status === "pending" ? "Pending"
-    : record?.claimed ? "Verified" : "Unverified";
+      : vr?.status === "pending" ? "Pending"
+        : record?.claimed ? "Verified" : "Unverified";
 
   return (
     <Drawer
@@ -213,12 +213,12 @@ function RetailerDrawer({ record, onClose }) {
             <div>
               <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                <DetailRow label="License #"      value={record.license_number} />
-                <DetailRow label="Status"         value={record.license_status} />
-                <DetailRow label="Type"           value={record.license_type} />
-                <DetailRow label="Jurisdiction"   value={record.jurisdiction || record.stateName} />
-                <DetailRow label="Issued"         value={record.issue_date ? new Date(record.issue_date).toLocaleDateString() : null} />
-                <DetailRow label="Expires"        value={exp ? exp.toLocaleDateString() : null} />
+                <DetailRow label="License #" value={record.license_number} />
+                <DetailRow label="Status" value={record.license_status} />
+                <DetailRow label="Type" value={record.license_type} />
+                <DetailRow label="Jurisdiction" value={record.jurisdiction || record.stateName} />
+                <DetailRow label="Issued" value={record.issue_date ? new Date(record.issue_date).toLocaleDateString() : null} />
+                <DetailRow label="Expires" value={exp ? exp.toLocaleDateString() : null} />
               </div>
             </div>
 
@@ -226,10 +226,10 @@ function RetailerDrawer({ record, onClose }) {
             <div>
               <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Location</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                <DetailRow label="Address"   value={record.business_address} />
-                <DetailRow label="City"      value={record.city} />
-                <DetailRow label="State"     value={record.stateName} />
-                <DetailRow label="ZIP"       value={record.postal_code} />
+                <DetailRow label="Address" value={record.business_address} />
+                <DetailRow label="City" value={record.city} />
+                <DetailRow label="State" value={record.stateName} />
+                <DetailRow label="ZIP" value={record.postal_code} />
               </div>
             </div>
 
@@ -237,10 +237,10 @@ function RetailerDrawer({ record, onClose }) {
             <div>
               <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Contact</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                <DetailRow label="Phone"    value={record.contact_information?.phone} />
-                <DetailRow label="Email"    value={record.contact_information?.email} />
-                <DetailRow label="Website"  value={record.contact_information?.website} />
-                <DetailRow label="Owner"    value={record.owner?.name} />
+                <DetailRow label="Phone" value={record.contact_information?.phone} />
+                <DetailRow label="Email" value={record.contact_information?.email} />
+                <DetailRow label="Website" value={record.contact_information?.website} />
+                <DetailRow label="Owner" value={record.owner?.name} />
               </div>
             </div>
 
@@ -282,10 +282,10 @@ function RetailerDrawer({ record, onClose }) {
             <div>
               <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Meta</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                <DetailRow label="Source"       value={SOURCE_LABELS[record.sourceType] || record.sourceType} />
-                <DetailRow label="Risk Flag"    value={record.riskFlag} />
+                <DetailRow label="Source" value={SOURCE_LABELS[record.sourceType] || record.sourceType} />
+                <DetailRow label="Risk Flag" value={record.riskFlag} />
                 <DetailRow label="Completeness" value={record.dataCompletenessScore != null ? `${record.dataCompletenessScore}%` : null} />
-                <DetailRow label="Claimed"      value={record.claimed ? `Yes · ${record.claimedAt ? new Date(record.claimedAt).toLocaleDateString() : ""}` : "No"} />
+                <DetailRow label="Claimed" value={record.claimed ? `Yes · ${record.claimedAt ? new Date(record.claimedAt).toLocaleDateString() : ""}` : "No"} />
               </div>
             </div>
           </div>
@@ -498,7 +498,7 @@ function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
   return (
     <div className="admin-queue-stat"
       style={{
-        background: "#fff",
+        backgroundImage: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
         border: "0.8px solid #dce7e1",
         borderRadius: "24px",
         boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)",
@@ -507,12 +507,15 @@ function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
         position: "relative",
       }}
     >
-      <div className="admin-queue-stat__content">
-        <p className="admin-queue-stat__label" style={{ color: C.textSecondary }}>{label}</p>
-        <p className="admin-queue-stat__value" style={{ color: C.textPrimary }}>{value}</p>
+      <div style={{
+        justifyContent: "space-between", flex: 1, alignItems: "flex-start",
+        height: "100%", display: "flex", flexDirection: "column",
+      }} >
+        <p className="admin-queue-stat__label" style={{ color: 'white', alignSelf: "flex-start" }}>{label}</p>
+        <p className="admin-queue-stat__value" style={{ color: 'white' }}>{value}</p>
         <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
       </div>
-      <img className="admin-queue-stat__icon" src={icon} alt="" aria-hidden="true" />
+      <img className="admin-queue-stat__icon" style={{ width: "80px", height: "80px", position: 'absolute', right: "20px" }} src={icon} alt="" aria-hidden="true" />
     </div>
   );
 }
@@ -565,8 +568,8 @@ export default function AdminRetailers() {
   const queryClient = useQueryClient();
 
   // Filter draft state — for dropdowns, applied on button click
-  const [stateDraft, setStateDraft]         = useState("");
-  const [sourceDraft, setSourceDraft]       = useState("");
+  const [stateDraft, setStateDraft] = useState("");
+  const [sourceDraft, setSourceDraft] = useState("");
   const [completenessFilter, setCompletenessFilter] = useState("");
 
   // Quick-filter state — applied immediately on click
@@ -616,31 +619,31 @@ export default function AdminRetailers() {
   const { data: apiData, isLoading, isError } = useAdminRetailers(apiParams);
   const { data: timelineData } = useAdminAuditLog({ targetType: "LicenseRecord", limit: 6 });
   const { data: recentLogsData } = useRecentAuditLog({ limit: 5 });
-  const timelineLogs  = timelineData?.data  || [];
+  const timelineLogs = timelineData?.data || [];
   const recentAuditLogs = recentLogsData?.data || [];
 
   const rawRecords = apiData?.data || [];
-  const records    = rawRecords.map(mapRetailer);
+  const records = rawRecords.map(mapRetailer);
   const pagination = apiData?.pagination || {};
-  const facets     = apiData?.facets || {};
-  const stats      = apiData?.stats || {};
+  const facets = apiData?.facets || {};
+  const stats = apiData?.stats || {};
 
   // Facet counts for filter sidebar
-  const claimedCount       = facets.claimedCount       ?? 0;
-  const unclaimedCount     = facets.unclaimedCount     ?? 0;
-  const expiringSoonCount  = facets.expiringSoonCount  ?? 0;
-  const dataGapsCount      = facets.dataGapsCount      ?? 0;
-  const pendingVRCount     = facets.pendingVRCount     ?? 0;
-  const verifiedBreakdown  = facets.verifiedBreakdown  || {};
+  const claimedCount = facets.claimedCount ?? 0;
+  const unclaimedCount = facets.unclaimedCount ?? 0;
+  const expiringSoonCount = facets.expiringSoonCount ?? 0;
+  const dataGapsCount = facets.dataGapsCount ?? 0;
+  const pendingVRCount = facets.pendingVRCount ?? 0;
+  const verifiedBreakdown = facets.verifiedBreakdown || {};
   const adminVerifiedCount = verifiedBreakdown.adminVerified ?? 0;
-  const autoVerifiedCount  = verifiedBreakdown.autoVerified  ?? 0;
-  const activeFacetCount     = facets.licenseStatuses?.find(f => /^active$/i.test(f._id))?.count ?? 0;
-  const expiredFacetCount    = facets.expiredByDateCount ?? 0;
-  const stateOptions         = facets.states || [];
+  const autoVerifiedCount = verifiedBreakdown.autoVerified ?? 0;
+  const activeFacetCount = facets.licenseStatuses?.find(f => /^active$/i.test(f._id))?.count ?? 0;
+  const expiredFacetCount = facets.expiredByDateCount ?? 0;
+  const stateOptions = facets.states || [];
 
   // Counts for hero chips (based on current-page records)
-  const needReviewCount  = records.filter(r => r.actionStyle === "review").length;
-  const expiringCount    = records.filter(r => {
+  const needReviewCount = records.filter(r => r.actionStyle === "review").length;
+  const expiringCount = records.filter(r => {
     if (r.expires === "—") return false;
     const d = new Date(r.expires);
     return d.getTime() > Date.now() && d.getTime() - Date.now() < 30 * 86400000;
@@ -648,9 +651,9 @@ export default function AdminRetailers() {
 
   const total = pagination.total ?? 0;
 
-  const filteredVerified      = stats.verifiedCount   ?? 0;
-  const filteredExpiringSoon  = stats.expiringSoon    ?? 0;
-  const filteredDataGaps      = stats.dataGaps        ?? 0;
+  const filteredVerified = stats.verifiedCount ?? 0;
+  const filteredExpiringSoon = stats.expiringSoon ?? 0;
+  const filteredDataGaps = stats.dataGaps ?? 0;
 
   const STATS = [
     { label: "Total Retailers", value: total.toLocaleString(), delta: "In database", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersTotalIcon },
@@ -728,9 +731,9 @@ export default function AdminRetailers() {
       const rows = allRecords.map(r => {
         const now = Date.now();
         const exp = r.expiration_date ? new Date(r.expiration_date) : null;
-        const isExpired  = exp && exp.getTime() < now;
+        const isExpired = exp && exp.getTime() < now;
         const isExpiring = exp && !isExpired && (exp.getTime() - now) < 30 * 86400000;
-        const isPending  = r._vrStatus?.status === "pending";
+        const isPending = r._vrStatus?.status === "pending";
         const verification = isPending ? "Pending" : r.claimed ? "Claimed" : isExpired ? "Expired" : "Unclaimed";
 
         return [
@@ -967,6 +970,7 @@ export default function AdminRetailers() {
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <button
+                className="admin-primary-action"
                 onClick={() => setShowAddModal(true)}
                 style={{
                   height: "42px", padding: "0 16px",
@@ -1171,6 +1175,7 @@ export default function AdminRetailers() {
 
                 {/* Apply button */}
                 <button
+                  className="admin-primary-action"
                   onClick={handleApply}
                   style={{
                     width: "100%", height: "42px", borderRadius: "12px",
@@ -1220,6 +1225,7 @@ export default function AdminRetailers() {
                       Bulk Assign
                     </button> */}
                     <button
+                      className="admin-primary-action"
                       onClick={handleExportCSV}
                       disabled={exporting}
                       style={{ height: "42px", padding: "0 16px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13.333px", fontWeight: 700, cursor: "pointer", opacity: exporting ? 0.6 : 1 }}

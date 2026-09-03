@@ -13,6 +13,10 @@ import { useQueryClient, useQuery } from "@tanstack/react-query";
 import api from "../../services/api";
 import { toast } from "react-toastify";
 import { Search } from "lucide-react";
+import retailersTotalIcon from "../../assets/admin-retailers-total.png";
+import retailersVerifiedIcon from "../../assets/admin-retailers-verified.png";
+import retailersExpiringIcon from "../../assets/admin-retailers-expiring.png";
+import retailersGapsIcon from "../../assets/admin-retailers-gaps.png";
 
 const C = {
   border: "#dce7e1",
@@ -28,9 +32,9 @@ const FMT = { month: "short", day: "numeric", year: "numeric" };
 // ── Badges ────────────────────────────────────────────────────────────────────
 function BadgeStatus({ status }) {
   const map = {
-    Active:        { bg: "#edf9f2", color: "#1f9d61" },
+    Active: { bg: "#edf9f2", color: "#1f9d61" },
     "Expiring Soon": { bg: "#fff5eb", color: "#d9822b" },
-    Revoked:       { bg: "#fff1f1", color: "#d64545" },
+    Revoked: { bg: "#fff1f1", color: "#d64545" },
   };
   const s = map[status] || { bg: "#f4f7fa", color: "#617182" };
   return (
@@ -54,18 +58,18 @@ function getBadgeStatus(record) {
 
 function mapVerified(r) {
   return {
-    key:          r._id,
-    name:         r.business_name || "—",
-    sub:          r.dba || r.city || "—",
-    license:      r.license_number || "—",
-    market:       r.stateName || "—",
+    key: r._id,
+    name: r.business_name || "—",
+    sub: r.dba || r.city || "—",
+    license: r.license_number || "—",
+    market: r.stateName || "—",
     verifiedDate: r.lastVerifiedDate
       ? new Date(r.lastVerifiedDate).toLocaleDateString("en-US", FMT)
       : r.updatedAt ? new Date(r.updatedAt).toLocaleDateString("en-US", FMT) : "—",
     expires: r.expiration_date
       ? new Date(r.expiration_date).toLocaleDateString("en-US", FMT) : "—",
     badgeStatus: getBadgeStatus(r),
-    sourceType:  r.sourceType || "—",
+    sourceType: r.sourceType || "—",
   };
 }
 
@@ -193,12 +197,12 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <DetailRow label="License #"  value={rawRecord.license_number} />
-              <DetailRow label="Type"       value={rawRecord.license_type} />
-              <DetailRow label="Status"     value={rawRecord.license_status} />
-              <DetailRow label="Expires"    value={rawRecord.expiration_date ? new Date(rawRecord.expiration_date).toLocaleDateString("en-US", FMT) : null} />
-              <DetailRow label="Source"     value={rawRecord.sourceType} />
-              <DetailRow label="Risk Flag"  value={rawRecord.riskFlag} />
+              <DetailRow label="License #" value={rawRecord.license_number} />
+              <DetailRow label="Type" value={rawRecord.license_type} />
+              <DetailRow label="Status" value={rawRecord.license_status} />
+              <DetailRow label="Expires" value={rawRecord.expiration_date ? new Date(rawRecord.expiration_date).toLocaleDateString("en-US", FMT) : null} />
+              <DetailRow label="Source" value={rawRecord.sourceType} />
+              <DetailRow label="Risk Flag" value={rawRecord.riskFlag} />
             </div>
           </div>
 
@@ -206,10 +210,10 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Location</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <DetailRow label="City"    value={rawRecord.city} />
-              <DetailRow label="State"   value={rawRecord.stateName} />
+              <DetailRow label="City" value={rawRecord.city} />
+              <DetailRow label="State" value={rawRecord.stateName} />
               <DetailRow label="Address" value={rawRecord.address} />
-              <DetailRow label="Zip"     value={rawRecord.zip} />
+              <DetailRow label="Zip" value={rawRecord.zip} />
             </div>
           </div>
 
@@ -388,13 +392,17 @@ function IssueVerificationModal({ onClose, onSuccess }) {
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-function StatCard({ label, value, delta, deltaBg, deltaColor }) {
+function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
   return (
-    <div className="admin-queue-stat" style={{ background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px", position: "relative", overflow: "clip" }}>
-      <div style={{ position: "absolute", right: "-12px", top: "-12px", width: "80px", height: "80px", borderRadius: "50%", background: "radial-gradient(circle,rgba(45,169,109,0.13) 0%,rgba(45,169,109,0) 70%)", pointerEvents: "none" }} />
-      <p style={{ fontSize: "14.08px", fontWeight: 400, color: C.textSecondary, marginBottom: "8px" }}>{label}</p>
-      <p style={{ fontSize: "30.4px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.912px", margin: 0 }}>{value}</p>
-      <span style={{ display: "inline-flex", alignItems: "center", marginTop: "10px", padding: "6px 10px", borderRadius: "999px", background: deltaBg, color: deltaColor, fontSize: "13.12px", fontWeight: 800, whiteSpace: "nowrap" }}>{delta}</span>
+    <div className="admin-queue-stat" style={{
+      backgroundImage: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
+      border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px", position: "relative", overflow: "clip"
+    }}>
+      <div className="admin-queue-stat__content">
+        <p className="admin-queue-stat__label" style={{ color: "white" }}>{label}</p>
+        <p className="admin-queue-stat__value" style={{ color: 'white' }}>{value}</p>
+        <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
+      </div>
     </div>
   );
 }
@@ -424,23 +432,23 @@ function FilterRow({ label, count, active, onClick }) {
 export default function AdminCanojaVerified() {
   const queryClient = useQueryClient();
 
-  const [search, setSearch]           = useState("");
-  const [apiParams, setApiParams]     = useState({ limit: 50, page: 1 });
+  const [search, setSearch] = useState("");
+  const [apiParams, setApiParams] = useState({ limit: 50, page: 1 });
   const [statusFilter, setStatusFilter] = useState("");
   const [regionDraft, setRegionDraft] = useState("");
   const [sourceDraft, setSourceDraft] = useState("");
 
   const [renewalStatusFilter, setRenewalStatusFilter] = useState("");
   const [showIssue, setShowIssue] = useState(false);
-  const [drawerRecord, setDrawerRecord]   = useState(null);
-  const [drawerRaw, setDrawerRaw]         = useState(null);
-  const [revokeTarget, setRevokeTarget]   = useState(null);
-  const [renewTarget, setRenewTarget]     = useState(null);
-  const [revokingId, setRevokingId]       = useState(null);
-  const [renewingId, setRenewingId]       = useState(null);
+  const [drawerRecord, setDrawerRecord] = useState(null);
+  const [drawerRaw, setDrawerRaw] = useState(null);
+  const [revokeTarget, setRevokeTarget] = useState(null);
+  const [renewTarget, setRenewTarget] = useState(null);
+  const [revokingId, setRevokingId] = useState(null);
+  const [renewingId, setRenewingId] = useState(null);
 
   const { mutateAsync: revokeApi } = useRevokeVerifiedBadge();
-  const { mutateAsync: renewApi  } = useRenewVerifiedBadge();
+  const { mutateAsync: renewApi } = useRenewVerifiedBadge();
   const { data: recentAuditData } = useRecentAuditLog({ actions: "revoke_verified_badge,renew_verified_badge", limit: 20 });
 
   // Debounce search
@@ -458,16 +466,16 @@ export default function AdminCanojaVerified() {
   const { data: apiData, isLoading, isError } = useAdminCanojaVerified(apiParams);
 
   const rawRecords = apiData?.data || [];
-  const records    = rawRecords.map(mapVerified);
+  const records = rawRecords.map(mapVerified);
   const pagination = apiData?.pagination || {};
-  const apiStats   = apiData?.stats || {};
+  const apiStats = apiData?.stats || {};
   const stateOptions = apiData?.facets?.states || [];
 
   const STATS = [
-    { label: "Active Verified",   value: (apiStats.active       ?? "—").toString(), delta: "Currently verified",    deltaBg: "#edf9f2", deltaColor: "#1f9d61" },
-    { label: "Expiring Soon",     value: (apiStats.expiringSoon ?? "—").toString(), delta: "Renew within 14 days",   deltaBg: "#fff5eb", deltaColor: "#d9822b" },
-    { label: "Revoked",           value: (apiStats.revoked      ?? "—").toString(), delta: "Compliance mismatch",    deltaBg: "#fff1f1", deltaColor: "#d64545" },
-    { label: "Badge Views",        value: (apiStats.totalBadgeViews ?? "—").toLocaleString(), delta: "Total shop views",       deltaBg: "#edf5ff", deltaColor: "#2f80ed" },
+    { label: "Active Verified", value: (apiStats.active ?? "—").toString(), delta: "Currently verified", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersVerifiedIcon },
+    { label: "Expiring Soon", value: (apiStats.expiringSoon ?? "—").toString(), delta: "Renew within 14 days", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: retailersExpiringIcon },
+    { label: "Revoked", value: (apiStats.revoked ?? "—").toString(), delta: "Compliance mismatch", deltaBg: "#fff1f1", deltaColor: "#d64545", icon: retailersGapsIcon },
+    { label: "Badge Views", value: (apiStats.totalBadgeViews ?? "—").toLocaleString(), delta: "Total shop views", deltaBg: "#edf5ff", deltaColor: "#2f80ed", icon: retailersTotalIcon },
   ];
 
   const handleStatusFilter = (val) => {
@@ -568,7 +576,7 @@ export default function AdminCanojaVerified() {
       const blob = new Blob([BOM + csv], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
-      a.href = url; a.download = `canoja-verified-${new Date().toISOString().slice(0,10)}.csv`;
+      a.href = url; a.download = `canoja-verified-${new Date().toISOString().slice(0, 10)}.csv`;
       a.click(); URL.revokeObjectURL(url);
     } catch (e) {
       toast.error("Export failed");
@@ -672,6 +680,7 @@ export default function AdminCanojaVerified() {
               />
             </div>
             <button
+              className="admin-primary-action"
               onClick={() => setShowIssue(true)}
               style={{ height: "42px", padding: "0 20px", borderRadius: "12px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13.333px", fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}
             >
@@ -731,9 +740,9 @@ export default function AdminCanojaVerified() {
                 <div>
                   <label style={{ display: "block", fontSize: "13.76px", fontWeight: 800, color: C.textPrimary, marginBottom: "8px" }}>Status</label>
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <FilterRow label="Active"        count={apiStats.active       ?? "—"} active={statusFilter === "active"}        onClick={() => handleStatusFilter("active")} />
-                    <FilterRow label="Expiring Soon" count={apiStats.expiringSoon ?? "—"} active={statusFilter === "expiringSoon"}   onClick={() => handleStatusFilter("expiringSoon")} />
-                    <FilterRow label="Revoked"       count={apiStats.revoked      ?? "—"} active={statusFilter === "revoked"}       onClick={() => handleStatusFilter("revoked")} />
+                    <FilterRow label="Active" count={apiStats.active ?? "—"} active={statusFilter === "active"} onClick={() => handleStatusFilter("active")} />
+                    <FilterRow label="Expiring Soon" count={apiStats.expiringSoon ?? "—"} active={statusFilter === "expiringSoon"} onClick={() => handleStatusFilter("expiringSoon")} />
+                    <FilterRow label="Revoked" count={apiStats.revoked ?? "—"} active={statusFilter === "revoked"} onClick={() => handleStatusFilter("revoked")} />
                   </div>
                 </div>
 
@@ -769,13 +778,14 @@ export default function AdminCanojaVerified() {
                 <div>
                   <label style={{ display: "block", fontSize: "13.76px", fontWeight: 800, color: C.textPrimary, marginBottom: "8px" }}>Renewal Status</label>
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-                    <FilterRow label="Due (< 30 days)"       count={apiStats.renewalDue      ?? "—"} active={renewalStatusFilter === "due"}      onClick={() => handleRenewalStatusFilter("due")} />
+                    <FilterRow label="Due (< 30 days)" count={apiStats.renewalDue ?? "—"} active={renewalStatusFilter === "due"} onClick={() => handleRenewalStatusFilter("due")} />
                     <FilterRow label="Upcoming (30–60 days)" count={apiStats.renewalUpcoming ?? "—"} active={renewalStatusFilter === "upcoming"} onClick={() => handleRenewalStatusFilter("upcoming")} />
-                    <FilterRow label="Overdue (expired)"     count={apiStats.renewalOverdue  ?? "—"} active={renewalStatusFilter === "overdue"}  onClick={() => handleRenewalStatusFilter("overdue")} />
+                    <FilterRow label="Overdue (expired)" count={apiStats.renewalOverdue ?? "—"} active={renewalStatusFilter === "overdue"} onClick={() => handleRenewalStatusFilter("overdue")} />
                   </div>
                 </div>
 
                 <button
+                  className="admin-primary-action"
                   onClick={handleApply}
                   style={{ width: "100%", height: "42px", borderRadius: "12px", backgroundImage: "linear-gradient(170.77deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}
                 >
@@ -793,7 +803,7 @@ export default function AdminCanojaVerified() {
                     <p style={{ fontSize: "14.4px", color: C.textSecondary, margin: "4px 0 0" }}>Businesses with active Canoja verification. Click any row for full details.</p>
                   </div>
                   <div className="admin-queue-actions" style={{ display: "flex", gap: "10px" }}>
-                    <button onClick={handleExport} style={{ height: "42px", padding: "0 16px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}>Export Badge Log</button>
+                    <button className="admin-primary-action" onClick={handleExport} style={{ height: "42px", padding: "0 16px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}>Export Badge Log</button>
                   </div>
                 </div>
 

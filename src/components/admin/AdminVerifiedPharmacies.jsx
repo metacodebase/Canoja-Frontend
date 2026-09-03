@@ -66,14 +66,14 @@ function getLicenseStatus(record) {
 
 function Tag({ label }) {
   const map = {
-    "Licensed":      { bg: "#edf9f2", color: "#1f9d61" },
-    "Top Rated":     { bg: "#edf9f2", color: "#1f9d61" },
-    "Delivery":      { bg: "#edf9f2", color: "#1f9d61" },
-    "Pickup":        { bg: "#edf9f2", color: "#1f9d61" },
-    "Open Now":      { bg: "#edf9f2", color: "#1f9d61" },
-    "Has Menu":      { bg: "#edf9f2", color: "#1f9d61" },
+    "Licensed": { bg: "#edf9f2", color: "#1f9d61" },
+    "Top Rated": { bg: "#edf9f2", color: "#1f9d61" },
+    "Delivery": { bg: "#edf9f2", color: "#1f9d61" },
+    "Pickup": { bg: "#edf9f2", color: "#1f9d61" },
+    "Open Now": { bg: "#edf9f2", color: "#1f9d61" },
+    "Has Menu": { bg: "#edf9f2", color: "#1f9d61" },
     "Expiring Soon": { bg: "#fff5eb", color: "#d9822b" },
-    "Renewal Due":   { bg: "#fff5eb", color: "#d9822b" },
+    "Renewal Due": { bg: "#fff5eb", color: "#d9822b" },
   };
   const s = map[label] || { bg: "#f4f7fa", color: "#617182" };
   return (
@@ -157,7 +157,7 @@ function PharmacyCard({ shop: record, onViewProfile }) {
         {tags.map(t => <Tag key={t} label={t} />)}
       </div>
       <div style={{ display: "flex", gap: "10px", marginTop: "4px" }}>
-        <button onClick={onViewProfile} style={{
+        <button className="admin-primary-action" onClick={onViewProfile} style={{
           flex: 1, height: "42px", borderRadius: "12px",
           backgroundImage: "linear-gradient(161deg, #1b6b46 0%, #2da96d 100%)",
           border: "0.8px solid rgba(0,0,0,0)", color: "#fff",
@@ -233,12 +233,12 @@ function ProfileDrawer({ record, onClose }) {
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <DetailRow label="License #"  value={record.license_number} />
-              <DetailRow label="Type"       value={record.license_type} />
-              <DetailRow label="Status"     value={licenseStatus} />
-              <DetailRow label="Expires"    value={record.expiration_date ? new Date(record.expiration_date).toLocaleDateString("en-US", FMT) : null} />
+              <DetailRow label="License #" value={record.license_number} />
+              <DetailRow label="Type" value={record.license_type} />
+              <DetailRow label="Status" value={licenseStatus} />
+              <DetailRow label="Expires" value={record.expiration_date ? new Date(record.expiration_date).toLocaleDateString("en-US", FMT) : null} />
               <DetailRow label="Issue Date" value={record.issue_date ? new Date(record.issue_date).toLocaleDateString("en-US", FMT) : null} />
-              <DetailRow label="Rating"     value={record.rating ? `${record.rating}★ (${record.reviews || 0} reviews)` : null} />
+              <DetailRow label="Rating" value={record.rating ? `${record.rating}★ (${record.reviews || 0} reviews)` : null} />
             </div>
           </div>
 
@@ -247,9 +247,9 @@ function ProfileDrawer({ record, onClose }) {
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Location</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
               <DetailRow label="Address" value={record.business_address} />
-              <DetailRow label="City"    value={record.city} />
-              <DetailRow label="State"   value={record.stateName} />
-              <DetailRow label="Zip"     value={record.postal_code} />
+              <DetailRow label="City" value={record.city} />
+              <DetailRow label="State" value={record.stateName} />
+              <DetailRow label="Zip" value={record.postal_code} />
             </div>
           </div>
 
@@ -257,8 +257,8 @@ function ProfileDrawer({ record, onClose }) {
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Contact</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <DetailRow label="Phone"   value={record.contact_information?.phone} />
-              <DetailRow label="Email"   value={record.contact_information?.email} />
+              <DetailRow label="Phone" value={record.contact_information?.phone} />
+              <DetailRow label="Email" value={record.contact_information?.email} />
               <DetailRow label="Website" value={record.contact_information?.website} />
             </div>
           </div>
@@ -284,56 +284,41 @@ function ProfileDrawer({ record, onClose }) {
 function StatCard({ label, value, delta, deltaBg, deltaColor }) {
   return (
     <div className="admin-queue-stat" style={{
-      background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px",
+      backgroundImage: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)", border: "0.8px solid #dce7e1", borderRadius: "24px",
       boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)",
       padding: "20px", overflow: "clip", position: "relative",
     }}>
-      <div style={{
-        position: "absolute", right: "-12px", top: "-12px",
-        width: "80px", height: "80px", borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(45,169,109,0.13) 0%, rgba(45,169,109,0) 70%)",
-        pointerEvents: "none",
-      }} />
-      <p style={{ fontSize: "14.08px", fontWeight: 400, color: C.textSecondary, lineHeight: "20.416px", marginBottom: "8px" }}>
-        {label}
-      </p>
-      <p style={{ fontSize: "30.4px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.912px", lineHeight: "44.08px", margin: 0 }}>
-        {value}
-      </p>
-      <span style={{
-        display: "inline-flex", alignItems: "center",
-        marginTop: "10px", padding: "6px 10px", borderRadius: "999px",
-        background: deltaBg, color: deltaColor,
-        fontSize: "13.12px", fontWeight: 800, lineHeight: "19.024px", whiteSpace: "nowrap",
-      }}>
-        {delta}
-      </span>
+      <div className="admin-queue-stat__content">
+        <p className="admin-queue-stat__label" style={{ color: 'white' }}>{label}</p>
+        <p className="admin-queue-stat__value" style={{ color: 'white' }}>{value}</p>
+        <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
+      </div>
     </div>
   );
 }
 
 const DISTANCE_OPTIONS = [
-  { label: "Within 5 miles",  value: 8047 },
+  { label: "Within 5 miles", value: 8047 },
   { label: "Within 10 miles", value: 16093 },
   { label: "Within 25 miles", value: 40234 },
   { label: "Within 50 miles", value: 80467 },
-  { label: "Any distance",    value: null },
+  { label: "Any distance", value: null },
 ];
 
 export default function AdminVerifiedPharmacies() {
-  const [search, setSearch]             = useState("");
+  const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [market, setMarket]             = useState("");
+  const [market, setMarket] = useState("");
   const [availability, setAvailability] = useState(""); // "openNow"
-  const [serviceType, setServiceType]   = useState(""); // "pickup" | "delivery"
-  const [distance, setDistance]         = useState(null);
-  const [minRating, setMinRating]       = useState("");
+  const [serviceType, setServiceType] = useState(""); // "pickup" | "delivery"
+  const [distance, setDistance] = useState(null);
+  const [minRating, setMinRating] = useState("");
   const [licenseStatus, setLicenseStatus] = useState("");
-  const [operator, setOperator]         = useState(""); // "claimed" | "unclaimed"
-  const [page, setPage]                 = useState(1);
+  const [operator, setOperator] = useState(""); // "claimed" | "unclaimed"
+  const [page, setPage] = useState(1);
   const [drawerRecord, setDrawerRecord] = useState(null);
-  const [userCoords, setUserCoords]     = useState(null);
-  const [geoError, setGeoError]         = useState(false);
+  const [userCoords, setUserCoords] = useState(null);
+  const [geoError, setGeoError] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => { setDebouncedSearch(search); setPage(1); }, 300);
@@ -347,28 +332,28 @@ export default function AdminVerifiedPharmacies() {
     if (distance && !userCoords && !geoError) {
       navigator.geolocation.getCurrentPosition(
         pos => setUserCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        ()  => setGeoError(true),
+        () => setGeoError(true),
       );
     }
   }, [distance]);
 
   const isDistanceActive = !!(distance && userCoords);
-  const isOpenNowActive  = availability === "openNow";
+  const isOpenNowActive = availability === "openNow";
   // compareShops is used when distance or openNow filter is active
   const useCompareShopsMode = isDistanceActive || isOpenNowActive;
 
   const compareFilters = {
     canojaVerified: true,
     ...(isOpenNowActive ? { openNow: true } : {}),
-    ...(market      ? { state: market }                    : {}),
-    ...(minRating   ? { minRating: parseFloat(minRating) } : {}),
-    ...(licenseStatus === "Expired"  ? { licenseStatus: "Inactive" } :
-        licenseStatus === "Active"   ? {} : // active = no expiry filter in compareShops
-        licenseStatus                ? { licenseStatus } : {}),
+    ...(market ? { state: market } : {}),
+    ...(minRating ? { minRating: parseFloat(minRating) } : {}),
+    ...(licenseStatus === "Expired" ? { licenseStatus: "Inactive" } :
+      licenseStatus === "Active" ? {} : // active = no expiry filter in compareShops
+        licenseStatus ? { licenseStatus } : {}),
   };
   const compareBody = {
-    lat:    isDistanceActive ? userCoords.lat : 39.5,
-    lng:    isDistanceActive ? userCoords.lng : -98.35,
+    lat: isDistanceActive ? userCoords.lat : 39.5,
+    lng: isDistanceActive ? userCoords.lng : -98.35,
     radius: distance ?? 5000000,
     filters: compareFilters,
     page, limit: 50,
@@ -378,13 +363,13 @@ export default function AdminVerifiedPharmacies() {
   // Main data: admin endpoint (server-side service type, rating, licenseStatus, market, search)
   const mainParams = { page, limit: 50 };
   if (debouncedSearch) mainParams.q = debouncedSearch;
-  if (market)          mainParams.region = market;
-  if (minRating)       mainParams.minRating = minRating;
-  if (serviceType)     mainParams.serviceType = serviceType;
-  if (licenseStatus)   mainParams.licenseStatus = licenseStatus;
-  if (operator)        mainParams.claimed = operator;
+  if (market) mainParams.region = market;
+  if (minRating) mainParams.minRating = minRating;
+  if (serviceType) mainParams.serviceType = serviceType;
+  if (licenseStatus) mainParams.licenseStatus = licenseStatus;
+  if (operator) mainParams.claimed = operator;
 
-  const { data: adminData,   isLoading: adminLoading   } = useAdminCanojaVerified(mainParams);
+  const { data: adminData, isLoading: adminLoading } = useAdminCanojaVerified(mainParams);
   const { data: compareData, isLoading: compareLoading } = useCompareShops(compareBody, { enabled: useCompareShopsMode });
 
   // Open-now total count (lightweight separate call)
@@ -401,18 +386,18 @@ export default function AdminVerifiedPharmacies() {
     : (adminData?.data || []);
   const shops = rawShops;
 
-  const adminPagination   = adminData?.pagination || {};
+  const adminPagination = adminData?.pagination || {};
   const comparePagination = compareData?.data?.pagination || {};
   const pagination = useCompareShopsMode
     ? { total: comparePagination.total_results, pages: comparePagination.total_pages }
     : adminPagination;
   const totalVerified = pagination.total ?? "—";
-  const stateOptions  = adminData?.facets?.states || [];
-  const facetStats    = adminData?.stats || {};
-  const openNowCount  = openNowCountData?.data?.pagination?.total_results ?? 0;
+  const stateOptions = adminData?.facets?.states || [];
+  const facetStats = adminData?.stats || {};
+  const openNowCount = openNowCountData?.data?.pagination?.total_results ?? 0;
   const deliveryCount = facetStats.deliveryReady ?? 0;
-  const avgRating     = facetStats.avgRating != null ? facetStats.avgRating : "—";
-  const claimedCount   = facetStats.claimed   ?? 0;
+  const avgRating = facetStats.avgRating != null ? facetStats.avgRating : "—";
+  const claimedCount = facetStats.claimed ?? 0;
   const unclaimedCount = facetStats.unclaimed ?? 0;
 
   const handleReset = () => {
@@ -636,7 +621,7 @@ export default function AdminVerifiedPharmacies() {
                   <label style={{ display: "block", fontSize: "13.76px", fontWeight: 800, color: C.textPrimary, marginBottom: "8px" }}>Operator</label>
                   <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                     {[
-                      { label: "Claimed",   value: "claimed",   count: claimedCount },
+                      { label: "Claimed", value: "claimed", count: claimedCount },
                       { label: "Unclaimed", value: "unclaimed", count: unclaimedCount },
                     ].map(({ label, value, count }) => (
                       <div
@@ -665,34 +650,34 @@ export default function AdminVerifiedPharmacies() {
             <div className="admin-directory-results" style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
 
               {/* Stat cards */}
-              <div className="admin-directory-stats-wrap" style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
-              <div className="admin-directory-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
-                <StatCard
-                  label="Verified Results"
-                  value={typeof totalVerified === "number" ? totalVerified.toLocaleString() : totalVerified}
-                  delta={licenseStatus === "Expired" ? "Expired Licenses" : "Canoja Verified"}
-                  deltaBg={licenseStatus === "Expired" ? "#fff5eb" : "#edf9f2"}
-                  deltaColor={licenseStatus === "Expired" ? "#d9822b" : "#1f9d61"}
-                />
-                <StatCard
-                  label="Open Now"
-                  value={openNowCount}
-                  delta="Live operating hours"
-                  deltaBg="#edf5ff" deltaColor="#2f80ed"
-                />
-                <StatCard
-                  label="Delivery Ready"
-                  value={deliveryCount}
-                  delta="Delivery available"
-                  deltaBg="#fff5eb" deltaColor="#d9822b"
-                />
-                <StatCard
-                  label="Avg Rating"
-                  value={avgRating}
-                  delta="Across results"
-                  deltaBg="#edf9f2" deltaColor="#1f9d61"
-                />
-              </div>
+              <div className="admin-directory-stats-wrap" style={{ position: "relative", background: "transparent" }}>
+                <div className="admin-directory-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: "18px" }}>
+                  <StatCard
+                    label="Verified Results"
+                    value={typeof totalVerified === "number" ? totalVerified.toLocaleString() : totalVerified}
+                    delta={licenseStatus === "Expired" ? "Expired Licenses" : "Canoja Verified"}
+                    deltaBg={licenseStatus === "Expired" ? "#fff5eb" : "#edf9f2"}
+                    deltaColor={licenseStatus === "Expired" ? "#d9822b" : "#1f9d61"}
+                  />
+                  <StatCard
+                    label="Open Now"
+                    value={openNowCount}
+                    delta="Live operating hours"
+                    deltaBg="#edf5ff" deltaColor="#2f80ed"
+                  />
+                  <StatCard
+                    label="Delivery Ready"
+                    value={deliveryCount}
+                    delta="Delivery available"
+                    deltaBg="#fff5eb" deltaColor="#d9822b"
+                  />
+                  <StatCard
+                    label="Avg Rating"
+                    value={avgRating}
+                    delta="Across results"
+                    deltaBg="#edf9f2" deltaColor="#1f9d61"
+                  />
+                </div>
               </div>
 
               {isLoading && (
