@@ -708,7 +708,7 @@ export default function AdminPendingVerifications() {
 
   return (
     <AdminShell>
-      <div className="admin-queue-page" style={{
+      <div className="admin-queue-page admin-pending-verifications-page" style={{
         background: "#051D17",
         border: "0.8px solid rgba(194,210,202,0.5)",
         borderRadius: "28px",
@@ -770,7 +770,7 @@ export default function AdminPendingVerifications() {
           </div> */}
 
           {/* Stat cards */}
-          <div className="admin-queue-stats-wrap" style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+          <div className="admin-queue-stats-wrap" style={{ background: "#051D17", paddingBottom: "12px", marginBottom: "-12px" }}>
             <div className="admin-queue-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
               {STATS.map(s => <StatCard key={s.label} {...s} />)}
             </div>

@@ -659,7 +659,7 @@ export default function AdminCanojaVerified() {
 
   return (
     <AdminShell>
-      <div className="admin-queue-page" style={{ background: "#051D17", border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px", boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)", overflow: "clip" }}>
+      <div className="admin-queue-page admin-canoja-verified-page" style={{ background: "#051D17", border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px", boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)", overflow: "clip" }}>
 
         {/* Sticky header */}
         <div className="admin-queue-header" style={{ position: "sticky", top: 0, zIndex: 10, background: "#051D17", borderBottom: "0.8px solid #dce7e1", padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", backdropFilter: "blur(8px)" }}>
@@ -718,7 +718,7 @@ export default function AdminCanojaVerified() {
           </div> */}
 
           {/* Stat cards */}
-          <div className="admin-queue-stats-wrap" style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+          <div className="admin-queue-stats-wrap" style={{ background: "#051D17", paddingBottom: "12px", marginBottom: "-12px" }}>
             <div className="admin-queue-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
               {STATS.map(s => <StatCard key={s.label} {...s} />)}
             </div>
@@ -796,7 +796,7 @@ export default function AdminCanojaVerified() {
 
             {/* Right: table */}
             <div className="admin-queue-results" style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
-              <div className="admin-queue-table-card" style={{ background: "#fff", border: "0.8px solid #dce7e1", borderRadius: "24px", boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", overflow: "clip", padding: "0.8px" }}>
+              <div className="admin-queue-table-card" style={{ background: "#fff", border: "0.8px solid #dce7e1", borderRadius: 0, boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", overflow: "clip", padding: "0.8px" }}>
                 <div className="admin-queue-table-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px", borderBottom: "0.8px solid #dce7e1" }}>
                   <div>
                     <p style={{ fontSize: "16.32px", fontWeight: 800, color: C.textPrimary, margin: 0 }}>Verified Businesses</p>
@@ -811,12 +811,13 @@ export default function AdminCanojaVerified() {
 
                 <ConfigProvider theme={{ components: { Table: { headerBg: "#f1f7f4", headerColor: "#617182", headerSplitColor: "transparent", borderColor: "#dce7e1", rowHoverBg: "#f7fbf9", cellPaddingBlock: 16, cellPaddingInline: 16 } } }}>
                   <Table
+                    className="admin-verified-table"
                     dataSource={records}
                     columns={columns}
                     size="middle"
                     loading={isLoading}
                     scroll={{ x: "max-content" }}
-                    style={{ fontFamily: "Inter, sans-serif" }}
+                    style={{ fontFamily: "Inter, sans-serif"}}
                     locale={{ emptyText: isLoading ? "Loading…" : "No verified operators found" }}
                     onRow={row => ({
                       onClick: () => openDrawer(row),

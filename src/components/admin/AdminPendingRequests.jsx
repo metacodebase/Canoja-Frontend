@@ -769,7 +769,7 @@ export default function AdminPendingRequests() {
 
   return (
     <AdminShell>
-      <div className="admin-queue-page" style={{ background: "#051D17", border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px", boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)", overflow: "clip" }}>
+      <div className="admin-queue-page admin-pending-requests-page" style={{ background: "#051D17", border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px", boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)", overflow: "clip" }}>
 
         {/* Sticky header */}
         <div className="admin-queue-header" style={{ position: "sticky", top: 0, zIndex: 10, background: "#051D17", borderBottom: "0.8px solid #dce7e1", padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", backdropFilter: "blur(8px)" }}>
@@ -809,7 +809,7 @@ export default function AdminPendingRequests() {
           </div> */}
 
           {/* Stat cards */}
-          <div className="admin-queue-stats-wrap" style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+          <div className="admin-queue-stats-wrap" style={{ background: "#051D17", paddingBottom: "12px", marginBottom: "-12px" }}>
             <div className="admin-queue-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "18px" }}>
               {STATS.map(s => <StatCard key={s.label} {...s} />)}
             </div>

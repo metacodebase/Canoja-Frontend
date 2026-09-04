@@ -128,6 +128,7 @@ export default function AdminShell({ children }) {
           className="admin-sidebar-collapse"
           aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           aria-expanded={!sidebarCollapsed}
+          style={{height:'40px',width:'40px'}}
           onClick={() => setSidebarCollapsed(value => !value)}
         >
           {sidebarCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}

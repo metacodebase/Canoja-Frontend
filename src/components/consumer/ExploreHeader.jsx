@@ -3,6 +3,7 @@ import canojaLogo from "../../assets/canojaLogo.png";
 import { useAuth } from "../../context/AuthContext";
 import AdminThemeToggle from "../admin/AdminThemeToggle";
 import MaterialIcon from "./MaterialIcon";
+import CanojaVerifiedBadge from "../CanojaVerifiedBadge";
 import "../admin/adminTheme.css";
 
 const ExploreHeader = ({ view, onViewChange, theme, onThemeToggle }) => {
@@ -25,7 +26,7 @@ const ExploreHeader = ({ view, onViewChange, theme, onThemeToggle }) => {
         </div>
       </header>
       <div className="verified-strip">
-        <img src={canojaLogo} alt="" />
+        <CanojaVerifiedBadge size={46} />
         <span><strong>Verified operators near you</strong>Licensed · Verified · Trusted · Intelligent</span>
       </div>
       <div className="explore-title-row">

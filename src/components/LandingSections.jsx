@@ -1,6 +1,7 @@
 import { ArrowRight, Link2, ScanSearch, Sprout, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import cityImage from "../assets/canoja-city.jpg";
+import CanojaVerifiedBadge from "./CanojaVerifiedBadge";
 
 const operators = [
   { badge: "CANOJA VERIFIED", name: "Green Summit Wellness", type: "Dispensary", place: "Denver, Colorado", distance: "2.1 mi", license: "MED-001482", status: "License active", position: "center" },
@@ -19,7 +20,7 @@ function DiscoverySection() {
   return <section className="discovery section-shell" id="discover">
     <div className="section-intro"><div><span className="section-kicker">Trusted operator discovery</span><h2>A clearer way to<br />discover cannabis<br />operators.</h2></div><p>Review business details, operator category, public license information, verification indicators, hours, services and direct links before choosing where to visit.</p></div>
     <div className="operator-grid">{operators.map((operator) => <article className="operator-card" key={operator.name}>
-      <div className="operator-card__image"><img src={cityImage} style={{ objectPosition: operator.position }} alt="Aerial view of a Colorado community" /><span>{operator.badge}</span></div>
+      <div className="operator-card__image"><img src={cityImage} style={{ objectPosition: operator.position }} alt="Aerial view of a Colorado community" />{operator.badge === "CANOJA VERIFIED" ? <CanojaVerifiedBadge size={72} className="operator-card__verified-badge" /> : <span>{operator.badge}</span>}</div>
       <div className="operator-card__body"><h3>{operator.name}</h3><p>{operator.type} · {operator.place} · {operator.distance}</p><div className={`license-status ${operator.status === "Under review" ? "review" : ""}`}><strong>{operator.status}</strong><span>{operator.license}</span></div><Link to="/explore">View operator profile <ArrowRight size={14} /></Link></div>
     </article>)}</div>
   </section>;

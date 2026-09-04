@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Pagination, ConfigProvider, Drawer } from "antd";
 import AdminShell from "./AdminShell";
 import { useCompareShops, useAdminCanojaVerified } from "../../services/admin";
+import CanojaVerifiedBadge from "../CanojaVerifiedBadge";
 import { Search } from "lucide-react";
 
 const C = {
@@ -141,13 +142,7 @@ function PharmacyCard({ shop: record, onViewProfile }) {
             whiteSpace: "nowrap", flexShrink: 0,
           }}>Expired</span>
         ) : (
-          <span style={{
-            display: "inline-flex", alignItems: "center",
-            height: "26px", padding: "0 10px", borderRadius: "999px",
-            background: "rgba(212,167,44,0.15)", border: "0.8px solid rgba(212,167,44,0.35)",
-            color: "#b5850a", fontSize: "12px", fontWeight: 800,
-            whiteSpace: "nowrap", flexShrink: 0,
-          }}>Verified</span>
+          <CanojaVerifiedBadge />
         )}
       </div>
       <p style={{ fontSize: "14.08px", fontWeight: 400, color: C.textSecondary, lineHeight: "20.416px", margin: 0 }}>
@@ -164,6 +159,7 @@ function PharmacyCard({ shop: record, onViewProfile }) {
           fontSize: "13.333px", fontWeight: 700, cursor: "pointer",
         }}>View Profile</button>
         <button
+          className="admin-directions-action"
           onClick={() => {
             const coords = record.location?.coordinates;
             const dest = coords
@@ -216,7 +212,7 @@ function ProfileDrawer({ record, onClose }) {
               {licenseStatus === "Inactive" ? (
                 <span style={{ display: "inline-flex", alignItems: "center", height: "26px", padding: "0 10px", borderRadius: "999px", background: "rgba(217,130,43,0.12)", border: "0.8px solid rgba(217,130,43,0.35)", color: "#d9822b", fontSize: "12px", fontWeight: 800 }}>Expired</span>
               ) : (
-                <span style={{ display: "inline-flex", alignItems: "center", height: "26px", padding: "0 10px", borderRadius: "999px", background: "rgba(212,167,44,0.15)", border: "0.8px solid rgba(212,167,44,0.35)", color: "#b5850a", fontSize: "12px", fontWeight: 800 }}>Verified</span>
+                <CanojaVerifiedBadge />
               )}
               <button onClick={onClose} style={{ background: "none", border: "0.8px solid #dce7e1", borderRadius: "8px", width: "32px", height: "32px", cursor: "pointer", fontSize: "16px", color: "#617182" }}>✕</button>
             </div>
@@ -408,7 +404,7 @@ export default function AdminVerifiedPharmacies() {
 
   return (
     <AdminShell>
-      <div className="admin-directory-page" style={{
+      <div className="admin-directory-page admin-verified-businesses-page" style={{
         background: "#051D17",
         border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px",
         boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)",

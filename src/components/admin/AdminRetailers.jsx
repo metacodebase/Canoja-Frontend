@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { Search } from "lucide-react";
 import retailersTotalIcon from "../../assets/admin-retailers-total.png";
 import retailersVerifiedIcon from "../../assets/admin-retailers-verified.png";
+import CanojaVerifiedBadge from "../CanojaVerifiedBadge";
 import retailersExpiringIcon from "../../assets/admin-retailers-expiring.png";
 import retailersGapsIcon from "../../assets/admin-retailers-gaps.png";
 
@@ -23,6 +24,8 @@ const C = {
 
 // ── Status badge — exact Figma: h-28, rounded-full, 12.48px extrabold ─────────
 function StatusBadge({ status }) {
+  if (status === "Verified") return <CanojaVerifiedBadge size={48} />;
+
   const map = {
     Claimed: { bg: "#edf9f2", color: "#1f9d61" },
     Pending: { bg: "#fff5eb", color: "#d9822b" },
@@ -507,15 +510,15 @@ function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
         position: "relative",
       }}
     >
-      <div style={{
+      <div className="admin-queue-stat__content" style={{
         justifyContent: "space-between", flex: 1, alignItems: "flex-start",
         height: "100%", display: "flex", flexDirection: "column",
       }} >
         <p className="admin-queue-stat__label" style={{ color: 'white', alignSelf: "flex-start" }}>{label}</p>
         <p className="admin-queue-stat__value" style={{ color: 'white' }}>{value}</p>
-        <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
+        <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor ,fontSize:10 }}>{delta}</span>
       </div>
-      <img className="admin-queue-stat__icon" style={{ width: "80px", height: "80px", position: 'absolute', right: "20px" }} src={icon} alt="" aria-hidden="true" />
+      <img className="admin-queue-stat__icon" src={icon} style={{position:'absolute',right:0}}  alt="" aria-hidden="true" />
     </div>
   );
 }
@@ -809,7 +812,7 @@ export default function AdminRetailers() {
   return (
     <AdminShell>
       {/* ── Outer frosted card (Figma: rounded-28, border rgba(194,210,202,0.5)) */}
-      <div className="admin-queue-page"
+      <div className="admin-queue-page admin-retailers-page"
         style={{
           background: "#051D17",
           border: "0.8px solid rgba(194,210,202,0.5)",
@@ -820,7 +823,7 @@ export default function AdminRetailers() {
         }}
       >
         {/* ── Sticky header bar ─────────────────────────────────────────── */}
-        <div className="admin-queue-header"
+        <div className="admin-queue-header admin-retailers-header"
           style={{
             position: "sticky",
             top: 0,
@@ -1000,7 +1003,7 @@ export default function AdminRetailers() {
           </div> */}
 
           {/* ── Stat cards ──────────────────────────────────────────────── */}
-          <div className="admin-queue-stats-wrap" style={{ position: "sticky", top: 0, zIndex: 10, background: "#f8fafc", paddingBottom: "12px", marginBottom: "-12px" }}>
+          <div className="admin-queue-stats-wrap" style={{ background: "#051D17", paddingBottom: "12px", marginBottom: "-12px" }}>
             <div className="admin-queue-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: "18px" }}>
               {STATS.map(s => <StatCard key={s.label} {...s} />)}
             </div>
