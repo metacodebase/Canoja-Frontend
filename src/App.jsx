@@ -125,7 +125,7 @@ function App() {
             />
             
             {/* Default Redirects */}
-            <Route path="/admin" element={<Navigate to="/login" replace />} />
+            <Route path="/admin" element={<Navigate to="/" replace />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           
