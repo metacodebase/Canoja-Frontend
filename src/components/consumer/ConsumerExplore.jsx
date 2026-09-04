@@ -23,6 +23,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
   const [loading, setLoading] = useState(() => !getCachedResults("all"));
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [searchLocation, setSearchLocation] = useState(null);
+  const [mapLimit, setMapLimit] = useState(50);
   const { filters, setFilters, query, setQuery, view, setView, sort, setSort } = useExploreState();
   const { coords, locating, locationError } = useBrowserLocation();
   const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords);
@@ -45,9 +46,14 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
   }, [query]);
 
   const activeSearchLocation = searchLocation?.query === query ? searchLocation : null;
+  const hasSelectedLocation = Boolean(filters.region || filters.zipCode || filters.state || activeSearchLocation);
+  const mapCoords = hasSelectedLocation ? null : coords;
+
+  useEffect(() => setMapLimit(50), [filters]);
 
   useEffect(() => {
     const payload = buildSearchPayload(filters, sort);
+    if (view === "map") payload.limit = mapLimit;
     const hasFilterLocation = filters.region || filters.zipCode || filters.state || activeSearchLocation;
     if (!hasFilterLocation && !coords) {
       setLoading(locating && shops.length === 0);
@@ -56,7 +62,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
     if (activeSearchLocation) {
       payload.state = activeSearchLocation.state;
       payload.city = activeSearchLocation.city;
-      payload.limit = 1000;
+      payload.limit = view === "map" ? mapLimit : 1000;
     }
     if (!hasFilterLocation) Object.assign(payload, coords);
     const requestKey = JSON.stringify(payload);
@@ -75,7 +81,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
       })
       .catch(() => setShops([]))
       .finally(() => setLoading(false));
-  }, [coords, filters, locating, shops.length, sort, activeSearchLocation]);
+  }, [coords, filters, locating, shops.length, sort, activeSearchLocation, view, mapLimit]);
 
   const visibleShops = useMemo(() => {
     const term = query.trim().toLowerCase();
@@ -95,7 +101,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
         <ExploreHeader view={view} onViewChange={setView} theme={activeTheme} onThemeToggle={toggleTheme} />
         <ExploreControls query={query} onQueryChange={setQuery} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
         {filtersOpen && <ExploreFilterPanel value={filters} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setFilters(nextFilters); setFiltersOpen(false); }} />}
-        {view === "map" ? <ExploreMap shops={visibleShops} coords={coords} locating={locating} locationError={locationError} onShopSelect={openShop} theme={activeTheme} /> : <>
+        {view === "map" ? <ExploreMap shops={visibleShops} coords={mapCoords} locating={!hasSelectedLocation && locating} locationError={hasSelectedLocation ? "" : locationError} onShopSelect={openShop} theme={activeTheme} canLoadMore={shops.length >= mapLimit && mapLimit < 1000} nextLimit={Math.min(mapLimit + 50, 1000)} onLoadMore={() => setMapLimit(limit => Math.min(limit + 50, 1000))} /> : <>
           <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={spotlightLoading || (!(filters.region || filters.zipCode || filters.state) && locating)} />
           <ExploreSection
             title="All"

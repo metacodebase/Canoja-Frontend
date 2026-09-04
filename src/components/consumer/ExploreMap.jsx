@@ -9,9 +9,8 @@ const addShopMarker = (maps, map, item, onSelect) => {
       this.node = document.createElement("button");
       this.node.type = "button";
       this.node.className = "canoja-map-marker";
-      this.node.innerHTML = `<span class="canoja-marker-icon"><img src="${canojaLogo}" alt=""></span><span class="canoja-marker-label"><strong></strong><small></small></span>`;
-      this.node.querySelector("strong").textContent = item.shop.name || item.shop.business_name || "Canoja operator";
-      this.node.querySelector("small").textContent = item.shop.address || item.shop.business_address || "";
+      this.node.innerHTML = `<span class="canoja-marker-icon"><img src="${canojaLogo}" alt=""></span>`;
+      this.node.setAttribute("aria-label", item.shop.name || item.shop.business_name || "Canoja operator");
       this.node.addEventListener("click", onSelect);
       this.getPanes().overlayMouseTarget.appendChild(this.node);
     }
@@ -27,14 +26,26 @@ const addShopMarker = (maps, map, item, onSelect) => {
   return marker;
 };
 
-const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect, theme }) => {
+const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect, theme, canLoadMore, nextLimit, onLoadMore }) => {
+  const sectionRef = useRef(null);
   const mapNode = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
   const selectedIndexRef = useRef(0);
+  const lastPannedIndexRef = useRef(0);
   const [mapError, setMapError] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const mappedShops = useMemo(() => shops.map((shop) => ({ shop, position: positionOf(shop) })).filter(({ position }) => position), [shops]);
+
+  useEffect(() => {
+    const updateFullscreen = () => {
+      setIsFullscreen(document.fullscreenElement === sectionRef.current);
+      requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
+    };
+    document.addEventListener("fullscreenchange", updateFullscreen);
+    return () => document.removeEventListener("fullscreenchange", updateFullscreen);
+  }, []);
 
   useEffect(() => {
     if (!hasGoogleMapsKey) { setMapError("Google Maps API key is unavailable."); return undefined; }
@@ -42,9 +53,10 @@ const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect, them
     const overlays = [];
     loadGoogleMaps().then((maps) => {
       if (disposed || !mapNode.current) return;
+      mapNode.current.replaceChildren();
       const userPosition = coords ? { lat: coords.lat, lng: coords.lng } : null;
       const center = userPosition || mappedShops[0]?.position || { lat: 18.3358, lng: -64.8963 };
-      const map = new maps.Map(mapNode.current, { center, zoom: 12, minZoom: 3, maxZoom: 18, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, gestureHandling: "greedy", styles: theme === "light" ? null : DARK_MAP_STYLES });
+      const map = new maps.Map(mapNode.current, { center, zoom: 12, minZoom: 3, maxZoom: 18, mapTypeControl: false, streetViewControl: false, fullscreenControl: false, cameraControl: false, rotateControl: false, gestureHandling: "greedy", styles: theme === "light" ? null : DARK_MAP_STYLES });
       mapRef.current = map;
       const bounds = new maps.LatLngBounds();
       mappedShops.forEach((item, index) => {
@@ -65,11 +77,15 @@ const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect, them
     if (selectedIndex >= mappedShops.length) setSelectedIndex(0);
     markersRef.current.forEach((marker, index) => marker.setSelected?.(index === selectedIndex));
     const selected = mappedShops[selectedIndex];
-    if (selected && mapRef.current) mapRef.current.panTo(selected.position);
+    if (selected && mapRef.current && selectedIndex !== lastPannedIndexRef.current) {
+      mapRef.current.panTo(selected.position);
+      lastPannedIndexRef.current = selectedIndex;
+    }
   }, [mappedShops, selectedIndex]);
 
   const selected = mappedShops[selectedIndex]?.shop;
-  return <section className="consumer-map" aria-label="Nearby operators map"><div ref={mapNode} className="google-map-canvas" />{mapError && <div className="map-error">{mapError}</div>}{selected && <MapShopCard shop={selected} index={selectedIndex} total={mappedShops.length} onPrevious={() => setSelectedIndex((index) => Math.max(0, index - 1))} onNext={() => setSelectedIndex((index) => Math.min(mappedShops.length - 1, index + 1))} onOpen={() => onShopSelect(selected)} />}<div className="map-result-count"><strong>{mappedShops.length} operators in this area</strong>{locating ? "Finding your location…" : locationError}</div></section>;
+  const toggleFullscreen = () => isFullscreen ? document.exitFullscreen() : sectionRef.current?.requestFullscreen();
+  return <section ref={sectionRef} className="consumer-map" aria-label="Nearby operators map"><div ref={mapNode} className="google-map-canvas" /><button type="button" className="map-fullscreen" onClick={toggleFullscreen} aria-label={isFullscreen ? "Exit fullscreen" : "Open fullscreen"}>{isFullscreen ? "×" : "⛶"}</button>{mapError && <div className="map-error">{mapError}</div>}{canLoadMore && <button type="button" className="map-load-more" onClick={onLoadMore}>Load up to {nextLimit} operators</button>}{selected && <MapShopCard shop={selected} index={selectedIndex} total={mappedShops.length} onPrevious={() => setSelectedIndex((index) => Math.max(0, index - 1))} onNext={() => setSelectedIndex((index) => Math.min(mappedShops.length - 1, index + 1))} onOpen={() => onShopSelect(selected)} />}<div className="map-result-count"><strong>{mappedShops.length} operators in this area</strong>{locating ? "Finding your location…" : locationError}</div></section>;
 };
 
 export default ExploreMap;

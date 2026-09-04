@@ -1,5 +1,19 @@
+import { getCities, getStates } from "@mardillu/us-cities-utils";
 import { REGION_LABELS } from "./filterConfig";
 import MaterialIcon from "./MaterialIcon";
+
+const US_STATES = getStates();
+const REGION_STATES = {
+  US: US_STATES.map(({ name }) => name),
+  CA: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"],
+  JM: ["Clarendon", "Hanover", "Kingston", "Manchester", "Portland", "Saint Andrew", "Saint Ann", "Saint Catherine", "Saint Elizabeth", "Saint James", "Saint Mary", "Saint Thomas", "Trelawny", "Westmoreland"],
+  VI: ["Saint Croix", "Saint John", "Saint Thomas"],
+};
+const ALL_STATES = Object.values(REGION_STATES).flat();
+const getCityOptions = (state) => {
+  const stateAbbr = US_STATES.find(({ name }) => name.toLowerCase() === state.trim().toLowerCase())?.nameAbbr;
+  return stateAbbr ? [...new Set(getCities(stateAbbr).map(({ name }) => name))].sort() : [];
+};
 
 const FilterLocation = ({ draft, setField }) => (
   <>
@@ -27,8 +41,8 @@ const FilterLocation = ({ draft, setField }) => (
         <label className="filter-field">Zip Code<div className="filter-input"><MaterialIcon name="search" color="#999" /><input value={draft.zipCode} onChange={(event) => setField("zipCode", event.target.value)} placeholder="Search by zip code…" /></div></label>
       ) : (
         <div className="filter-field-grid">
-          <label className="filter-field">State<div className="filter-input"><MaterialIcon name="search" color="#999" /><input value={draft.state} onChange={(event) => setField("state", event.target.value)} placeholder="State or province" /></div></label>
-          <label className="filter-field">City <small>(optional)</small><div className="filter-input"><MaterialIcon name="search" color="#999" /><input value={draft.city} onChange={(event) => setField("city", event.target.value)} placeholder="City" /></div></label>
+          <label className="filter-field">State<div className="filter-input"><MaterialIcon name="search" color="#999" /><input list="explore-region-states" value={draft.state} onChange={(event) => { const state = event.target.value; setField("state", state); if (!draft.region) { const region = Object.entries(REGION_STATES).find(([, states]) => states.includes(state))?.[0]; if (region) setField("region", region); } }} placeholder="State or province" /><datalist id="explore-region-states">{(draft.region ? REGION_STATES[draft.region] : ALL_STATES).map(state => <option key={state} value={state} />)}</datalist></div></label>
+          <label className="filter-field">City <small>(optional)</small><div className="filter-input"><MaterialIcon name="search" color="#999" /><input list="explore-state-cities" value={draft.city} onChange={(event) => setField("city", event.target.value)} placeholder="City" /><datalist id="explore-state-cities">{getCityOptions(draft.state).map(city => <option key={city} value={city} />)}</datalist></div></label>
         </div>
       )}
     </section>

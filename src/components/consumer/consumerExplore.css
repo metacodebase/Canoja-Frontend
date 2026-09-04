@@ -110,6 +110,10 @@
 .map-error { position: absolute; z-index: 500; inset: 50% auto auto 50%; padding: 12px 16px; border: 1px solid #9f3b45; border-radius: 10px; background: rgba(50, 18, 22, .94); color: #ffb4ba; transform: translate(-50%, -50%); }
 .map-result-count { position: absolute; z-index: 500; left: 18px; bottom: 18px; display: grid; gap: 2px; max-width: calc(100% - 36px); padding: 10px 14px; border: 1px solid #35534c; border-radius: 12px; background: rgba(13, 34, 38, .92); color: #9cafaa; font-size: 11px; box-shadow: 0 8px 24px rgba(0,0,0,.28); backdrop-filter: blur(8px); }
 .map-result-count strong { color: #eef5f1; font-size: 13px; }
+.map-load-more { position: absolute; z-index: 500; bottom: 18px; left: 50%; padding: 12px 18px; border: 1px solid rgba(64,234,84,.55); border-radius: 999px; background: #0d2226; color: #fff; box-shadow: 0 8px 24px rgba(0,0,0,.28); font-weight: 800; transform: translateX(-50%); cursor: pointer; }
+.map-load-more:hover { background: #159653; }
+.map-fullscreen { position: absolute; z-index: 500; top: 12px; right: 12px; width: 42px; height: 42px; display: grid; place-items: center; border: 0; border-radius: 3px; background: #fff; color: #263238; box-shadow: 0 1px 4px rgba(0,0,0,.3); font-size: 25px; line-height: 1; cursor: pointer; }
+.consumer-map:fullscreen { width: 100vw; height: 100vh; min-height: 100vh; border: 0; border-radius: 0; }
 .canoja-map-marker { position: absolute; width: max-content; display: grid; justify-items: center; padding: 0; border: 0; background: transparent; cursor: pointer; filter: drop-shadow(0 5px 7px rgba(0,0,0,.45)); }
 .canoja-marker-icon { width: 40px; height: 40px; display: grid; place-items: center; border: 2px solid #1fbd60; border-radius: 50%; background: #0d2226; transition: transform .18s ease, border-color .18s ease; }
 .canoja-marker-icon img { width: 25px; height: 25px; object-fit: contain; }
@@ -122,9 +126,9 @@
 .canoja-map-marker.is-selected .canoja-marker-label { border-color: #40ea54; background: #073622; }
 .map-card-dock { position: absolute; z-index: 450; right: 24px; bottom: 24px; width: min(330px, calc(100% - 48px)); }
 .map-card-stack { position: relative; height: 220px; display: grid; place-items: center; }
-.map-shop-card { position: relative; z-index: 2; width: 245px; min-height: 190px; box-sizing: border-box; padding: 24px 22px; border: 1px solid rgba(64,234,84,.4); border-radius: 24px; background: #fff; color: #9aafa5; box-shadow: 0 18px 45px rgba(0,0,0,.34); }
-.map-shop-card h3 { margin: 0 28px 14px 0; color: #159653; font-size: 18px; line-height: 1.2; }
-.map-shop-card p { display: flex; align-items: flex-start; gap: 7px; margin: 8px 0; font-size: 12px; }
+.map-shop-card { position: relative; z-index: 2; width: 245px; height: 210px; overflow: hidden; box-sizing: border-box; padding: 24px 22px; border: 1px solid rgba(64,234,84,.4); border-radius: 24px; background: #fff; color: #9aafa5; box-shadow: 0 18px 45px rgba(0,0,0,.34); }
+.map-shop-card h3 { min-height: 43px; max-height: 43px; overflow: hidden; margin: 0 28px 8px 0; color: #159653; font-size: 18px; line-height: 1.2; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.map-shop-card p { display: flex; align-items: flex-start; gap: 7px; min-height: 16px; max-height: 32px; overflow: hidden; margin: 6px 0; font-size: 12px; }
 .map-shop-card p svg { flex: 0 0 auto; }
 .map-shop-type { display: inline-block; max-width: 150px; overflow: hidden; padding: 4px 11px; border-radius: 999px; background: #159653; color: #fff; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 .map-card-open { position: absolute; right: 14px; bottom: 14px; width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid #d8e8df; border-radius: 50%; background: #fff; color: #159653; cursor: pointer; }
@@ -227,6 +231,8 @@
 }
 .operator-theme.admin-theme--light .map-result-count { border-color: #bdd9cc; background: rgba(255,255,255,.92); color: #668078; }
 .operator-theme.admin-theme--light .map-result-count strong { color: #17372c; }
+.operator-theme.admin-theme--light .map-load-more { border-color: #159653; background: #fff; color: #145237; }
+.operator-theme.admin-theme--light .map-load-more:hover { background: #e2f4eb; }
 .operator-theme.admin-theme--light .filter-backdrop { background: rgba(15, 40, 32, .3); }
 .operator-theme.admin-theme--light .filter-panel,
 .operator-theme.admin-theme--light .filter-panel__footer { background: #f7fbf9; color: #17372c; }
@@ -238,10 +244,22 @@
 .operator-theme.admin-theme--light .filter-field,
 .operator-theme.admin-theme--light .filter-check { color: #17372c; }
 .operator-theme.admin-theme--light .filter-input { border-color: #c4d9d0; background: #f1f7f4; }
-.operator-theme.admin-theme--light .filter-input input { color: #17372c; }
+.operator-theme.admin-theme--light .filter-input input { color: #17372c !important; }
+.operator-theme.admin-theme--light .filter-input input::placeholder { color: #71877f !important; }
+.operator-theme.admin-theme--light .region-grid button,
+.operator-theme.admin-theme--light .search-type-grid button { border-color: #28a65d !important; background: #fff !important; color: #234f40 !important; opacity: 1; }
+.operator-theme.admin-theme--light .region-grid button:hover,
+.operator-theme.admin-theme--light .search-type-grid button:hover { background: #eaf7f0 !important; }
+.operator-theme.admin-theme--light .region-grid button.active,
+.operator-theme.admin-theme--light .search-type-grid button.active { border-color: #279d4f !important; background: #279d4f !important; color: #fff !important; }
+.operator-theme.admin-theme--light .filter-helper { border-color: #d69a24; background: #fff8e8; color: #8a5a00; }
+.operator-theme.admin-theme--light .filter-check { border-bottom-color: #c7ddd3; }
 .operator-theme.admin-theme--light .mobile-checkbox { border-color: #9ab8ac; background: #fff; }
+.operator-theme.admin-theme--light .mobile-checkbox.checked { border-color: #279d4f; background: #279d4f; color: #fff; }
 .operator-theme.admin-theme--light .cannabis-types,
 .operator-theme.admin-theme--light .cannabis-types button { color: #526f64; }
+.operator-theme.admin-theme--light .filter-reset { border-color: #159653; background: #fff; color: #159653; }
+.operator-theme.admin-theme--light .filter-apply { background: #279d4f; color: #fff; }
 
 @media (max-width: 720px) {
   .consumer-shell { padding: 22px 18px 48px; }
@@ -259,6 +277,7 @@
   .filter-panel__header { padding-top: 22px; }
   .consumer-map { height: 72vh; min-height: 580px; }
   .map-card-dock { right: 50%; bottom: 18px; transform: translateX(50%); }
+  .map-load-more { bottom: 280px; }
   .map-result-count { top: 14px; bottom: auto; }
   .canoja-marker-label { max-width: 115px; }
 }

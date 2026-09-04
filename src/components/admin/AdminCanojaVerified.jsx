@@ -631,6 +631,7 @@ export default function AdminCanojaVerified() {
       render: (_, row) => (
         <div style={{ display: "flex", gap: "8px" }} onClick={e => e.stopPropagation()}>
           <button
+            className="admin-secondary-action"
             onClick={() => openDrawer(row)}
             style={{ height: "34px", padding: "0 14px", borderRadius: "10px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "12.5px", fontWeight: 700, cursor: "pointer" }}
           >
@@ -638,6 +639,7 @@ export default function AdminCanojaVerified() {
           </button>
           {row.badgeStatus !== "Revoked" && (
             <button
+              className="admin-danger-action"
               onClick={() => setRevokeTarget(rawRecords.find(r => r._id === row.key))}
               style={{ height: "34px", padding: "0 14px", borderRadius: "10px", background: "#fff1f1", border: "0.8px solid #d64545", color: "#d64545", fontSize: "12.5px", fontWeight: 700, cursor: "pointer" }}
             >
@@ -673,6 +675,7 @@ export default function AdminCanojaVerified() {
             <div style={{ position: "relative", width: "100%" }}>
               <Search aria-hidden="true" size={16} strokeWidth={2} style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", pointerEvents: "none" }} />
               <input
+                className="admin-verified-search"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search business, license #, market…"
