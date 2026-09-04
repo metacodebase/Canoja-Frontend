@@ -12,6 +12,7 @@ import useBrowserLocation from "./useBrowserLocation";
 import useExploreState from "./useExploreState";
 import useSpotlightShops from "./useSpotlightShops";
 import useAdminTheme from "../admin/useAdminTheme";
+import { resolveLocationSearch } from "./locationSearch";
 import "./consumerExplore.css";
 
 const ConsumerExplore = ({ embedded = false, themeOverride }) => {
@@ -21,6 +22,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
   const [shops, setShops] = useState(() => getCachedResults("all") || []);
   const [loading, setLoading] = useState(() => !getCachedResults("all"));
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [searchLocation, setSearchLocation] = useState(null);
   const { filters, setFilters, query, setQuery, view, setView, sort, setSort } = useExploreState();
   const { coords, locating, locationError } = useBrowserLocation();
   const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords);
@@ -31,11 +33,30 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
   }, [navigate]);
 
   useEffect(() => {
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      const resolved = await resolveLocationSearch(query);
+      if (!cancelled) setSearchLocation(resolved ? { query, ...resolved } : null);
+    }, 400);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [query]);
+
+  const activeSearchLocation = searchLocation?.query === query ? searchLocation : null;
+
+  useEffect(() => {
     const payload = buildSearchPayload(filters, sort);
-    const hasFilterLocation = filters.region || filters.zipCode || filters.state;
+    const hasFilterLocation = filters.region || filters.zipCode || filters.state || activeSearchLocation;
     if (!hasFilterLocation && !coords) {
       setLoading(locating && shops.length === 0);
       return;
+    }
+    if (activeSearchLocation) {
+      payload.state = activeSearchLocation.state;
+      payload.city = activeSearchLocation.city;
+      payload.limit = 1000;
     }
     if (!hasFilterLocation) Object.assign(payload, coords);
     const requestKey = JSON.stringify(payload);
@@ -54,18 +75,18 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
       })
       .catch(() => setShops([]))
       .finally(() => setLoading(false));
-  }, [coords, filters, locating, shops.length, sort]);
+  }, [coords, filters, locating, shops.length, sort, activeSearchLocation]);
 
   const visibleShops = useMemo(() => {
     const term = query.trim().toLowerCase();
     const filtered = shops.filter((shop) => {
-      const matchesSearch = !term || `${shop.name} ${shop.address} ${shop.found_by_query}`.toLowerCase().includes(term);
+      const matchesSearch = activeSearchLocation || !term || `${shop.name} ${shop.address} ${shop.found_by_query}`.toLowerCase().includes(term);
       return matchesSearch;
     });
     return [...filtered].sort((a, b) => sort === "rating"
       ? (b.rating || 0) - (a.rating || 0)
       : sort === "alphabetical" ? (a.name || "").localeCompare(b.name || "") : 0);
-  }, [query, shops, sort]);
+  }, [query, activeSearchLocation, shops, sort]);
 
   return (
     <div className={embedded ? "consumer-theme" : `admin-theme operator-theme admin-theme--${theme}`}>
