@@ -12,11 +12,7 @@ import {
 } from "../../services/admin";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Search } from "lucide-react";
-import retailersTotalIcon from "../../assets/admin-retailers-total.png";
-import retailersVerifiedIcon from "../../assets/admin-retailers-verified.png";
-import retailersExpiringIcon from "../../assets/admin-retailers-expiring.png";
-import retailersGapsIcon from "../../assets/admin-retailers-gaps.png";
+import { ClipboardList, Copy, Search, Store, TrendingUp } from "lucide-react";
 
 const C = {
   border: "#dce7e1",
@@ -555,18 +551,19 @@ function NewRequestModal({ onClose, onSuccess }) {
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
+function StatCard({ label, value, delta, deltaBg, deltaColor, icon: Icon }) {
   return (
     <div className="admin-queue-stat" style={{
       backgroundImage: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
       border: "0.8px solid #dce7e1", borderRadius: "24px",
-      boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px"
+      boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px", position: "relative", overflow: "clip"
     }}>
       <div className="admin-queue-stat__content">
         <p className="admin-queue-stat__label" style={{ color: 'white' }}>{label}</p>
         <p className="admin-queue-stat__value" style={{ color: 'white' }}>{value}</p>
         <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
       </div>
+      <Icon className="admin-queue-stat__glow-icon" aria-hidden="true" />
     </div>
   );
 }
@@ -643,10 +640,10 @@ export default function AdminPendingRequests() {
   const conversionRate = decided > 0 ? Math.round(((approved + autoVerif) / decided) * 100) : null;
 
   const STATS = [
-    { label: "Open Requests", value: (apiStats.openRequests ?? "—").toString(), delta: "Across all request types", deltaBg: "#edf5ff", deltaColor: "#2f80ed", icon: retailersTotalIcon },
-    { label: "Claim Business", value: (apiStats.claimBusiness ?? "—").toString(), delta: "Highest intent", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersVerifiedIcon },
-    { label: "Duplicate Signals", value: (apiStats.duplicateSignals ?? "—").toString(), delta: "Review before approval", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: retailersGapsIcon },
-    { label: "Conversion Rate", value: conversionRate !== null ? `${conversionRate}%` : "—", delta: "Verified / Decided", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersExpiringIcon },
+    { label: "Open Requests", value: (apiStats.openRequests ?? "—").toString(), delta: "Across all request types", deltaBg: "#edf5ff", deltaColor: "#2f80ed", icon: ClipboardList },
+    { label: "Claim Business", value: (apiStats.claimBusiness ?? "—").toString(), delta: "Highest intent", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: Store },
+    { label: "Duplicate Signals", value: (apiStats.duplicateSignals ?? "—").toString(), delta: "Review before approval", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: Copy },
+    { label: "Conversion Rate", value: conversionRate !== null ? `${conversionRate}%` : "—", delta: "Verified / Decided", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: TrendingUp },
   ];
 
   const handleTypeFilter = (val) => {
@@ -783,6 +780,7 @@ export default function AdminPendingRequests() {
             <div style={{ position: "relative", width: "100%" }}>
               <Search aria-hidden="true" size={16} strokeWidth={2} style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", pointerEvents: "none" }} />
               <input
+                className="admin-request-history-search"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search business name, email, phone…"
@@ -790,7 +788,7 @@ export default function AdminPendingRequests() {
               />
             </div>
             <button
-              className="admin-primary-action"
+              className="admin-primary-action admin-request-history-new"
               onClick={() => setShowNewRequest(true)}
               style={{ height: "42px", padding: "0 16px", borderRadius: "12px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}
             >
@@ -913,7 +911,7 @@ export default function AdminPendingRequests() {
                       Message Operator
                     </button> */}
                     <button
-                      className="admin-primary-action"
+                      className="admin-primary-action admin-request-history-approve"
                       onClick={() => canApproveSelection && handleApprove(selectedRowKeys[0])}
                       disabled={!canApproveSelection}
                       title={!canApproveSelection && selectedRowKeys.length ? "Only pending or in-review requests can be approved" : ""}

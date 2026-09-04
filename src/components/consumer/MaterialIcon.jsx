@@ -3,6 +3,9 @@ const PATHS = {
   map: "m20.5 3-5.5 2.1L9 3 3.5 4.9A1 1 0 0 0 3 5.8V21l6-2.1 6 2.1 5.5-1.9a1 1 0 0 0 .5-.9V4a1 1 0 0 0-.5-1zM10 5.5l4 1.4v11.6l-4-1.4V5.5zm-5 1 3-1v11.6l-3 1V6.5zm14 11-3 1V6.9l3-1v11.6z",
   "info-outline": "M11 17h2v-6h-2v6zm1-15a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm-1-11h2V7h-2v2z",
   search: "M9.5 3a6.5 6.5 0 1 0 3.98 11.64L19.85 21 21 19.85l-6.36-6.37A6.5 6.5 0 0 0 9.5 3zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9z",
+  "location-on": "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z",
+  "location-city": "M15 11V5l-3-3-3 3v2H3v15h18V11h-6zm-8 9H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5v-2h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V6h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z",
+  "expand-more": "m7.41 8.59 4.59 4.58 4.59-4.58L18 10l-6 6-6-6z",
   check: "M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z",
   refresh: "M17.65 6.35A8 8 0 1 0 19.73 14h-2.08A6 6 0 1 1 16.24 7.76L13 11h8V3z",
   phone: "M6.62 10.79a15.5 15.5 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02z",
@@ -13,8 +16,8 @@ const PATHS = {
   verified: "m23 12-2.44-2.79.34-3.69-3.61-.82L15.4 1.5 12 2.96 8.6 1.5 6.71 4.69l-3.61.81.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.81L8.6 22.5l3.4-1.47 3.4 1.46 1.89-3.19 3.61-.82-.34-3.69L23 12zm-12.91 4.72-3.8-3.81 1.48-1.48 2.32 2.33 5.85-5.87 1.48 1.49-7.33 7.34z",
 };
 
-const MaterialIcon = ({ name, size = 20, color = "currentColor" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill={color}>
+const MaterialIcon = ({ name, size = 20, color = "currentColor", className }) => (
+  <svg className={className} width={size} height={size} viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill={color}>
     <path d={PATHS[name]} />
   </svg>
 );

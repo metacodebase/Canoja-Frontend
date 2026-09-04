@@ -12,11 +12,7 @@ import {
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import api from "../../services/api";
 import { toast } from "react-toastify";
-import { Search } from "lucide-react";
-import retailersTotalIcon from "../../assets/admin-retailers-total.png";
-import retailersVerifiedIcon from "../../assets/admin-retailers-verified.png";
-import retailersExpiringIcon from "../../assets/admin-retailers-expiring.png";
-import retailersGapsIcon from "../../assets/admin-retailers-gaps.png";
+import { BadgeCheck, Clock3, Eye, Search, ShieldX } from "lucide-react";
 
 const C = {
   border: "#dce7e1",
@@ -392,7 +388,7 @@ function IssueVerificationModal({ onClose, onSuccess }) {
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
+function StatCard({ label, value, delta, deltaBg, deltaColor, icon: Icon }) {
   return (
     <div className="admin-queue-stat" style={{
       backgroundImage: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
@@ -403,6 +399,7 @@ function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
         <p className="admin-queue-stat__value" style={{ color: 'white' }}>{value}</p>
         <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
       </div>
+      <Icon className="admin-queue-stat__glow-icon" aria-hidden="true" />
     </div>
   );
 }
@@ -472,10 +469,10 @@ export default function AdminCanojaVerified() {
   const stateOptions = apiData?.facets?.states || [];
 
   const STATS = [
-    { label: "Active Verified", value: (apiStats.active ?? "—").toString(), delta: "Currently verified", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersVerifiedIcon },
-    { label: "Expiring Soon", value: (apiStats.expiringSoon ?? "—").toString(), delta: "Renew within 14 days", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: retailersExpiringIcon },
-    { label: "Revoked", value: (apiStats.revoked ?? "—").toString(), delta: "Compliance mismatch", deltaBg: "#fff1f1", deltaColor: "#d64545", icon: retailersGapsIcon },
-    { label: "Badge Views", value: (apiStats.totalBadgeViews ?? "—").toLocaleString(), delta: "Total shop views", deltaBg: "#edf5ff", deltaColor: "#2f80ed", icon: retailersTotalIcon },
+    { label: "Active Verified", value: (apiStats.active ?? "—").toString(), delta: "Currently verified", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: BadgeCheck },
+    { label: "Expiring Soon", value: (apiStats.expiringSoon ?? "—").toString(), delta: "Renew within 14 days", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: Clock3 },
+    { label: "Revoked", value: (apiStats.revoked ?? "—").toString(), delta: "Compliance mismatch", deltaBg: "#fff1f1", deltaColor: "#d64545", icon: ShieldX },
+    { label: "Badge Views", value: (apiStats.totalBadgeViews ?? "—").toLocaleString(), delta: "Total shop views", deltaBg: "#edf5ff", deltaColor: "#2f80ed", icon: Eye },
   ];
 
   const handleStatusFilter = (val) => {

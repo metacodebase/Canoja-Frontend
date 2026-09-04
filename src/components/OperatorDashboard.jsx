@@ -218,15 +218,16 @@ const OperatorDashboard = () => {
             gap: "20px",
           }}>
             {/* Verification Card */}
-            <div style={{
-              background: "#f9fafb",
+            <div className="operator-health-card" style={{
+              background: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
               borderRadius: "12px",
               padding: "20px",
-              border: "1px solid #e5e7eb",
+              border: "1px solid rgba(255,255,255,.18)",
+              boxShadow: "0 10px 24px rgba(27,107,70,.2)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                 {getStatusIcon("verification", "verified")}
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#374151", margin: 0 }}>
+                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#ffffff", margin: 0 }}>
                   Verification
                 </h3>
               </div>
@@ -241,18 +242,19 @@ const OperatorDashboard = () => {
             </div>
 
             {/* Visibility Card */}
-            <div style={{
-              background: "#f9fafb",
+            <div className="operator-health-card" style={{
+              background: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
               borderRadius: "12px",
               padding: "20px",
-              border: "1px solid #e5e7eb",
+              border: "1px solid rgba(255,255,255,.18)",
+              boxShadow: "0 10px 24px rgba(27,107,70,.2)",
               cursor: "pointer",
             }}
               onClick={handleToggleVisibility}
               title="Click to toggle visibility">
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                 {getStatusIcon("visibility", businessHealth?.visibility?.status)}
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#374151", margin: 0 }}>
+                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#ffffff", margin: 0 }}>
                   Visibility
                 </h3>
               </div>
@@ -264,21 +266,22 @@ const OperatorDashboard = () => {
               }}>
                 {businessHealth?.visibility?.message || "Visible"}
               </p>
-              <p style={{ fontSize: "12px", color: "#6b7280", margin: "4px 0 0 0" }}>
+              <p style={{ fontSize: "12px", color: "rgba(255,255,255,.75)", margin: "4px 0 0 0" }}>
                 Tap to change
               </p>
             </div>
 
             {/* Menu Freshness Card */}
-            <div style={{
-              background: "#f9fafb",
+            <div className="operator-health-card" style={{
+              background: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
               borderRadius: "12px",
               padding: "20px",
-              border: "1px solid #e5e7eb",
+              border: "1px solid rgba(255,255,255,.18)",
+              boxShadow: "0 10px 24px rgba(27,107,70,.2)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                 {getStatusIcon("menu", businessHealth?.menu_freshness?.status)}
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#374151", margin: 0 }}>
+                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#ffffff", margin: 0 }}>
                   Menu Freshness
                 </h3>
               </div>
@@ -290,7 +293,7 @@ const OperatorDashboard = () => {
               }}>
                 {businessHealth?.menu_freshness?.message || "No menu"}
               </p>
-              <p style={{ fontSize: "12px", color: "#6b7280", margin: "4px 0 0 0" }}>
+              <p style={{ fontSize: "12px", color: "rgba(255,255,255,.75)", margin: "4px 0 0 0" }}>
                 {businessHealth?.menu_freshness?.uploaded_at
                   ? `Last updated ${new Date(businessHealth.menu_freshness.uploaded_at).toLocaleString()}`
                   : businessHealth?.menu_freshness?.status === "uploaded" ? "Menu uploaded" : "Upload a menu"}
@@ -298,22 +301,23 @@ const OperatorDashboard = () => {
             </div>
 
             {/* Engagement Card */}
-            <div style={{
-              background: "#f9fafb",
+            <div className="operator-health-card" style={{
+              background: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
               borderRadius: "12px",
               padding: "20px",
-              border: "1px solid #e5e7eb",
+              border: "1px solid rgba(255,255,255,.18)",
+              boxShadow: "0 10px 24px rgba(27,107,70,.2)",
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
                 {getStatusIcon("engagement", "default")}
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#374151", margin: 0 }}>
+                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#ffffff", margin: 0 }}>
                   Engagement
                 </h3>
               </div>
               <p style={{
                 fontSize: "16px",
                 fontWeight: "600",
-                color: "#1e293b",
+                color: "#ffffff",
                 margin: "4px 0 0 0",
               }}>
                 {businessHealth?.engagement?.count ?? 0} views

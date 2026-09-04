@@ -10,11 +10,7 @@ import {
 } from "../../services/admin";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-import { Search } from "lucide-react";
-import retailersTotalIcon from "../../assets/admin-retailers-total.png";
-import retailersVerifiedIcon from "../../assets/admin-retailers-verified.png";
-import retailersExpiringIcon from "../../assets/admin-retailers-expiring.png";
-import retailersGapsIcon from "../../assets/admin-retailers-gaps.png";
+import { CircleAlert, Flame, Inbox, Search, Timer } from "lucide-react";
 
 const US_STATES = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY", "DC"];
 
@@ -378,18 +374,19 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
 }
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-function StatCard({ label, value, delta, deltaBg, deltaColor, icon }) {
+function StatCard({ label, value, delta, deltaBg, deltaColor, icon: Icon }) {
   return (
     <div className="admin-queue-stat" style={{
       backgroundImage: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
       border: "0.8px solid #dce7e1", borderRadius: "24px",
-      boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px",
+      boxShadow: "0px 1px 2px 0px rgba(16,24,40,0.06)", padding: "20px", position: "relative", overflow: "clip",
     }}>
       <div className="admin-queue-stat__content">
         <p className="admin-queue-stat__label" style={{ color: 'white' }}>{label}</p>
         <p className="admin-queue-stat__value" style={{ color: 'white' }}>{value}</p>
         <span className="admin-queue-stat__badge" style={{ background: deltaBg, color: deltaColor }}>{delta}</span>
       </div>
+      <Icon className="admin-queue-stat__glow-icon" aria-hidden="true" />
     </div>
   );
 }
@@ -484,10 +481,10 @@ export default function AdminPendingVerifications() {
   const stateOptions = apiData?.facets?.states || [];
 
   const STATS = [
-    { label: "Pending Total", value: (apiStats.pendingTotal ?? "—").toString(), delta: "Backlog", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: retailersTotalIcon },
-    { label: "High Priority", value: (apiStats.highPriority ?? "—").toString(), delta: "Needs same-day review", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: retailersVerifiedIcon },
-    { label: "SLA Breaches", value: (apiStats.slaBreaches ?? "—").toString(), delta: "Older than 72h", deltaBg: "#fff1f1", deltaColor: "#d64545", icon: retailersExpiringIcon },
-    { label: "Avg Time to Verify", value: apiStats.avgTimeToVerify ?? "—", delta: "Approved + rejected", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: retailersGapsIcon },
+    { label: "Pending Total", value: (apiStats.pendingTotal ?? "—").toString(), delta: "Backlog", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: Inbox },
+    { label: "High Priority", value: (apiStats.highPriority ?? "—").toString(), delta: "Needs same-day review", deltaBg: "#fff5eb", deltaColor: "#d9822b", icon: Flame },
+    { label: "SLA Breaches", value: (apiStats.slaBreaches ?? "—").toString(), delta: "Older than 72h", deltaBg: "#fff1f1", deltaColor: "#d64545", icon: CircleAlert },
+    { label: "Avg Time to Verify", value: apiStats.avgTimeToVerify ?? "—", delta: "Approved + rejected", deltaBg: "#edf9f2", deltaColor: "#1f9d61", icon: Timer },
   ];
 
   const handleAgeFilter = (val) => {
@@ -741,6 +738,7 @@ export default function AdminPendingVerifications() {
             <div style={{ position: "relative", width: "100%" }}>
               <Search aria-hidden="true" size={16} strokeWidth={2} style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)", color: "#8090a3", pointerEvents: "none" }} />
               <input
+                className="admin-verification-search"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search business, submission ID, email…"
@@ -871,6 +869,7 @@ export default function AdminPendingVerifications() {
                       <span style={{ fontSize: "13px", color: C.textSecondary }}>{selectedRowKeys.length} selected</span>
                     )}
                     <button
+                      className="admin-verification-action admin-verification-action--bulk"
                       onClick={handleBulkApprove}
                       disabled={!selectedRowKeys.length || bulkApproving}
                       style={{
@@ -886,13 +885,14 @@ export default function AdminPendingVerifications() {
                       {bulkApproving ? "Approving…" : "Bulk Approve"}
                     </button>
                     <button
+                      className="admin-verification-action admin-verification-action--escalate"
                       onClick={handleBulkEscalate}
                       style={{ height: "42px", padding: "0 16px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}
                     >
                       Escalate
                     </button>
                     <button
-                      className="admin-primary-action"
+                      className="admin-primary-action admin-verification-action admin-verification-action--review"
                       onClick={openReviewerView}
                       style={{ height: "42px", padding: "0 16px", borderRadius: "12px", backgroundImage: "linear-gradient(165.51deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13.333px", fontWeight: 700, cursor: "pointer" }}
                     >

@@ -1228,7 +1228,7 @@ export default function AdminRetailers() {
                       Bulk Assign
                     </button> */}
                     <button
-                      className="admin-primary-action"
+                      className="admin-primary-action admin-retailer-export"
                       onClick={handleExportCSV}
                       disabled={exporting}
                       style={{ height: "42px", padding: "0 16px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13.333px", fontWeight: 700, cursor: "pointer", opacity: exporting ? 0.6 : 1 }}

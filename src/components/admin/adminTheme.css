@@ -63,13 +63,27 @@
 .admin-retailers-page { --admin-filter-sticky-top: 180px; }
 .admin-pending-requests-page,
 .admin-canoja-verified-page { --admin-filter-sticky-top: 148px; }
+.admin-pending-requests-page.admin-queue-page .admin-queue-search-wrap .admin-request-history-search { width: 340px !important; height: 48px !important; box-sizing: border-box; border-radius: 18px !important; }
+.admin-pending-requests-page.admin-queue-page .admin-queue-search-wrap { gap: 10px !important; column-gap: 10px !important; justify-content: flex-start; }
+.admin-pending-requests-page.admin-queue-page .admin-queue-search-wrap > div:first-child { width: 340px !important; min-width: 340px; max-width: 340px; flex: 0 0 340px; }
+.admin-pending-requests-page .admin-request-history-new:not(:disabled) { width: 160px; min-width: 160px; max-width: 160px; height: 48px !important; box-sizing: border-box; padding: 0 16px !important; border-radius: 18px !important; }
+.admin-pending-requests-page .admin-request-history-approve { width: 120px; height: 48px !important; padding: 0 16px !important; border-radius: 18px !important; }
+.admin-theme--dark .admin-pending-requests-page .admin-request-history-new:not(:disabled),
+.admin-theme--dark .admin-pending-requests-page .admin-request-history-approve:not(:disabled) { background: linear-gradient(105deg, #35cf59, #00a77e) !important; color: #001812 !important; box-shadow: 0 12px 24px rgba(29, 210, 95, .28) !important; }
 .admin-pending-verifications-page { --admin-filter-sticky-top: 180px; }
+.admin-pending-verifications-page.admin-queue-page .admin-queue-search-wrap .admin-verification-search { width: 340px !important; height: 48px !important; box-sizing: border-box; border-radius: 18px !important; }
+.admin-pending-verifications-page .admin-verification-action { height: 48px !important; padding: 0 16px !important; border-radius: 18px !important; }
+.admin-pending-verifications-page .admin-verification-action.admin-primary-action:not(:disabled) { height: 48px !important; border-radius: 18px !important; }
+.admin-pending-verifications-page .admin-verification-action--bulk,
+.admin-pending-verifications-page .admin-verification-action--escalate { width: 120px; }
+.admin-pending-verifications-page .admin-verification-action--review { width: 190px; }
+.admin-theme--dark .admin-pending-verifications-page .admin-verification-action--review { background: linear-gradient(105deg, #35cf59, #00a77e) !important; color: #001812 !important; box-shadow: 0 12px 24px rgba(29, 210, 95, .28) !important; }
 .admin-verified-businesses-page { --admin-filter-sticky-top: 157px; }
 .admin-queue-filters::-webkit-scrollbar,
 .admin-directory-filters::-webkit-scrollbar { width: 6px; }
 .admin-queue-filters::-webkit-scrollbar-thumb,
 .admin-directory-filters::-webkit-scrollbar-thumb { background: rgba(87, 148, 119, .48); border-radius: 999px; }
-.admin-queue-stat { min-width: 0; min-height: 180px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-sizing: border-box; }
+.admin-queue-stat { min-width: 0; width: 100%; height: 180px; min-height: 180px; display: flex; align-items: center; justify-content: space-between; gap: 10px; box-sizing: border-box; padding: 20px !important; border-radius: 24px !important; }
 .admin-queue-stat__content { position: relative; z-index: 1; min-width: 0; }
 .admin-queue-stat__label { margin: 0 0 8px; font-size: 14.08px; font-weight: 400; line-height: 20.416px; }
 .admin-queue-stat__value { margin: 0; font-size: 30.4px; font-weight: 800; letter-spacing: -.912px; line-height: 44.08px; }
@@ -82,7 +96,7 @@
   padding: 0 12px !important;
   box-sizing: border-box;
   border-radius: 999px;
-  font-size: 12px !important;
+  font-size: 10px !important;
   font-weight: 800;
   line-height: 1 !important;
   white-space: nowrap !important;
@@ -96,30 +110,39 @@
 .admin-directory-stats .admin-queue-stat { min-width: 0; align-items: flex-start; }
 .admin-directory-stats .admin-queue-stat__content { width: 100%; min-width: 0; }
 .admin-directory-stats .admin-queue-stat__badge { max-width: 100%; text-align: center; }
-.admin-queue-stat__content .admin-queue-stat__badge { max-width: 100%; text-align: center; }
+.admin-queue-stat__content .admin-queue-stat__badge { width: max-content; max-width: none; text-align: center; }
 .admin-theme--dark .admin-queue-page { background: rgba(0, 27, 23, .8) !important; border-color: rgba(0, 214, 92, .32) !important; box-shadow: inset 0 0 55px rgba(0, 255, 116, .025), 0 8px 24px rgba(0, 0, 0, .22) !important; }
 .admin-theme--dark .admin-queue-header { background: rgba(0, 27, 23, .94) !important; border-color: transparent !important; backdrop-filter: blur(12px); }
 .admin-theme--dark .admin-queue-body { background: transparent !important; }
 .admin-theme--dark .admin-queue-table-header { border-bottom: 0 !important; }
 .admin-theme--dark .admin-queue-stats-wrap { background: transparent !important; }
-.admin-theme--dark .admin-queue-stat { min-height: 180px; padding: 24px !important; border: 1px solid rgba(45, 211, 101, .16) !important; border-radius: 20px !important; background: linear-gradient(180deg, rgba(22, 119, 60, .78) 0%, rgba(2, 38, 29, .96) 100%) !important; box-shadow: inset 0 0 0 1px rgba(45, 211, 101, .16), 0 8px 24px rgba(0, 0, 0, .14) !important; }
+.admin-theme--dark .admin-queue-stat { border: 1px solid rgba(45, 211, 101, .16) !important; background: linear-gradient(180deg, rgba(22, 119, 60, .78) 0%, rgba(2, 38, 29, .96) 100%) !important; box-shadow: inset 0 0 0 1px rgba(45, 211, 101, .16), 0 8px 24px rgba(0, 0, 0, .14) !important; }
 .admin-theme--dark .admin-directory-hero { background: linear-gradient(180deg, rgba(22, 119, 60, .78) 0%, rgba(2, 38, 29, .96) 100%) !important; }
-.admin-theme--dark .admin-queue-stat__label { color: #9dafaa !important; font-size: 16px; }
-.admin-theme--dark .admin-queue-stat__value { color: #f5fbf8 !important; font-size: 36px; line-height: 48px; }
-.admin-theme--dark .admin-queue-stat__badge { padding: 3px 13px; line-height: 18px; }
+.admin-theme--dark .admin-queue-stat__label { color: #9dafaa !important; }
+.admin-theme--dark .admin-queue-stat__value { color: #f5fbf8 !important; }
 .admin-theme--dark .admin-queue-stat__icon { filter: saturate(1.08); }
+.admin-queue-stat__glow-icon { position: absolute; top: 50%; right: 24px; width: 72px; height: 72px; color: #00ef58; stroke-width: 2.4; transform: translateY(-50%); filter: drop-shadow(0 0 10px rgba(0, 239, 88, .72)) drop-shadow(0 0 22px rgba(0, 239, 88, .32)); pointer-events: none; }
+.admin-queue-stat__content { position: relative; z-index: 1; max-width: calc(100% - 88px); }
 .admin-theme--dark .admin-canoja-verified-page .admin-queue-stat { padding: 20px !important; border-radius: 24px !important; }
 .admin-theme--dark .admin-canoja-verified-page .admin-queue-stat__label { font-size: 14.08px; line-height: 20.416px; }
 .admin-theme--dark .admin-canoja-verified-page .admin-queue-stat__value { font-size: 30.4px; line-height: 44.08px; }
 .admin-theme--dark .admin-canoja-verified-page .admin-queue-stat__badge { height: 26px; margin-top: 10px; padding: 0 12px !important; line-height: 1 !important; }
 .admin-retailer-heading { flex: 0 1 390px; min-width: 280px; }
 .admin-retailer-controls .admin-queue-search-wrap { flex: 1; min-width: 0; }
+.admin-retailer-controls .admin-queue-search-wrap > div:first-child { width: auto !important; min-width: 220px; flex: 1; }
+.admin-retailer-controls .admin-queue-search-wrap input { width: 100% !important; height: 48px !important; box-sizing: border-box; border-radius: 18px !important; }
+.admin-retailer-controls .admin-saved-searches-trigger { width: 150px; height: 48px !important; padding: 0 16px !important; border-radius: 18px !important; }
+.admin-retailer-controls > div:last-child .admin-primary-action:not(:disabled) { width: 140px; min-width: 140px; max-width: 140px; height: 48px !important; box-sizing: border-box; padding: 0 16px !important; border-radius: 18px !important; }
+.admin-theme .admin-queue-table-card .admin-queue-actions .admin-retailer-export { width: 140px; min-width: 140px; max-width: 140px; height: 48px !important; box-sizing: border-box; padding: 0 16px !important; border-radius: 18px !important; background: linear-gradient(105deg, #35cf59, #00a77e) !important; color: #fff !important; box-shadow: 0 12px 24px rgba(29, 171, 95, .2) !important; }
+.admin-theme--dark .admin-retailer-export { background: linear-gradient(105deg, #35cf59, #00a77e) !important; color: #001812 !important; box-shadow: 0 12px 24px rgba(29, 210, 95, .28) !important; }
 .admin-theme--dark .admin-queue-search-wrap > div:first-child { width: auto !important; min-width: 220px; flex: 1; }
 .admin-theme--dark .admin-queue-search-wrap input { width: 100% !important; height: 48px !important; border-radius: 18px !important; background: #001b17 !important; border-color: rgba(87, 148, 119, .28) !important; }
 .admin-theme--dark .admin-saved-searches-trigger { height: 48px !important; padding: 0 22px !important; border-radius: 18px !important; background: #001b17 !important; border-color: #008f73 !important; }
 .admin-theme--dark .admin-retailer-controls > div:last-child button { height: 48px !important; padding: 0 24px !important; border-radius: 18px !important; background-image: linear-gradient(105deg, #35cf59, #00a77e) !important; color: #001812 !important; box-shadow: 0 12px 24px rgba(29, 210, 95, .28); }
-.admin-primary-action:not(:disabled) { height: 42px !important; padding: 0 16px !important; border: 0 !important; border-radius: 12px !important; background: linear-gradient(161deg, #1b6b46 0%, #2da96d 100%) !important; color: #fff !important; font-size: 13.333px !important; font-weight: 700 !important; cursor: pointer !important; white-space: nowrap; }
+.admin-primary-action:not(:disabled) { height: 42px !important; padding: 0 16px !important; border: 0 !important; border-radius: 12px !important; background: linear-gradient(105deg, #35cf59, #00a77e) !important; color: #fff !important; font-size: 13.333px !important; font-weight: 700 !important; cursor: pointer !important; white-space: nowrap; box-shadow: 0 12px 24px rgba(29, 171, 95, .2) !important; }
 .admin-theme--dark .admin-primary-action:not(:disabled) { height: 48px !important; padding: 0 24px !important; border-radius: 18px !important; background: linear-gradient(105deg, #35cf59, #00a77e) !important; color: #001812 !important; box-shadow: 0 12px 24px rgba(29, 210, 95, .28) !important; }
+.operator-plan-action { min-height: 48px; padding: 0 24px !important; border-radius: 18px !important; background: linear-gradient(105deg, #35cf59, #00a77e) !important; color: #fff !important; box-shadow: 0 12px 24px rgba(29, 171, 95, .2) !important; }
+.admin-theme--dark .operator-plan-action { background: linear-gradient(105deg, #35cf59, #00a77e) !important; color: #001812 !important; box-shadow: 0 12px 24px rgba(29, 210, 95, .28) !important; }
 .admin-theme--light .admin-canoja-verified-page .admin-queue-search-wrap > div:first-child { width: 220px !important; min-width: 220px; flex: 0 0 220px; }
 .admin-theme--light .admin-canoja-verified-page .admin-verified-search {
   width: 220px !important;
@@ -341,6 +364,27 @@
   border: 0 !important;
   box-shadow: none !important;
 }
+.operator-theme .operator-health-card {
+  border: 1px solid rgba(255, 255, 255, .2) !important;
+  background: linear-gradient(155deg, #1b6b46 0%, #2eb870 100%) !important;
+  box-shadow: 0 10px 24px rgba(27, 107, 70, .2) !important;
+}
+.operator-theme.admin-theme--dark main .operator-dashboard-page .operator-health-card {
+  border-color: rgba(64, 234, 84, .22) !important;
+  background-color: #1b6b46 !important;
+  background-image: linear-gradient(135deg, #145c3c 0%, #238f58 52%, #2eb870 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), 0 12px 28px rgba(0, 0, 0, .28) !important;
+}
+.operator-theme .operator-health-card h3,
+.operator-theme .operator-health-card > p {
+  color: #fff !important;
+}
+.operator-theme .operator-health-card > p + p {
+  color: rgba(255, 255, 255, .78) !important;
+}
+.operator-theme .operator-health-card svg path {
+  stroke: #fff !important;
+}
 .operator-theme.admin-theme--light .operator-spotlight-card { background: #fff !important; border-color: #cfe0d8 !important; }
 .operator-theme.admin-theme--light .operator-spotlight-card h1 { color: #17372c !important; }
 .operator-theme.admin-theme--light .operator-spotlight-info { color: #526f64 !important; background: #effaf4 !important; }
@@ -501,6 +545,7 @@
   .admin-retailer-controls .admin-queue-search-wrap button { width: 100%; }
   .admin-retailer-controls > div:last-child { width: 100%; justify-content: stretch !important; }
   .admin-retailer-controls > div:last-child button { width: 100%; }
+  .admin-retailer-controls > div:last-child .admin-primary-action:not(:disabled) { width: 100%; }
   .admin-queue-body { padding: 16px !important; gap: 18px !important; }
   .admin-queue-stats-wrap { position: relative !important; padding: 0 !important; margin: 0 !important; background: transparent !important; }
   .admin-queue-stats { grid-template-columns: minmax(0, 1fr) !important; gap: 12px !important; }
@@ -515,6 +560,14 @@
   .admin-queue-table-header { min-width: 0; flex-direction: column; align-items: stretch !important; gap: 16px; padding: 16px !important; }
   .admin-queue-actions { display: grid !important; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
   .admin-queue-actions button { width: 100%; min-width: 0; padding: 0 10px !important; }
+  .admin-theme .admin-queue-table-card .admin-queue-actions .admin-retailer-export { width: 100%; min-width: 0; max-width: none; }
+  .admin-pending-verifications-page.admin-queue-page .admin-queue-search-wrap .admin-verification-search,
+  .admin-pending-verifications-page .admin-verification-action,
+  .admin-pending-requests-page.admin-queue-page .admin-queue-search-wrap .admin-request-history-search,
+  .admin-pending-requests-page .admin-request-history-new:not(:disabled),
+  .admin-pending-requests-page .admin-request-history-approve { width: 100% !important; }
+  .admin-pending-requests-page.admin-queue-page .admin-queue-search-wrap > div:first-child { width: 100% !important; min-width: 0; max-width: none; flex-basis: auto; }
+  .admin-pending-requests-page .admin-request-history-new:not(:disabled) { min-width: 0; max-width: none; }
   .admin-queue-table-card .ant-table-wrapper { min-width: 720px; }
   .admin-queue-table-card .ant-pagination { position: sticky; left: 0; width: calc(100vw - 58px); justify-content: center; }
   .admin-directory-page { overflow: visible !important; border-radius: 20px !important; }

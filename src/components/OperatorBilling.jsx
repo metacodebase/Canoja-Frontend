@@ -47,7 +47,7 @@ const OperatorBilling = () => {
             <PlanCard id="free" name="Free" price="0" features={FREE_FEATURES} current={currentTier === "free"} selected={selectedPlan === "free"} onSelect={setSelectedPlan} />
             <PlanCard id="starter" name="Starter" price="99" features={STARTER_FEATURES} current={currentTier === "starter"} selected={selectedPlan === "starter"} starter onSelect={setSelectedPlan} />
           </div>
-          <button type="button" disabled={!selectedPlan || selectedPlan === currentTier || updatePlan.isPending} onClick={handleUpdate} style={{ ...styles.action, ...((!selectedPlan || selectedPlan === currentTier || updatePlan.isPending) ? styles.actionDisabled : {}) }}>{actionLabel}</button>
+          <button className="operator-plan-action" type="button" disabled={!selectedPlan || selectedPlan === currentTier || updatePlan.isPending} onClick={handleUpdate} style={{ ...styles.action, ...((!selectedPlan || selectedPlan === currentTier || updatePlan.isPending) ? styles.actionDisabled : {}) }}>{actionLabel}</button>
           <p style={styles.finePrint}>Testing mode — no payment will be charged.</p>
         </>}
       </div>

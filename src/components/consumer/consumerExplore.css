@@ -159,10 +159,15 @@
 .filter-helper { display: flex; align-items: flex-start; gap: 8px; padding: 10px; border: 1px solid #b98516; border-radius: 9px; background: rgba(245, 166, 35, .12); color: #f5a623; font-size: 11px; }
 .filter-field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .filter-field { display: grid; gap: 8px; color: #fff; font-size: 13px; font-weight: 700; }
+.filter-field-label { display: flex; align-items: center; gap: 5px; min-height: 18px; }
 .filter-field small { color: #8fa29c; font-weight: 400; }
 .filter-input { display: flex; align-items: center; gap: 8px; padding-left: 11px; border: 1px solid #35534c; border-radius: 10px; background: #102724; }
 .filter-input input { width: 100%; box-sizing: border-box; padding: 12px 12px 12px 0; border: 0; outline: 0; background: transparent; color: #fff; }
-.filter-input:focus-within { border-color: #40ea54; }
+.filter-input--dropdown { min-height: 48px; padding: 0 11px; border-radius: 12px; transition: border-color .18s ease, box-shadow .18s ease, background .18s ease; }
+.filter-input--dropdown:hover { border-color: #279d4f; }
+.filter-input--dropdown input { min-width: 0; padding: 13px 0; font-weight: 600; }
+.filter-dropdown-arrow { flex: 0 0 auto; color: #279d4f; pointer-events: none; }
+.filter-input:focus-within { border-color: #40ea54; box-shadow: 0 0 0 3px rgba(64,234,84,.12); }
 .category-block { gap: 0; }
 .category-block > strong { margin-bottom: 8px; }
 .filter-check { width: 100%; display: flex; align-items: center; gap: 10px; padding: 12px 2px; border: 0; border-bottom: 1px solid #173b32; background: transparent; color: #fff; text-align: left; }
@@ -244,6 +249,8 @@
 .operator-theme.admin-theme--light .filter-field,
 .operator-theme.admin-theme--light .filter-check { color: #17372c; }
 .operator-theme.admin-theme--light .filter-input { border-color: #c4d9d0; background: #f1f7f4; }
+.operator-theme.admin-theme--light .filter-block__heading span { background: #f1f7f4; color: #17372c; font-weight: 700; }
+.operator-theme.admin-theme--light .filter-input--dropdown:hover { border-color: #279d4f; background: #fff; }
 .operator-theme.admin-theme--light .filter-input input { color: #17372c !important; }
 .operator-theme.admin-theme--light .filter-input input::placeholder { color: #71877f !important; }
 .operator-theme.admin-theme--light .region-grid button,
