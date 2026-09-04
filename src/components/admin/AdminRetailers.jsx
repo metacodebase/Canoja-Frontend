@@ -811,7 +811,7 @@ export default function AdminRetailers() {
       {/* ── Outer frosted card (Figma: rounded-28, border rgba(194,210,202,0.5)) */}
       <div className="admin-queue-page"
         style={{
-          background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.96) 100%)",
+          background: "#051D17",
           border: "0.8px solid rgba(194,210,202,0.5)",
           borderRadius: "28px",
           boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)",
@@ -825,7 +825,7 @@ export default function AdminRetailers() {
             position: "sticky",
             top: 0,
             zIndex: 10,
-            background: "rgba(255,255,255,0.76)",
+            background: "#051D17",
             borderBottom: "0.8px solid #dce7e1",
             padding: "24px 24px 24.8px 24px",
             display: "flex",

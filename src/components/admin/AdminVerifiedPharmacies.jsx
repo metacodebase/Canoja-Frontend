@@ -409,7 +409,7 @@ export default function AdminVerifiedPharmacies() {
   return (
     <AdminShell>
       <div className="admin-directory-page" style={{
-        background: "linear-gradient(180deg, rgba(255,255,255,0.72) 0%, rgba(255,255,255,0.96) 100%)",
+        background: "#051D17",
         border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px",
         boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)",
         overflow: "clip", position: "relative",
@@ -417,7 +417,7 @@ export default function AdminVerifiedPharmacies() {
         {/* Header */}
         <div className="admin-directory-header" style={{
           position: "sticky", top: 0, zIndex: 10,
-          background: "rgba(255,255,255,0.76)", borderBottom: "0.8px solid #dce7e1",
+          background: "#051D17", borderBottom: "0.8px solid #dce7e1",
           padding: "24px 24px 24.8px 24px",
           display: "flex", alignItems: "center", justifyContent: "space-between",
           gap: "24px", backdropFilter: "blur(8px)",

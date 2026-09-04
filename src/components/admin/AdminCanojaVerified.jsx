@@ -659,10 +659,10 @@ export default function AdminCanojaVerified() {
 
   return (
     <AdminShell>
-      <div className="admin-queue-page" style={{ background: "linear-gradient(180deg,rgba(255,255,255,0.72) 0%,rgba(255,255,255,0.96) 100%)", border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px", boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)", overflow: "clip" }}>
+      <div className="admin-queue-page" style={{ background: "#051D17", border: "0.8px solid rgba(194,210,202,0.5)", borderRadius: "28px", boxShadow: "0px 8px 24px 0px rgba(13,59,42,0.08)", overflow: "clip" }}>
 
         {/* Sticky header */}
-        <div className="admin-queue-header" style={{ position: "sticky", top: 0, zIndex: 10, background: "rgba(255,255,255,0.76)", borderBottom: "0.8px solid #dce7e1", padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", backdropFilter: "blur(8px)" }}>
+        <div className="admin-queue-header" style={{ position: "sticky", top: 0, zIndex: 10, background: "#051D17", borderBottom: "0.8px solid #dce7e1", padding: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "24px", backdropFilter: "blur(8px)" }}>
           <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
             <h1 style={{ fontSize: "28.8px", fontWeight: 800, color: C.textPrimary, letterSpacing: "-0.576px", margin: 0 }}>Canoja Verified</h1>
             <p style={{ fontSize: "15.36px", color: C.textSecondary, maxWidth: "620px", margin: 0 }}>

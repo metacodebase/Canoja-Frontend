@@ -71,9 +71,9 @@ const AdminHistory = () => {
 
   return (
     <AdminLayout>
-      <div style={{ background: "#ffffff", borderRadius: "20px", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)", border: "1px solid #e2e8f0", overflow: "hidden" }}>
+      <div style={{ background: "#051D17", borderRadius: "20px", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)", border: "1px solid #e2e8f0", overflow: "hidden" }}>
         {/* Header */}
-        <div style={{ background: "linear-gradient(135deg, #f8fafc, #f1f5f9)", borderBottom: "1px solid #e2e8f0", padding: "24px 32px" }}>
+        <div style={{ background: "#051D17", borderBottom: "1px solid #e2e8f0", padding: "24px 32px" }}>
           <h1 style={{ fontSize: "28px", fontWeight: "700", color: "#1e293b", margin: "0 0 4px 0" }}>Verification History</h1>
           <p style={{ color: "#64748b", fontSize: "15px", margin: 0 }}>All verification requests across all statuses</p>
         </div>
