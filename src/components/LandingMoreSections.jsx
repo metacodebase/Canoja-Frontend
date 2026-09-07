@@ -1,8 +1,9 @@
-import { Check, Mail, MapPin, Search, SlidersHorizontal, Sparkles } from "lucide-react";
+import { Check, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import appleIcon from "../assets/apple-store.png";
 import googleIcon from "../assets/google-play.png";
 import mobileHero from "../assets/canoja-mobile-hero.png";
+import mobileShowcase from "../assets/canoja-mobile-showcase.png";
 import canojaWordmark from "../assets/canoja-wordmark.png";
 
 const appFeatures = [
@@ -11,13 +12,6 @@ const appFeatures = [
   ["Save favorites", "Keep a personal list of operators you want to revisit."],
   ["Stay connected", "Receive future updates, operator news and platform notifications."],
 ];
-const screens = [
-  { title: "Welcome", icon: Sparkles, text: "Trusted discovery starts here" },
-  { title: "Nearby", icon: MapPin, text: "Explore operators around you" },
-  { title: "Search", icon: Search, text: "Find a licensed operator" },
-  { title: "Explore", icon: Sparkles, text: "Verified profiles and details" },
-  { title: "Filters", icon: SlidersHorizontal, text: "Refine by type and distance" },
-];
 const phases = [
   { phase: "Phase I", title: "Discover", text: "Operator search, maps, business profiles, public license visibility, favorites, notifications and profile management." },
   { phase: "Phase II", title: "Order", text: "Live menus, product discovery, online ordering, pickup, checkout, promotions and operator order management." },
@@ -25,15 +19,10 @@ const phases = [
   { phase: "Future platform", title: "Intelligence", text: "Canoja intelligence™ and Ask Canoja™ for regulatory, market, compliance and business intelligence." },
 ];
 
-function Phone({ screen, featured }) {
-  const Icon = screen.icon;
-  return <div className={`phone ${featured ? "featured" : ""}`}><div className="phone__speaker" /><div className="phone__brand">Canoja</div><div className="phone__screen"><Icon /><small>{screen.title}</small><strong>{screen.text}</strong><span>Explore now</span></div><div className="phone__home" /></div>;
-}
-
 function MobileSection() {
   return <section className="mobile-section" id="mobile-app"><div className="section-shell">
     <div className="mobile-intro"><div><span className="section-kicker">Canoja mobile app</span><h2>Trusted cannabis discovery,<br />wherever you go.</h2><p>Take Canoja with you and explore licensed dispensaries, cultivators, manufacturers and other cannabis operators from your phone. The Canoja mobile app is designed to make trusted discovery faster, easier and more convenient.</p><div className="mobile-features">{appFeatures.map(([title, text]) => <article key={title}><Check /><div><strong>{title}</strong><p>{text}</p></div></article>)}</div><div className="store-buttons"><button><img src={appleIcon} alt="" />Download on the <b>App Store</b></button><button><img src={googleIcon} alt="" />Get it on <b>Google Play</b></button></div></div><img className="mobile-device-art" src={mobileHero} alt="Canoja mobile app with download QR code" /></div>
-    <div className="app-showcase"><span className="section-kicker">Canoja mobile app</span><h2>Explore cannabis with confidence,<br />right from your phone.</h2><div className="phone-row">{screens.map((screen, index) => <Phone key={screen.title} screen={screen} featured={index === 2} />)}</div><div className="slider-dots"><i /><i className="active" /><i /></div></div>
+    <div className="app-showcase"><span className="section-kicker">Canoja mobile app</span><h2>Explore cannabis with confidence,<br />right from your phone.</h2><div className="mobile-showcase-scroll"><img className="mobile-showcase-art" src={mobileShowcase} alt="Canoja mobile app screens" /></div><div className="slider-dots"><i /><i className="active" /><i /></div></div>
   </div></section>;
 }
 
