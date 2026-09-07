@@ -421,8 +421,8 @@ const OperatorDashboard = () => {
                     onClick={() => setShowMenuViewer(true)}
                     style={{
                       padding: "8px 16px",
-                      background: "linear-gradient(135deg, #3b82f6, #2563eb)",
-                      border: "none",
+                      background: "linear-gradient(105deg, #35cf59, #00a77e)",
+                      border: "1px solid #6bf1a0",
                       borderRadius: "8px",
                       fontSize: "14px",
                       fontWeight: "600",
@@ -444,28 +444,20 @@ const OperatorDashboard = () => {
                   onClick={() => setShowMenuUpload(true)}
                   style={{
                     padding: "8px 16px",
-                    background: menuUrl ? "#f3f4f6" : "linear-gradient(135deg, #10b981, #059669)",
-                    border: "none",
+                    background: "linear-gradient(105deg, #35cf59, #00a77e)",
+                    border: "1px solid #6bf1a0",
                     borderRadius: "8px",
                     fontSize: "14px",
                     fontWeight: "600",
-                    color: menuUrl ? "#374151" : "#ffffff",
+                    color: "#ffffff",
                     cursor: "pointer",
                     transition: "all 0.2s ease",
                   }}
                   onMouseEnter={(e) => {
-                    if (menuUrl) {
-                      e.currentTarget.style.background = "#e5e7eb";
-                    } else {
-                      e.currentTarget.style.opacity = "0.9";
-                    }
+                    e.currentTarget.style.opacity = "0.9";
                   }}
                   onMouseLeave={(e) => {
-                    if (menuUrl) {
-                      e.currentTarget.style.background = "#f3f4f6";
-                    } else {
-                      e.currentTarget.style.opacity = "1";
-                    }
+                    e.currentTarget.style.opacity = "1";
                   }}>
                   {menuUrl ? "Update" : "Upload"}
                 </button>

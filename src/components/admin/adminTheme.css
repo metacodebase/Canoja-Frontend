@@ -333,7 +333,7 @@
 .admin-theme--dark main [style*="background: #f8"],
 .admin-theme--dark main [style*="background: rgb(246"],
 .admin-theme--dark main [style*="background: #f6"],
-.admin-theme--dark main [style*="background: linear-gradient"][style*="255"] { background: #0d211c !important; border-color: #29463d !important; }
+.admin-theme--dark main [style*="background: linear-gradient"][style*="255"]:not(.operator-primary-action):not(.admin-primary-action):not(.change-password-primary) { background: #0d211c !important; border-color: #29463d !important; }
 .admin-theme--dark main [style*="color: rgb(15"],
 .admin-theme--dark main [style*="color: rgb(30"],
 .admin-theme--dark main [style*="color: rgb(24, 33, 43)"],
