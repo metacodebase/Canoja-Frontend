@@ -214,6 +214,7 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
           {record.status === "pending" && (
             <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
               <button
+                className="admin-primary-action"
                 onClick={() => onApprove(record._id)}
                 disabled={approving}
                 style={{ flex: 1, height: "40px", borderRadius: "10px", background: "linear-gradient(170deg,#1b6b46,#2da96d)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: approving ? 0.6 : 1 }}
@@ -340,6 +341,7 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
                 style={{ flex: 1, height: "38px", padding: "0 12px", borderRadius: "10px", border: "0.8px solid #dce7e1", fontSize: "13px", fontFamily: "inherit", outline: "none" }}
               />
               <button
+                className="admin-primary-action"
                 onClick={handleSend}
                 disabled={sending || !msgBody.trim()}
                 style={{ height: "38px", padding: "0 16px", borderRadius: "10px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: (sending || !msgBody.trim()) ? 0.5 : 1 }}
@@ -541,7 +543,7 @@ function NewRequestModal({ onClose, onSuccess }) {
         {/* Footer */}
         <div style={{ padding: "20px 28px", borderTop: "0.8px solid #dce7e1", display: "flex", gap: "10px", justifyContent: "flex-end", flexShrink: 0 }}>
           <button onClick={onClose} style={{ height: "42px", padding: "0 20px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: "#18212b", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>Cancel</button>
-          <button onClick={handleSubmit} disabled={isPending} style={{ height: "42px", padding: "0 20px", borderRadius: "12px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: isPending ? 0.6 : 1 }}>
+          <button className="admin-primary-action" onClick={handleSubmit} disabled={isPending} style={{ height: "42px", padding: "0 20px", borderRadius: "12px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: isPending ? 0.6 : 1 }}>
             {isPending ? "Creating…" : "Create Request"}
           </button>
         </div>

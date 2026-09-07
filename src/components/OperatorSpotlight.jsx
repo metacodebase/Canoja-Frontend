@@ -43,7 +43,7 @@ const OperatorSpotlight = () => {
         <h2 style={styles.sectionTitle}>What Spotlight does</h2>
         <div style={styles.benefits}>{BENEFITS.map(({ icon, text }) => <div key={text} style={styles.benefit}><span style={styles.benefitIcon}>{icon}</span><span>{text}</span></div>)}</div>
 
-        <button type="button" disabled={isLoading || toggleSpotlight.isPending} onClick={handleToggle} style={{ ...styles.action, ...(active ? styles.actionOff : styles.actionOn) }}><Star size={20} fill={active ? "none" : "currentColor"} />{toggleSpotlight.isPending ? "Updating..." : !hasAccess ? "Upgrade to Starter" : active ? "Remove from Spotlight" : "Add to Spotlight"}</button>
+        <button className={active ? "" : "operator-primary-action"} type="button" disabled={isLoading || toggleSpotlight.isPending} onClick={handleToggle} style={{ ...styles.action, ...(active ? styles.actionOff : styles.actionOn) }}><Star size={20} fill={active ? "none" : "currentColor"} />{toggleSpotlight.isPending ? "Updating..." : !hasAccess ? "Upgrade to Starter" : active ? "Remove from Spotlight" : "Add to Spotlight"}</button>
         {active && <p style={styles.hint}>Your business is currently visible in the Spotlight section. Use the button above to remove it.</p>}
       </div>
     </OperatorLayout>

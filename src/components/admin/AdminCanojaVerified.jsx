@@ -113,6 +113,7 @@ function RenewModal({ record, onClose, onConfirm, loading }) {
         <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "20px" }}>
           <button onClick={onClose} style={{ height: "40px", padding: "0 20px", borderRadius: "10px", background: "#fff", border: "0.8px solid #dce7e1", color: C.textPrimary, fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>Cancel</button>
           <button
+            className="admin-primary-action"
             onClick={() => onConfirm(record._id, expDate || null)}
             disabled={loading}
             style={{ height: "40px", padding: "0 20px", borderRadius: "10px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: loading ? 0.6 : 1 }}
@@ -176,6 +177,7 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
             )}
             {record.badgeStatus === "Revoked" && (
               <button
+                className="admin-primary-action"
                 onClick={() => onRenew(rawRecord)}
                 disabled={renewing}
                 style={{ flex: 1, height: "40px", borderRadius: "10px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: renewing ? 0.6 : 1 }}
@@ -378,7 +380,7 @@ function IssueVerificationModal({ onClose, onSuccess }) {
         {/* Footer */}
         <div style={{ padding: "20px 28px", borderTop: "0.8px solid #dce7e1", display: "flex", gap: "10px", justifyContent: "flex-end" }}>
           <button onClick={onClose} style={{ height: "42px", padding: "0 20px", borderRadius: "12px", background: "#fff", border: "0.8px solid #dce7e1", color: "#18212b", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>Cancel</button>
-          <button onClick={handleSubmit} disabled={!selected || isPending} style={{ height: "42px", padding: "0 20px", borderRadius: "12px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: selected ? "pointer" : "default", opacity: (!selected || isPending) ? 0.5 : 1 }}>
+          <button className="admin-primary-action" onClick={handleSubmit} disabled={!selected || isPending} style={{ height: "42px", padding: "0 20px", borderRadius: "12px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: selected ? "pointer" : "default", opacity: (!selected || isPending) ? 0.5 : 1 }}>
             {isPending ? "Issuing…" : "Issue Badge"}
           </button>
         </div>
@@ -645,6 +647,7 @@ export default function AdminCanojaVerified() {
           )}
           {row.badgeStatus === "Revoked" && (
             <button
+              className="admin-primary-action"
               onClick={() => setRenewTarget(rawRecords.find(r => r._id === row.key))}
               style={{ height: "34px", padding: "0 14px", borderRadius: "10px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "12.5px", fontWeight: 700, cursor: "pointer" }}
             >

@@ -86,7 +86,7 @@ const OperatorProfile = () => {
               <OperatingHoursEditor value={form.working_hours} onChange={(working_hours) => setForm((current) => ({ ...current, working_hours }))} />
             </section>
 
-            <div className="operator-profile-actions"><button type="button" onClick={() => navigate("/operator/dashboard")}><ArrowLeft size={17} />Back</button><button type="submit" disabled={pending}><Save size={17} />{pending ? "Saving…" : "Save Changes"}</button></div>
+            <div className="operator-profile-actions"><button type="button" onClick={() => navigate("/operator/dashboard")}><ArrowLeft size={17} />Back</button><button className="operator-primary-action" type="submit" disabled={pending}><Save size={17} />{pending ? "Saving…" : "Save Changes"}</button></div>
           </form>
         )}
       </main>

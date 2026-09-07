@@ -386,6 +386,7 @@ const AdminLogin = () => {
 
 					{/* Sign in button */}
 					<button
+						className="admin-primary-action"
 						type="button"
 						onClick={handleSubmit}
 						style={{

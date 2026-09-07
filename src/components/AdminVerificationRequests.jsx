@@ -119,6 +119,7 @@ const AdminVerificationRequests = () => {
                 </div>
               )}
               <button
+                className="admin-primary-action"
                 onClick={() => refetch()}
                 style={{ padding: "10px 18px", background: "linear-gradient(135deg, #10b981, #059669)", color: "#fff", border: "none", borderRadius: "8px", fontWeight: "600", fontSize: "14px", cursor: "pointer", boxShadow: "0 2px 4px rgba(16,185,129,0.2)" }}>
                 Refresh
@@ -162,7 +163,7 @@ const AdminVerificationRequests = () => {
                       </td>
                       <td style={{ padding: "16px 20px", textAlign: "center" }}>
                         <div style={{ display: "flex", gap: "6px", justifyContent: "center" }}>
-                          <button onClick={() => handleApprove(req._id)} disabled={approvingId === req._id}
+                          <button className="admin-primary-action" onClick={() => handleApprove(req._id)} disabled={approvingId === req._id}
                             style={{ background: "linear-gradient(135deg, #10b981, #059669)", color: "#fff", border: "none", borderRadius: "7px", padding: "7px 14px", fontWeight: "600", fontSize: "13px", cursor: approvingId === req._id ? "not-allowed" : "pointer", opacity: approvingId === req._id ? 0.6 : 1 }}>
                             {approvingId === req._id ? "..." : "Approve"}
                           </button>

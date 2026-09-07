@@ -400,7 +400,7 @@ function AddRetailerModal({ onClose, onSuccess }) {
             <button type="button" onClick={onClose} style={{ height: "40px", padding: "0 20px", borderRadius: "10px", background: "#fff", border: "0.8px solid #dce7e1", color: "#18212b", fontSize: "13px", fontWeight: 700, cursor: "pointer" }}>
               Cancel
             </button>
-            <button type="submit" disabled={loading} style={{ height: "40px", padding: "0 20px", borderRadius: "10px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: loading ? 0.6 : 1 }}>
+            <button className="admin-primary-action" type="submit" disabled={loading} style={{ height: "40px", padding: "0 20px", borderRadius: "10px", backgroundImage: "linear-gradient(161deg,#1b6b46 0%,#2da96d 100%)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: loading ? 0.6 : 1 }}>
               {loading ? "Adding…" : "Add Retailer"}
             </button>
           </div>
@@ -927,7 +927,7 @@ export default function AdminRetailers() {
                   }}>
                     <div style={{ padding: "8px" }}>
                       <button
-                        className="admin-save-search-action"
+                        className="admin-primary-action admin-save-search-action"
                         onClick={handleSaveSearch}
                         style={{
                           width: "100%", padding: "10px 14px", borderRadius: "10px",

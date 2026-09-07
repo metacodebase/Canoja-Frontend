@@ -251,6 +251,7 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
           {/* Actions */}
           <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
             <button
+              className="admin-primary-action"
               onClick={() => onApprove(record._id)}
               disabled={approving}
               style={{
@@ -692,6 +693,7 @@ export default function AdminPendingVerifications() {
         }
         return (
           <button
+            className="admin-primary-action"
             onClick={e => { e.stopPropagation(); handleApprove(row.key); }}
             disabled={approvingId === row.key}
             style={{ height: "34px", padding: "0 14px", borderRadius: "10px", background: "linear-gradient(170deg,#1b6b46,#2da96d)", border: "none", color: "#fff", fontSize: "12.5px", fontWeight: 700, cursor: "pointer", opacity: approvingId === row.key ? 0.6 : 1 }}
@@ -869,7 +871,7 @@ export default function AdminPendingVerifications() {
                       <span style={{ fontSize: "13px", color: C.textSecondary }}>{selectedRowKeys.length} selected</span>
                     )}
                     <button
-                      className="admin-verification-action admin-verification-action--bulk"
+                      className="admin-primary-action admin-verification-action admin-verification-action--bulk"
                       onClick={handleBulkApprove}
                       disabled={!selectedRowKeys.length || bulkApproving}
                       style={{

@@ -356,13 +356,12 @@ const ChangePasswordModal = ({ onClose }) => {
             </button>
             <button
               type="submit"
-              className="admin-primary-action"
+              className="admin-primary-action change-password-primary"
               disabled={changePasswordMutation.isPending}
               style={{
                 padding: "12px 24px",
-                background: changePasswordMutation.isPending
-                  ? "#94a3b8"
-                  : "linear-gradient(135deg, #10b981, #059669)",
+                backgroundColor: "#16c873",
+                backgroundImage: "linear-gradient(105deg, #35cf59, #00a77e)",
                 color: "#ffffff",
                 border: "none",
                 borderRadius: "8px",

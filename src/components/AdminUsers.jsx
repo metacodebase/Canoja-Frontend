@@ -144,6 +144,7 @@ const AdminUsers = () => {
                             <span style={{ fontSize: "12px", color: "#cbd5e1" }}>—</span>
                           ) : (
                             <button
+                              className={isActive ? "" : "admin-primary-action"}
                               onClick={() => handleToggle(user._id, isActive)}
                               disabled={togglingId === user._id}
                               style={{

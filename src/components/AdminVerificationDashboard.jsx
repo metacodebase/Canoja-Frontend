@@ -163,6 +163,7 @@ const cancelReject = () => {
               {pendingRequests.length} Pending Request{pendingRequests.length !== 1 ? "s" : ""}
             </div>
             <button
+              className="admin-primary-action"
               onClick={() => refetch()}
               style={{
                 padding: "12px 20px",
@@ -279,6 +280,7 @@ const cancelReject = () => {
                           justifyContent: "center"
                         }}>
                           <button
+                            className="admin-primary-action"
                             onClick={() => handleApprove(request._id)}
                             disabled={approvingId === request._id}
                             style={{

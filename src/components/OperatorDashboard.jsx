@@ -417,6 +417,7 @@ const OperatorDashboard = () => {
               ) : <div style={{ display: "flex", gap: "8px" }}>
                 {menuUrl && (
                   <button
+                    className="operator-primary-action"
                     onClick={() => setShowMenuViewer(true)}
                     style={{
                       padding: "8px 16px",
@@ -439,6 +440,7 @@ const OperatorDashboard = () => {
                   </button>
                 )}
                 <button
+                  className="operator-primary-action"
                   onClick={() => setShowMenuUpload(true)}
                   style={{
                     padding: "8px 16px",
