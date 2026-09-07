@@ -6,12 +6,15 @@ import ExploreHeader from "./ExploreHeader";
 import { buildSearchPayload, EMPTY_FILTERS } from "./filterConfig";
 import useBrowserLocation from "./useBrowserLocation";
 import useAdminTheme from "../admin/useAdminTheme";
+import OperatorLayout from "../OperatorLayout";
+import { useAuth } from "../../context/AuthContext";
 import "./consumerExplore.css";
 
 const getShopKey = (shop) => shop._id || shop.place_id || shop.id;
 
 const ConsumerAllShops = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { theme, toggleTheme } = useAdminTheme();
   const { state } = useLocation();
   const filters = state?.filters || EMPTY_FILTERS;
@@ -67,8 +70,7 @@ const ConsumerAllShops = () => {
     observer.current.observe(node);
   }, [hasMore, loading]);
 
-  return (
-    <div className={`admin-theme operator-theme admin-theme--${theme}`}>
+  const content = (
       <main className="consumer-explore">
         <div className="consumer-shell">
         <ExploreHeader view="list" onViewChange={() => navigate("/explore")} theme={theme} onThemeToggle={toggleTheme} />
@@ -83,6 +85,15 @@ const ConsumerAllShops = () => {
         {!loading && !shops.length && <div className="consumer-state">{locationError || "No operators found near this location."}</div>}
         </div>
       </main>
+  );
+
+  if (user?.role === "operator") {
+    return <OperatorLayout mainClassName="operator-main--explore">{content}</OperatorLayout>;
+  }
+
+  return (
+    <div className={`admin-theme operator-theme admin-theme--${theme}`}>
+      {content}
     </div>
   );
 };

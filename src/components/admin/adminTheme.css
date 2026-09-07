@@ -4,6 +4,17 @@
 .admin-sidebar-collapse { position: absolute; z-index: 5; top: 24px; right: 10px; width: 28px; height: 32px; display: grid; place-items: center; border: 1px solid rgba(45, 211, 101, .42); border-radius: 9px; background: linear-gradient(145deg, rgba(10, 84, 65, .98), rgba(0, 38, 34, .98)); color: #65e89b; box-shadow: 0 6px 18px rgba(0, 18, 17, .28); cursor: pointer; transition: background .2s ease, color .2s ease; }
 .admin-sidebar-brand { padding-left: 22px !important; padding-right: 48px !important; }
 .admin-sidebar-collapse:hover { background: linear-gradient(145deg, rgba(22, 119, 60, .98), rgba(6, 79, 49, .98)); color: #fff; }
+.operator-sidebar { position: relative; overflow: visible; transition: width .24s ease, padding .24s ease; }
+.operator-sidebar-collapse { position: fixed; z-index: 100; top: 24px; left: 198px; width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid rgba(45, 211, 101, .42); border-radius: 10px; background: linear-gradient(145deg, rgba(10, 84, 65, .98), rgba(0, 38, 34, .98)); color: #65e89b; box-shadow: 0 6px 18px rgba(0, 18, 17, .28); cursor: pointer; transition: left .24s ease, background .2s ease, color .2s ease; }
+.operator-sidebar-collapse:hover { background: linear-gradient(145deg, rgba(22, 119, 60, .98), rgba(6, 79, 49, .98)); color: #fff; }
+@media (min-width: 761px) {
+  .operator-sidebar--collapsed { width: 0 !important; min-width: 0 !important; flex: 0 0 0 !important; height: 0 !important; padding: 0 !important; border: 0 !important; background: none !important; box-shadow: none !important; overflow: hidden; }
+  .operator-sidebar--collapsed > * { visibility: hidden; opacity: 0; pointer-events: none; }
+  .operator-shell--sidebar-collapsed .operator-sidebar-collapse { top: 24px; left: 24px; }
+  .operator-shell--sidebar-collapsed .operator-main { padding-left: 28px !important; }
+  .operator-shell--sidebar-collapsed .operator-main:not(.operator-main--explore) { padding-top: 88px !important; }
+  .operator-shell--sidebar-collapsed .operator-main--explore { padding-left: 0 !important; }
+}
 @media (min-width: 761px) {
   .admin-sidebar--collapsed { border-right-color: transparent !important; box-shadow: none !important; }
   .admin-sidebar--collapsed .admin-sidebar-collapse { position: fixed; top: 50px; left: 48px; right: auto; width: 36px; height: 36px; border-radius: 10px; }
@@ -364,16 +375,71 @@
   border: 0 !important;
   box-shadow: none !important;
 }
-.operator-theme .operator-health-card {
-  border: 1px solid rgba(255, 255, 255, .2) !important;
-  background: linear-gradient(155deg, #1b6b46 0%, #2eb870 100%) !important;
-  box-shadow: 0 10px 24px rgba(27, 107, 70, .2) !important;
+.operator-dashboard-page { max-width: 1440px; margin: 0 auto; }
+.operator-dashboard-header,
+.operator-dashboard-panel {
+  border: 1px solid rgba(203, 222, 214, .9) !important;
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, .88) !important;
+  box-shadow: 0 12px 32px rgba(20, 82, 55, .08) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
+.operator-dashboard-header { position: relative; overflow: hidden; padding: 28px 32px !important; }
+.operator-dashboard-header::after { content: ""; position: absolute; inset: auto 0 0; height: 3px; background: linear-gradient(90deg, #35cf59, #00a77e, transparent 82%); }
+.operator-dashboard-title { color: #16773c !important; font-weight: 800 !important; letter-spacing: -.7px; }
+.operator-dashboard-switch { transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+.operator-dashboard-switch:hover { transform: translateY(-1px); background: rgba(16, 185, 129, .16) !important; box-shadow: 0 8px 20px rgba(16, 185, 129, .15); }
+.operator-dashboard-panel { padding: 28px 32px !important; }
+.operator-dashboard-section-title { color: #294f42 !important; font-size: 18px !important; font-weight: 800 !important; letter-spacing: 1.1px !important; }
+.operator-health-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; gap: 18px !important; }
+.operator-theme .operator-health-card {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  min-height: 180px;
+  padding: 20px !important;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  overflow: clip;
+  border: 1px solid rgba(110, 255, 178, .28) !important;
+  border-radius: 24px !important;
+  background: linear-gradient(180deg, rgba(22, 119, 60, .78) 0%, rgba(2, 38, 29, .96) 100%) !important;
+  box-shadow: inset 0 0 0 1px rgba(45, 211, 101, .16), 0 8px 24px rgba(0, 0, 0, .14) !important;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.operator-health-card[role="button"] { cursor: pointer; }
+.operator-health-card__content { position: relative; z-index: 1; width: calc(100% - 82px); height: 100%; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; }
+.operator-health-card__label { margin: 0 !important; color: #fff !important; }
+.operator-health-card__value { max-width: 100%; margin: 0 !important; color: #fff !important; overflow-wrap: anywhere; }
+.operator-health-card__badge { display: inline-flex; align-items: center; justify-content: center; min-height: 26px; max-width: 100%; padding: 0 12px; box-sizing: border-box; border-radius: 999px; background: rgba(237, 249, 242, .94); color: #16773c !important; font-size: 10px; font-weight: 800; line-height: 1; white-space: nowrap; }
+.operator-health-card__icon { position: absolute; top: 50%; right: 20px; width: 72px; height: 72px; display: grid; place-items: center; color: #00ef58; transform: translateY(-50%); filter: drop-shadow(0 0 8px rgba(0, 239, 88, .58)) drop-shadow(0 0 18px rgba(0, 239, 88, .24)); pointer-events: none; }
+.operator-health-card__icon svg { width: 72px; height: 72px; }
+.operator-health-card__icon svg path { stroke: currentColor !important; stroke-width: 1.65; }
+.operator-theme .operator-health-card:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), 0 14px 30px rgba(20, 82, 55, .22) !important; }
+.operator-dashboard-action { border-radius: 14px !important; transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease !important; }
+.operator-dashboard-action:not(:disabled):hover { transform: translateY(-1px); border-color: rgba(16, 185, 129, .55) !important; box-shadow: 0 8px 22px rgba(20, 82, 55, .09); }
+.admin-theme--light .operator-dashboard-action { background: rgba(244, 250, 247, .92) !important; border-color: #d5e5de !important; }
+.admin-theme--dark .operator-dashboard-header,
+.admin-theme--dark .operator-dashboard-panel { border-color: rgba(45, 211, 101, .18) !important; background: rgba(1, 27, 23, .86) !important; box-shadow: inset 0 0 0 1px rgba(45, 211, 101, .04), 0 16px 40px rgba(0, 0, 0, .24) !important; }
+.admin-theme--dark .operator-dashboard-title { color: #40ea54 !important; }
+.admin-theme--dark .operator-dashboard-section-title { color: #dff5e8 !important; }
+.admin-theme--dark .operator-dashboard-action { background: #102724 !important; border-color: #35534c !important; }
 .operator-theme.admin-theme--dark main .operator-dashboard-page .operator-health-card {
   border-color: rgba(64, 234, 84, .22) !important;
   background-color: #1b6b46 !important;
-  background-image: linear-gradient(135deg, #145c3c 0%, #238f58 52%, #2eb870 100%) !important;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12), 0 12px 28px rgba(0, 0, 0, .28) !important;
+  background-image: linear-gradient(180deg, rgba(22, 119, 60, .78) 0%, rgba(2, 38, 29, .96) 100%) !important;
+  box-shadow: inset 0 0 0 1px rgba(45, 211, 101, .16), 0 8px 24px rgba(0, 0, 0, .14) !important;
+}
+@media (max-width: 1180px) { .operator-health-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } }
+@media (max-width: 620px) {
+  .operator-dashboard-header,
+  .operator-dashboard-panel { padding: 22px 18px !important; border-radius: 18px !important; }
+  .operator-dashboard-title { font-size: 26px !important; }
+  .operator-health-grid { grid-template-columns: 1fr !important; }
 }
 .operator-theme .operator-health-card h3,
 .operator-theme .operator-health-card > p {
@@ -385,6 +451,8 @@
 .operator-theme .operator-health-card svg path {
   stroke: #fff !important;
 }
+.operator-theme .operator-health-card .operator-health-card__icon { color: #00ef58 !important; }
+.operator-theme .operator-health-card .operator-health-card__icon svg path { stroke: #00ef58 !important; }
 .operator-theme.admin-theme--light .operator-spotlight-card { background: #fff !important; border-color: #cfe0d8 !important; }
 .operator-theme.admin-theme--light .operator-spotlight-card h1 { color: #17372c !important; }
 .operator-theme.admin-theme--light .operator-spotlight-info { color: #526f64 !important; background: #effaf4 !important; }
@@ -437,6 +505,11 @@
 }
 .operator-theme.admin-theme--light .operator-plan-card small,
 .operator-theme.admin-theme--light .operator-plan-card span { border-color: #dce9e3; }
+.operator-theme.admin-theme--light .operator-plan-badge--current { color: #fff !important; }
+.operator-theme.admin-theme--light .operator-plan-feature-check {
+  color: #fff !important;
+  stroke: #fff !important;
+}
 .operator-theme.admin-theme--dark main [style*="color: #374151"],
 .operator-theme.admin-theme--dark main [style*="color: rgb(55, 65, 81)"] { color: #dcebe5 !important; }
 .operator-theme.admin-theme--dark main [style*="color: #64748b"],
@@ -505,7 +578,8 @@
 .operator-bottom-button:hover { background: rgba(255, 255, 255, .1) !important; }
 
 @media (max-width: 760px) {
-  .admin-sidebar-collapse { display: none; }
+  .admin-sidebar-collapse,
+  .operator-sidebar-collapse { display: none; }
   .admin-theme-toggle:not(.admin-theme-toggle--sidebar) { top: 12px; right: 12px; }
   .operator-menu-trigger { position: fixed; z-index: 1002; top: 14px; left: 14px; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid rgba(64, 234, 84, .35); border-radius: 12px; background: rgba(7, 35, 29, .94); color: #e8f4ef; box-shadow: 0 8px 24px rgba(0, 0, 0, .28); cursor: pointer; }
   .operator-theme.admin-theme--light .operator-menu-trigger { border-color: #b8d5c9; background: rgba(255, 255, 255, .96); color: #145237; box-shadow: 0 8px 24px rgba(13, 59, 42, .14); }

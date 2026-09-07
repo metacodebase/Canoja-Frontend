@@ -16,6 +16,8 @@
 .consumer-shell { width: min(100%, 1180px); margin: auto; padding: 28px 32px 64px; box-sizing: border-box; }
 @media (min-width: 761px) {
   .operator-main--explore { padding: 0 !important; }
+  .operator-theme .consumer-shell { width: 100%; max-width: none; }
+  .operator-shell--sidebar-collapsed .consumer-shell { padding-left: 88px; }
 }
 .consumer-header { display: flex; align-items: center; justify-content: space-between; }
 .consumer-header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-left: auto; }
@@ -87,13 +89,13 @@
 .business-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .spotlight-list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(300px, 42%); gap: 14px; overflow-x: auto; margin-top: -8px; padding: 10px 0 16px; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
 .spotlight-list::-webkit-scrollbar { display: none; }
-.spotlight-list .consumer-business-card { background: transparent; scroll-snap-align: start; }
-.spotlight-list .consumer-business-card::after { background: transparent; }
-.consumer-business-card { position: relative; display: flex; min-width: 0; padding: 10px; border: 1px solid rgba(64, 234, 84, .12); border-radius: 20px; outline: 0; background: linear-gradient(120deg, #29312f 0%, #172c23 42%, #03451d 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 8px 22px rgba(0,0,0,.18); cursor: pointer; transition: transform .2s ease, border-color .2s ease; }
+.spotlight-list .consumer-business-card { background: linear-gradient(120deg, #29312f 0%, #172c23 42%, #03451d 100%); scroll-snap-align: start; }
+.spotlight-list .consumer-business-card::after { background: radial-gradient(circle at 100% 50%, rgba(35, 194, 73, .18), transparent 56%); }
+.consumer-business-card { position: relative; display: flex; min-width: 0; padding: 10px 10px 34px; border: 1px solid rgba(64, 234, 84, .12); border-radius: 20px; outline: 0; background: linear-gradient(120deg, #29312f 0%, #172c23 42%, #03451d 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 8px 22px rgba(0,0,0,.18); cursor: pointer; transition: transform .2s ease, border-color .2s ease; }
 .consumer-business-card:hover, .consumer-business-card:focus-visible { transform: translateY(-2px); border-color: rgba(64, 234, 84, .55); }
 .consumer-business-card::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(circle at 100% 50%, rgba(35, 194, 73, .18), transparent 56%); }
-.consumer-business-card .business-photo, .consumer-business-card .business-copy, .consumer-business-card .business-rating { position: relative; z-index: 1; }
-.featured-badge { position: absolute; z-index: 3; top: 7px; left: 7px; padding: 4px 9px; border-radius: 999px; background: #ffc425; color: #102016; font-size: 10px; font-weight: 900; line-height: 1; box-shadow: 0 3px 8px rgba(0, 0, 0, .28); }
+.consumer-business-card .business-photo, .consumer-business-card .business-copy { position: relative; z-index: 1; }
+.featured-badge { position: absolute; z-index: 3; top: auto; right: auto; top: 15px; left: 15px; padding: 4px 9px; border-radius: 999px; background: #ffc425; color: #102016; font-size: 10px; font-weight: 900; line-height: 1; box-shadow: 0 3px 8px rgba(0, 0, 0, .28); }
 .business-photo { width: 112px; height: 112px; flex: 0 0 auto; display: grid; place-items: center; overflow: hidden; border-radius: 16px; background: #24332f; font-size: 34px; }
 .business-photo img { width: 100%; height: 100%; object-fit: cover; }
 .business-copy { min-width: 0; padding: 8px 12px; }
@@ -103,7 +105,7 @@
 .business-copy small { color: #859891; }
 .business-copy b.open { color: #40ea54; }
 .business-copy b.closed { color: #ff5e67; }
-.business-rating { position: absolute; top: 10px; right: 12px; color: #ffc94a; font-size: 12px; }
+.consumer-business-card .business-rating { position: absolute; z-index: 2; top: auto; right: 10px; bottom: 8px; left: auto; color: #ffc94a; font-size: 12px; }
 .consumer-state { padding: 34px; border: 1px dashed #30443f; border-radius: 18px; color: #8fa19b; text-align: center; }
 .consumer-map { position: relative; height: min(620px, 68vh); min-height: 500px; overflow: hidden; margin-top: 22px; border: 1px solid #29443d; border-radius: 24px; background: #0b2520; }
 .google-map-canvas { width: 100%; height: 100%; background: #10201d; }
@@ -219,7 +221,7 @@
   background: linear-gradient(120deg, #fff 0%, #f5fbf8 55%, #e7f7ee 100%);
   box-shadow: 0 8px 24px rgba(21, 82, 57, .09);
 }
-.operator-theme.admin-theme--light .spotlight-list .consumer-business-card { background: transparent; }
+.operator-theme.admin-theme--light .spotlight-list .consumer-business-card { background: linear-gradient(120deg, #fff 0%, #f5fbf8 55%, #e7f7ee 100%); }
 .operator-theme.admin-theme--light .business-photo { background: #e8f1ed; }
 .operator-theme.admin-theme--light .business-copy h3 { color: #138a4d; }
 .operator-theme.admin-theme--light .business-copy > span,

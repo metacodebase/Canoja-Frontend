@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Compass, CreditCard, LayoutDashboard, LockKeyhole, LogOut, Menu, Settings, X } from "lucide-react";
+import { ChevronLeft, Compass, CreditCard, LayoutDashboard, LockKeyhole, LogOut, Menu, Settings, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import canojaLogo from "../assets/canojaLogo.png";
@@ -27,6 +27,12 @@ const OperatorLayout = ({ children, mainClassName = "" }) => {
   const { theme, toggleTheme } = useAdminTheme();
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => localStorage.getItem("operatorSidebarCollapsed") === "true");
+
+  const toggleSidebar = () => setSidebarCollapsed((value) => {
+    localStorage.setItem("operatorSidebarCollapsed", String(!value));
+    return !value;
+  });
 
   const handleLogout = async () => {
     await api.post("/users/logout").catch(() => { });
@@ -37,11 +43,12 @@ const OperatorLayout = ({ children, mainClassName = "" }) => {
   };
 
   return (
-    <div className={`admin-theme operator-theme admin-theme--${theme}`} style={styles.shell}>
+    <div className={`admin-theme operator-theme operator-shell admin-theme--${theme}${sidebarCollapsed ? " operator-shell--sidebar-collapsed" : ""}`} style={styles.shell}>
       <button type="button" className="operator-menu-trigger" aria-label="Open operator menu" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><Menu size={22} /></button>
       {menuOpen && <button type="button" className="operator-sidebar-backdrop" aria-label="Close operator menu" onClick={() => setMenuOpen(false)} />}
-      <aside className={`operator-sidebar${menuOpen ? " operator-sidebar--open" : ""}`} style={{
-            width: "248px", height: "100vh", position: "sticky", top: 0, flexShrink: 0, display: "flex",
+      <button type="button" className="operator-sidebar-collapse" aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"} aria-expanded={!sidebarCollapsed} onClick={toggleSidebar}>{sidebarCollapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}</button>
+      <aside className={`operator-sidebar${menuOpen ? " operator-sidebar--open" : ""}${sidebarCollapsed ? " operator-sidebar--collapsed" : ""}`} style={{
+            width: sidebarCollapsed ? "0" : "248px", height: "100vh", position: "sticky", top: 0, flexShrink: 0, display: "flex",
       flexDirection: "column", padding: "20px 22px 22px", boxSizing: "border-box",
       gap: "22px", background: "linear-gradient(180deg, rgba(0,30,28,.84) 0%, rgba(0,38,34,.78) 54%, rgba(0,26,27,.76) 100%), url(" + canojaHeroBg + ")"
       }}>

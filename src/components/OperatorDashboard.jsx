@@ -22,7 +22,7 @@ const LocationRow = ({ icon, label, value, last = false }) => (
 );
 
 const DashboardActionRow = ({ icon, iconColor, title, description, badge, locked, onClick }) => (
-  <button type="button" onClick={locked ? undefined : onClick} disabled={locked} style={{ width: "100%", display: "flex", alignItems: "center", gap: "16px", padding: "16px 20px", background: "#f9fafb", borderRadius: "12px", border: "1px solid #e5e7eb", color: "inherit", font: "inherit", textAlign: "left", cursor: locked ? "not-allowed" : "pointer", opacity: locked ? 0.58 : 1, transition: "all .2s ease" }}
+  <button className="operator-dashboard-action" type="button" onClick={locked ? undefined : onClick} disabled={locked} style={{ width: "100%", display: "flex", alignItems: "center", gap: "16px", padding: "16px 20px", background: "#f9fafb", borderRadius: "12px", border: "1px solid #e5e7eb", color: "inherit", font: "inherit", textAlign: "left", cursor: locked ? "not-allowed" : "pointer", opacity: locked ? 0.58 : 1, transition: "all .2s ease" }}
     onMouseEnter={(e) => { if (!locked) { e.currentTarget.style.background = "#f3f4f6"; e.currentTarget.style.borderColor = "#10b981"; } }}
     onMouseLeave={(e) => { if (!locked) { e.currentTarget.style.background = "#f9fafb"; e.currentTarget.style.borderColor = "#e5e7eb"; } }}>
     <span style={{ width: "40px", height: "40px", display: "grid", placeItems: "center", flexShrink: 0, borderRadius: "10px", background: locked ? "#e5e7eb" : `${iconColor}20`, color: locked ? "#6b7280" : iconColor }}>{icon}</span>
@@ -32,6 +32,20 @@ const DashboardActionRow = ({ icon, iconColor, title, description, badge, locked
     </span>
     {locked ? <LockKeyhole size={18} color="#8fa99f" /> : <ChevronRight size={20} color="#6b7280" />}
   </button>
+);
+
+const BusinessHealthCard = ({ label, value, detail, icon, onClick }) => (
+  <div className="admin-queue-stat operator-health-card" onClick={onClick} title={onClick ? "Click to update" : undefined} role={onClick ? "button" : undefined} tabIndex={onClick ? 0 : undefined} onKeyDown={onClick ? (event) => { if (event.key === "Enter" || event.key === " ") onClick(); } : undefined}>
+    <div className="admin-queue-stat__content operator-health-card__content">
+      <p style={{ fontSize: "14px" }} className="admin-queue-stat__label operator-health-card__label">{label}</p>
+      <p style={{
+        fontSize: "20px", fontWeight: 700, lineHeight: "1.2",
+        alignSelf:'flex-start',flex:1,paddingTop:"10px"
+      }} className="admin-queue-stat__value operator-health-card__value">{value}</p>
+      {detail && <span className="admin-queue-stat__badge operator-health-card__badge">{detail}</span>}
+    </div>
+    <span className="operator-health-card__icon" aria-hidden="true">{icon}</span>
+  </div>
 );
 
 const OperatorDashboard = () => {
@@ -181,7 +195,7 @@ const OperatorDashboard = () => {
     <OperatorLayout>
       <div className="operator-dashboard-page" style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
         {/* Header */}
-        <div style={{
+        <div className="operator-dashboard-header" style={{
           background: "#ffffff",
           borderRadius: "16px",
           padding: "24px 32px",
@@ -189,20 +203,20 @@ const OperatorDashboard = () => {
           border: "1px solid #e2e8f0",
         }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "20px" }}>
-            <h1 style={{ fontSize: "32px", fontWeight: "700", color: "#1e293b", margin: 0 }}>{businessName || "Business Dashboard"}</h1>
-            {businesses.length > 1 && <button type="button" onClick={() => navigate("/operator/switch-business")} aria-label="Switch business" title="Switch business" style={{ width: "42px", height: "42px", flexShrink: 0, display: "grid", placeItems: "center", borderRadius: "11px", border: "1px solid rgba(16,185,129,.45)", background: "rgba(16,185,129,.1)", color: "#10b981", cursor: "pointer" }}><ArrowLeftRight size={21} strokeWidth={2.2} /></button>}
+            <h1 className="operator-dashboard-title" style={{ fontSize: "32px", fontWeight: "700", color: "#1e293b", margin: 0 }}>{businessName || "Business Dashboard"}</h1>
+            {businesses.length > 1 && <button className="operator-dashboard-switch" type="button" onClick={() => navigate("/operator/switch-business")} aria-label="Switch business" title="Switch business" style={{ width: "42px", height: "42px", flexShrink: 0, display: "grid", placeItems: "center", borderRadius: "11px", border: "1px solid rgba(16,185,129,.45)", background: "rgba(16,185,129,.1)", color: "#10b981", cursor: "pointer" }}><ArrowLeftRight size={21} strokeWidth={2.2} /></button>}
           </div>
         </div>
 
         {/* Business Health Section */}
-        <div style={{
+        <div className="operator-dashboard-panel" style={{
           background: "#ffffff",
           borderRadius: "16px",
           padding: "24px 32px",
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
         }}>
-          <h2 style={{
+          <h2 className="operator-dashboard-section-title" style={{
             fontSize: "20px",
             fontWeight: "700",
             color: "#1e293b",
@@ -212,129 +226,31 @@ const OperatorDashboard = () => {
           }}>
             Business Health
           </h2>
-          <div style={{
+          <div className="operator-health-grid" style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
             gap: "20px",
           }}>
-            {/* Verification Card */}
-            <div className="operator-health-card" style={{
-              background: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
-              borderRadius: "12px",
-              padding: "20px",
-              border: "1px solid rgba(255,255,255,.18)",
-              boxShadow: "0 10px 24px rgba(27,107,70,.2)",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                {getStatusIcon("verification", "verified")}
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#ffffff", margin: 0 }}>
-                  Verification
-                </h3>
-              </div>
-              <p style={{
-                fontSize: "16px",
-                fontWeight: "600",
-                color: getStatusColor("verified"),
-                margin: "4px 0 0 0",
-              }}>
-                Verified
-              </p>
-            </div>
-
-            {/* Visibility Card */}
-            <div className="operator-health-card" style={{
-              background: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
-              borderRadius: "12px",
-              padding: "20px",
-              border: "1px solid rgba(255,255,255,.18)",
-              boxShadow: "0 10px 24px rgba(27,107,70,.2)",
-              cursor: "pointer",
-            }}
-              onClick={handleToggleVisibility}
-              title="Click to toggle visibility">
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                {getStatusIcon("visibility", businessHealth?.visibility?.status)}
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#ffffff", margin: 0 }}>
-                  Visibility
-                </h3>
-              </div>
-              <p style={{
-                fontSize: "16px",
-                fontWeight: "600",
-                color: getStatusColor(businessHealth?.visibility?.status),
-                margin: "4px 0 0 0",
-              }}>
-                {businessHealth?.visibility?.message || "Visible"}
-              </p>
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,.75)", margin: "4px 0 0 0" }}>
-                Tap to change
-              </p>
-            </div>
-
-            {/* Menu Freshness Card */}
-            <div className="operator-health-card" style={{
-              background: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
-              borderRadius: "12px",
-              padding: "20px",
-              border: "1px solid rgba(255,255,255,.18)",
-              boxShadow: "0 10px 24px rgba(27,107,70,.2)",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                {getStatusIcon("menu", businessHealth?.menu_freshness?.status)}
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#ffffff", margin: 0 }}>
-                  Menu Freshness
-                </h3>
-              </div>
-              <p style={{
-                fontSize: "16px",
-                fontWeight: "600",
-                color: getStatusColor(businessHealth?.menu_freshness?.status),
-                margin: "4px 0 0 0",
-              }}>
-                {businessHealth?.menu_freshness?.message || "No menu"}
-              </p>
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,.75)", margin: "4px 0 0 0" }}>
-                {businessHealth?.menu_freshness?.uploaded_at
-                  ? `Last updated ${new Date(businessHealth.menu_freshness.uploaded_at).toLocaleString()}`
-                  : businessHealth?.menu_freshness?.status === "uploaded" ? "Menu uploaded" : "Upload a menu"}
-              </p>
-            </div>
-
-            {/* Engagement Card */}
-            <div className="operator-health-card" style={{
-              background: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)",
-              borderRadius: "12px",
-              padding: "20px",
-              border: "1px solid rgba(255,255,255,.18)",
-              boxShadow: "0 10px 24px rgba(27,107,70,.2)",
-            }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                {getStatusIcon("engagement", "default")}
-                <h3 style={{ fontSize: "14px", fontWeight: "600", color: "#ffffff", margin: 0 }}>
-                  Engagement
-                </h3>
-              </div>
-              <p style={{
-                fontSize: "16px",
-                fontWeight: "600",
-                color: "#ffffff",
-                margin: "4px 0 0 0",
-              }}>
-                {businessHealth?.engagement?.count ?? 0} views
-              </p>
-            </div>
+            <BusinessHealthCard label="Verification" value="Verified"
+              detail="License confirmed" icon={getStatusIcon("verification", "verified")} />
+            <BusinessHealthCard label="Visibility" value={businessHealth?.visibility?.message || "Visible"}
+              detail="Tap to change" icon={getStatusIcon("visibility", businessHealth?.visibility?.status)} onClick={handleToggleVisibility} />
+            <BusinessHealthCard label="Menu Freshness" value={businessHealth?.menu_freshness?.message || "No menu"}
+              detail={businessHealth?.menu_freshness?.uploaded_at ? `Updated ${new Date(businessHealth.menu_freshness.uploaded_at).toLocaleDateString()}` : businessHealth?.menu_freshness?.status === "uploaded" ? "Menu uploaded" : "Upload a menu"} icon={getStatusIcon("menu", businessHealth?.menu_freshness?.status)} />
+            <BusinessHealthCard label="Engagement" value={`${businessHealth?.engagement?.count ?? 0} views`}
+              detail="Profile activity" icon={getStatusIcon("engagement", "default")} />
           </div>
         </div>
 
         {/* Manage Section */}
-        <div style={{
+        <div className="operator-dashboard-panel" style={{
           background: "#ffffff",
           borderRadius: "16px",
           padding: "24px 32px",
           boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           border: "1px solid #e2e8f0",
         }}>
-          <h2 style={{
+          <h2 className="operator-dashboard-section-title" style={{
             fontSize: "20px",
             fontWeight: "700",
             color: "#1e293b",
@@ -346,7 +262,7 @@ const OperatorDashboard = () => {
           </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {/* Locations */}
-            <div
+            <div className="operator-dashboard-action"
               onClick={() => setShowLocationModal(true)}
               style={{
                 display: "flex",
@@ -397,7 +313,7 @@ const OperatorDashboard = () => {
             </div>
 
             {/* Profile Information */}
-            <div
+            <div className="operator-dashboard-action"
               onClick={() => navigate("/operator/profile")}
               style={{
                 display: "flex",
@@ -447,7 +363,7 @@ const OperatorDashboard = () => {
             </div>
 
             {/* Menu Snapshot */}
-            <div
+            <div className="operator-dashboard-action"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -566,8 +482,8 @@ const OperatorDashboard = () => {
           </div>
         </div>
 
-        <div style={{ background: "#ffffff", borderRadius: "16px", padding: "24px 32px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)", border: "1px solid #e2e8f0" }}>
-          <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#1e293b", margin: "0 0 24px", textTransform: "uppercase", letterSpacing: ".5px" }}>Grow</h2>
+        <div className="operator-dashboard-panel" style={{ background: "#ffffff", borderRadius: "16px", padding: "24px 32px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)", border: "1px solid #e2e8f0" }}>
+          <h2 className="operator-dashboard-section-title" style={{ fontSize: "20px", fontWeight: "700", color: "#1e293b", margin: "0 0 24px", textTransform: "uppercase", letterSpacing: ".5px" }}>Grow</h2>
           <DashboardActionRow
             icon={<CreditCard size={21} />}
             iconColor="#a78bfa"
@@ -578,8 +494,8 @@ const OperatorDashboard = () => {
           />
         </div>
 
-        <div style={{ background: "#ffffff", borderRadius: "16px", padding: "24px 32px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)", border: "1px solid #e2e8f0" }}>
-          <h2 style={{ fontSize: "20px", fontWeight: "700", color: "#1e293b", margin: "0 0 24px", textTransform: "uppercase", letterSpacing: ".5px" }}>Insights</h2>
+        <div className="operator-dashboard-panel" style={{ background: "#ffffff", borderRadius: "16px", padding: "24px 32px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)", border: "1px solid #e2e8f0" }}>
+          <h2 className="operator-dashboard-section-title" style={{ fontSize: "20px", fontWeight: "700", color: "#1e293b", margin: "0 0 24px", textTransform: "uppercase", letterSpacing: ".5px" }}>Insights</h2>
           <DashboardActionRow
             icon={<BarChart3 size={21} />}
             iconColor="#10b981"
