@@ -1,6 +1,10 @@
-import { ArrowRight, Link2, ScanSearch, Sprout, Users } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import cityImage from "../assets/canoja-city.jpg";
+import discoverNearbyIcon from "../assets/discover-nearby.png";
+import reviewStatusIcon from "../assets/review-status.png";
+import compareProfileIcon from "../assets/compare-profile.png";
+import connectDirectlyIcon from "../assets/connect-directly.png";
 import CanojaVerifiedBadge from "./CanojaVerifiedBadge";
 
 const operators = [
@@ -10,10 +14,10 @@ const operators = [
 ];
 
 const benefits = [
-  { icon: ScanSearch, title: "Discover nearby", text: "Search by location, operator type, business category, or license status." },
-  { icon: Sprout, title: "Review status", text: "Review public license information and Canoja verification indicators in one view." },
-  { icon: Users, title: "Compare profiles", text: "Compare hours, services, contact details, locations and operator-supplied information." },
-  { icon: Link2, title: "Connect directly", text: "Get directions, visit operator websites and report information that may need review." },
+  { image: discoverNearbyIcon, title: "Discover nearby", text: "Search by location, operator type, business category, or license status." },
+  { image: reviewStatusIcon, title: "Review status", text: "Review public license information and Canoja verification indicators in one view." },
+  { image: compareProfileIcon, title: "Compare profiles", text: "Compare hours, services, contact details, locations and operator-supplied information." },
+  { image: connectDirectlyIcon, title: "Connect directly", text: "Get directions, visit operator websites and report information that may need review." },
 ];
 
 function DiscoverySection() {
@@ -29,7 +33,7 @@ function DiscoverySection() {
 function PlatformSection() {
   return <section className="platform-section" id="why-canoja"><div className="section-shell">
     <div className="section-intro"><div><span className="section-kicker dark">Trusted operator discovery</span><h2>One trusted platform<br />for cannabis discovery.</h2></div><p>Canoja brings operator discovery, public license visibility and business profile management together in one simple experience designed for consumers and licensed operators.</p></div>
-    <div className="benefit-grid">{benefits.map(({ icon: Icon, title, text }) => <article key={title}><Icon /><h3>{title}</h3><p>{text}</p></article>)}</div>
+    <div className="benefit-grid">{benefits.map(({ icon: Icon, image, title, text }) => <article key={title}>{image ? <img className="benefit-icon" src={image} alt="" /> : <Icon />}<h3>{title}</h3><p>{text}</p></article>)}</div>
   </div></section>;
 }
 

@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
 
 .login-page { height: 100vh; min-height: 660px; padding: 24px; box-sizing: border-box; display: grid; grid-template-columns: minmax(420px, 1fr) minmax(430px, 1fr); gap: 24px; overflow: hidden; color: #f3f8f5; font-family: "DM Sans", sans-serif; background: #03100d; }
-.login-visual { min-height: 0; padding: 28px 42px 24px; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid #087037; border-radius: 42px; background: linear-gradient(rgba(2,23,17,.54), rgba(4,65,32,.78)), url("../assets/canoja-hero-bg.png") center/cover; }
+.login-visual { position: relative; min-height: 0; padding: 28px 42px 24px; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid #087037; border-radius: 42px; background: linear-gradient(rgba(2,23,17,.54), rgba(4,65,32,.78)), url("../assets/canoja-hero-bg.png") center/cover; box-shadow: inset 0 0 60px rgba(0,219,77,.12), 0 0 34px rgba(0,219,77,.2); }
+.login-visual__leaf { position: absolute; z-index: 2; top: 24px; left: 28px; width: 34px; height: 34px; object-fit: contain; }
 .login-visual__artwork { min-height: 0; flex: 1; display: grid; place-items: center; overflow: hidden; }
 .login-visual__artwork img { width: min(88%, 600px); max-height: 46vh; display: block; object-fit: contain; filter: drop-shadow(0 24px 35px rgba(0,0,0,.48)); }
 .login-visual__copy { text-align: center; }
@@ -29,7 +30,7 @@
 .login-input button svg { width: 20px; }
 .forgot-link { margin-top: -14px; justify-self: end; color: #eef4f0; font-size: 14px; font-weight: 600; }
 .forgot-link:hover { color: #00db4d; }
-.login-submit { height: 58px; margin-top: 3px; color: #04140c; font-size: 15px; font-weight: 800; text-transform: uppercase; border: 1px solid #6bf1a0; border-radius: 14px; background: linear-gradient(100deg, #32cc4c, #08bb91); box-shadow: 0 12px 26px rgba(0,219,77,.25); }
+.login-submit { height: 58px; margin-top: 3px; color: #fff; font-size: 15px; font-weight: 800; text-transform: uppercase; border: 1px solid #6bf1a0; border-radius: 14px; background: linear-gradient(100deg, #32cc4c, #08bb91); box-shadow: 0 12px 26px rgba(0,219,77,.25); }
 .login-submit:disabled { opacity: .6; }
 .spinner { width: 18px; height: 18px; margin-right: 9px; display: inline-block; vertical-align: middle; border: 2px solid #04140c; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; }
 .login-signup { margin: 32px 0 0; color: #a8b8b0; text-align: center; }

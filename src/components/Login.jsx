@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
 import { useAdminLogin } from "../services/admin";
 import canojaWordmark from "../assets/canoja-wordmark.png";
+import canojaLeaf from "../assets/canojaLogo.png";
 import canojaLoginPhones from "../assets/canoja-login-phones.png";
 import ForcedPasswordChange from "./ForcedPasswordChange";
 import "./loginTheme.css";
@@ -12,6 +13,7 @@ import "./loginTheme.css";
 function LoginVisual() {
   return (
     <section className="login-visual" aria-label="Canoja mobile app preview">
+      <img className="login-visual__leaf" src={canojaLeaf} alt="" />
       <div className="login-visual__artwork">
         <img src={canojaLoginPhones} alt="Canoja mobile app" />
       </div>
