@@ -163,7 +163,7 @@ function DetailRow({ label, value, href }) {
     <div className="admin-detail-row" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
       <span style={{ fontSize: "12px", fontWeight: 700, color: "#617182", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</span>
       {href ? (
-        <a className="admin-detail-link" href={href} target="_blank" rel="noopener noreferrer">
+        <a className="admin-detail-link" href={href} target="_blank" rel="noopener noreferrer" title={value}>
           {value} ↗
         </a>
       ) : (

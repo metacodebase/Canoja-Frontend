@@ -554,7 +554,8 @@
 .canoja-admin-dark .admin-detail-row span:first-child { color: #8fa99f !important; }
 .canoja-admin-dark .admin-detail-row span:last-child { color: #e8f4ef !important; }
 .canoja-admin-dark .admin-retailer-drawer button { color: #c4d8d0 !important; border-color: #35534c !important; }
-.admin-detail-link { width: fit-content; color: #1b6b46; font-size: 14px; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+.admin-detail-row { min-width: 0; }
+.admin-detail-link { display: block; width: 100%; max-width: 100%; overflow: hidden; color: #1b6b46; font-size: 14px; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; text-overflow: ellipsis; white-space: nowrap; }
 .admin-detail-link:hover { color: #2da96d; }
 .canoja-admin-dark .admin-retailer-drawer .admin-retailer-delete { background: rgba(201, 54, 54, .16) !important; border-color: #a94a4a !important; color: #ff8a8a !important; }
 .canoja-admin-dark .admin-retailer-drawer .admin-retailer-delete:hover:not(:disabled) { background: rgba(201, 54, 54, .28) !important; color: #ffaaaa !important; }
