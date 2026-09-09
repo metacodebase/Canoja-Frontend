@@ -152,11 +152,23 @@ function mapRetailer(r) {
 
 
 // ── Retailer detail drawer ────────────────────────────────────────────────────
-function DetailRow({ label, value }) {
+const websiteHref = value => {
+  const website = value?.trim();
+  if (!website) return null;
+  return /^https?:\/\//i.test(website) ? website : `https://${website}`;
+};
+
+function DetailRow({ label, value, href }) {
   return (
     <div className="admin-detail-row" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
       <span style={{ fontSize: "12px", fontWeight: 700, color: "#617182", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</span>
-      <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>
+      {href ? (
+        <a className="admin-detail-link" href={href} target="_blank" rel="noopener noreferrer">
+          {value} ↗
+        </a>
+      ) : (
+        <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>
+      )}
     </div>
   );
 }
@@ -253,7 +265,7 @@ function RetailerDrawer({ record, onClose, onSaved, onDeleted }) {
               <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
                 <StatusBadge status={vrLabel} />
                 {!editing && <button onClick={() => setEditing(true)} style={{ border: "none", borderRadius: "8px", height: "32px", padding: "0 12px", background: "#1b6b46", color: "#fff", fontWeight: 700, cursor: "pointer" }}>Edit</button>}
-                {!editing && <button onClick={remove} disabled={deleting} style={{ border: "0.8px solid #f0b7b7", borderRadius: "8px", height: "32px", padding: "0 12px", background: "#fff1f1", color: "#c93636", fontWeight: 700, cursor: "pointer" }}>{deleting ? "Deleting…" : "Delete"}</button>}
+                {!editing && <button className="admin-retailer-delete" onClick={remove} disabled={deleting} style={{ border: "0.8px solid #f0b7b7", borderRadius: "8px", height: "32px", padding: "0 12px", background: "#fff1f1", color: "#c93636", fontWeight: 700, cursor: "pointer" }}>{deleting ? "Deleting…" : "Delete"}</button>}
                 <button onClick={onClose} style={{ background: "none", border: "0.8px solid #dce7e1", borderRadius: "8px", width: "32px", height: "32px", cursor: "pointer", fontSize: "16px", color: "#617182" }}>✕</button>
               </div>
             </div>
@@ -298,7 +310,7 @@ function RetailerDrawer({ record, onClose, onSaved, onDeleted }) {
             <div>
               <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Contact</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                {[["Phone", "phone", record.contact_information?.phone], ["Email", "email", record.contact_information?.email], ["Website", "website", record.contact_information?.website], ["Owner", "owner_name", record.owner?.name], ["Owner email", "owner_email", record.owner?.email], ["Owner phone", "owner_phone", record.owner?.phone]].map(([label, key, value]) => editing ? <EditRow key={key} label={label} value={form[key]} onChange={v => set(key, v)} /> : <DetailRow key={key} label={label} value={value} />)}
+                {[["Phone", "phone", record.contact_information?.phone], ["Email", "email", record.contact_information?.email], ["Website", "website", record.contact_information?.website], ["Owner", "owner_name", record.owner?.name], ["Owner email", "owner_email", record.owner?.email], ["Owner phone", "owner_phone", record.owner?.phone]].map(([label, key, value]) => editing ? <EditRow key={key} label={label} value={form[key]} onChange={v => set(key, v)} /> : <DetailRow key={key} label={label} value={value} href={key === "website" ? websiteHref(value) : null} />)}
               </div>
             </div>
             {editing && <div><p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Google Maps data</p><div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}><EditRow label="Maps URL" value={form.location_link} onChange={v => set("location_link", v)} /><EditRow label="Google Place ID" value={form.googlePlaceId} onChange={v => set("googlePlaceId", v)} /><EditRow label="Latitude" value={form.latitude} onChange={v => set("latitude", v)} /><EditRow label="Longitude" value={form.longitude} onChange={v => set("longitude", v)} /><EditRow label="Operator" value={form.operator_name} onChange={v => set("operator_name", v)} /><EditRow label="Business status" value={form.business_status} onChange={v => set("business_status", v)} /></div></div>}
@@ -473,12 +485,13 @@ const columns = [
     title: "Business",
     dataIndex: "name",
     key: "name",
+    width: 360,
     render: (_, row) => (
-      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-        <span style={{ fontWeight: 700, fontSize: "15.36px", color: C.textPrimary, lineHeight: "22.272px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "328px", minWidth: 0 }}>
+        <span title={row.name} style={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: 700, fontSize: "15.36px", color: C.textPrimary, lineHeight: "22.272px" }}>
           {row.name}
         </span>
-        <span style={{ fontWeight: 400, fontSize: "14.08px", color: C.textSecondary, lineHeight: "20.416px" }}>
+        <span title={row.sub} style={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: 400, fontSize: "14.08px", color: C.textSecondary, lineHeight: "20.416px" }}>
           {row.sub}
         </span>
       </div>
