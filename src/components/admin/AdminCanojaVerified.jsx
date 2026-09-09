@@ -25,6 +25,18 @@ const C = {
 
 const FMT = { month: "short", day: "numeric", year: "numeric" };
 
+function expirationDate(value) {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) || date.getUTCFullYear() < 2000
+    ? null
+    : date;
+}
+
+function formatExpirationDate(value) {
+  return expirationDate(value)?.toLocaleDateString("en-US", FMT) || "Not provided";
+}
+
 // ── Badges ────────────────────────────────────────────────────────────────────
 function BadgeStatus({ status }) {
   const map = {
@@ -45,8 +57,9 @@ function getBadgeStatus(record) {
   if (!record.canojaVerified) return "Revoked";
   const now = Date.now();
   const d30 = now + 30 * 86400000;
-  if (!record.expiration_date) return "Active";
-  const exp = new Date(record.expiration_date).getTime();
+  const expiration = expirationDate(record.expiration_date);
+  if (!expiration) return "Active";
+  const exp = expiration.getTime();
   if (exp < now) return "Revoked";
   if (exp < d30) return "Expiring Soon";
   return "Active";
@@ -62,8 +75,7 @@ function mapVerified(r) {
     verifiedDate: r.lastVerifiedDate
       ? new Date(r.lastVerifiedDate).toLocaleDateString("en-US", FMT)
       : r.updatedAt ? new Date(r.updatedAt).toLocaleDateString("en-US", FMT) : "—",
-    expires: r.expiration_date
-      ? new Date(r.expiration_date).toLocaleDateString("en-US", FMT) : "—",
+    expires: formatExpirationDate(r.expiration_date),
     badgeStatus: getBadgeStatus(r),
     sourceType: r.sourceType || "—",
   };
@@ -198,7 +210,7 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
               <DetailRow label="License #" value={rawRecord.license_number} />
               <DetailRow label="Type" value={rawRecord.license_type} />
               <DetailRow label="Status" value={rawRecord.license_status} />
-              <DetailRow label="Expires" value={rawRecord.expiration_date ? new Date(rawRecord.expiration_date).toLocaleDateString("en-US", FMT) : null} />
+              <DetailRow label="Expires" value={formatExpirationDate(rawRecord.expiration_date)} />
               <DetailRow label="Source" value={rawRecord.sourceType} />
               <DetailRow label="Risk Flag" value={rawRecord.riskFlag} />
             </div>

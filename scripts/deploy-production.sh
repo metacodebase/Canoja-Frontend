@@ -26,7 +26,7 @@ if [[ "${DEPLOY_PATH}" != /* || "${DEPLOY_PATH}" == "/" ]]; then
   exit 1
 fi
 
-command -v npm >/dev/null || { echo "npm is required." >&2; exit 1; }
+command -v yarn >/dev/null || { echo "yarn is required." >&2; exit 1; }
 command -v ssh >/dev/null || { echo "ssh is required." >&2; exit 1; }
 command -v rsync >/dev/null || { echo "rsync is required." >&2; exit 1; }
 
@@ -47,7 +47,7 @@ rsync_ssh=(ssh "${ssh_args[@]}")
 
 cd "${project_dir}"
 echo "Building production frontend..."
-npm run build
+yarn build
 
 [[ -f dist/index.html ]] || { echo "Production build did not create dist/index.html." >&2; exit 1; }
 
