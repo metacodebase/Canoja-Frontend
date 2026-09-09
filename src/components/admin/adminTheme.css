@@ -691,3 +691,7 @@
   .admin-queue-search-wrap button { width: 100%; }
   .admin-directory-stats { grid-template-columns: 1fr !important; }
 }
+
+.operator-main--claim { padding: 0 !important; }
+.operator-shell--sidebar-collapsed .operator-main.operator-main--claim { padding: 0 !important; }
+.operator-main--claim > .claim-business-form { min-height: 100dvh !important; }

@@ -39,7 +39,7 @@ const ClaimBusinessPage = () => {
   const form = <ClaimBusinessForm />;
 
   return user?.role === "operator"
-    ? <OperatorLayout>{form}</OperatorLayout>
+    ? <OperatorLayout mainClassName="operator-main--claim">{form}</OperatorLayout>
     : form;
 };
 

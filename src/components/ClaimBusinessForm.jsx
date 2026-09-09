@@ -243,7 +243,7 @@ const ClaimBusinessForm = () => {
       if (response.data.success) {
         const { data } = response.data;
         rememberClaimedBusiness(formData.pharmacyId);
-        
+
         // Handle different verification statuses
         if (data.verification_status === "auto_verified") {
           // Auto-verified (smoke shop or cannabis with matching license)
@@ -252,7 +252,7 @@ const ClaimBusinessForm = () => {
               ? "Your smoke shop has been auto-verified! Please check your email for next steps."
               : "Your business has been auto-verified! Please check your email for next steps."
           );
-          
+
           // Show success message with instructions
           setTimeout(() => {
             toast.info(
@@ -278,13 +278,13 @@ const ClaimBusinessForm = () => {
         navigate(explorePath, { replace: true });
         return;
       }
-      
+
       // Handle specific error messages
       const errorMessage =
         error.response?.data?.error ||
         error.response?.data?.message ||
         "Failed to submit claim request. Please try again.";
-      
+
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -318,7 +318,7 @@ const ClaimBusinessForm = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div className="claim-fields-step">
+          <div className="claim-fields-step" style={{ maxWidth: "90%", alignself: "center", margin: "0 auto" }}>
             <h2
               style={{
                 fontSize: "28px",
@@ -428,7 +428,7 @@ const ClaimBusinessForm = () => {
 
       case 2:
         return (
-          <div className="claim-fields-step">
+          <div className="claim-fields-step" style={{ maxWidth: "90%", alignself: "center", margin: "0 auto" }}>
             <h2
               style={{
                 fontSize: "28px",
@@ -613,7 +613,7 @@ const ClaimBusinessForm = () => {
 
       case 3:
         return (
-          <div className="claim-fields-step">
+          <div className="claim-fields-step" style={{ maxWidth: "90%", alignSelf: "center", margin: "0 auto" }}>
             <h2
               style={{
                 fontSize: "28px",
@@ -621,7 +621,7 @@ const ClaimBusinessForm = () => {
                 color: "#10b981",
                 marginBottom: "32px",
               }}>
-                License Details 
+              License Details
             </h2>
 
             <div style={{ marginBottom: "24px" }}>
@@ -633,7 +633,7 @@ const ClaimBusinessForm = () => {
                   fontWeight: "600",
                   fontSize: "14px",
                 }}>
-                License Number 
+                License Number
               </label>
               <input
                 type="text"
@@ -657,7 +657,7 @@ const ClaimBusinessForm = () => {
                   fontWeight: "600",
                   fontSize: "14px",
                 }}>
-                Issuing Authority (e.g., California DCC, NY OCM) 
+                Issuing Authority (e.g., California DCC, NY OCM)
               </label>
               <input
                 type="text"
@@ -681,7 +681,7 @@ const ClaimBusinessForm = () => {
                   fontWeight: "600",
                   fontSize: "14px",
                 }}>
-                License Type (Retail, Cultivation, Delivery, Lounge, etc.) 
+                License Type (Retail, Cultivation, Delivery, Lounge, etc.)
               </label>
               <input
                 type="text"
@@ -705,7 +705,7 @@ const ClaimBusinessForm = () => {
                   fontWeight: "600",
                   fontSize: "14px",
                 }}>
-                Expiration Date 
+                Expiration Date
               </label>
               <input
                 type="date"
@@ -728,7 +728,7 @@ const ClaimBusinessForm = () => {
                   fontWeight: "600",
                   fontSize: "14px",
                 }}>
-                Jurisdiction (State/Province & Country) 
+                Jurisdiction (State/Province & Country)
               </label>
               <input
                 type="text"
@@ -747,7 +747,7 @@ const ClaimBusinessForm = () => {
 
       case 4:
         return (
-          <div className="claim-fields-step">
+          <div className="claim-fields-step" style={{ maxWidth: "90%", alignSelf: "center", margin: "0 auto" }}>
             <h2
               style={{
                 fontSize: "28px",
@@ -1009,119 +1009,124 @@ const ClaimBusinessForm = () => {
       {/* Form Container */}
       <div
         style={{
-          maxWidth: "960px",
+          // maxWidth: "960px",
           margin: "0 auto",
           padding: "0 24px 80px 24px",
         }}>
         {renderStepContent()}
+        <div style={{ maxWidth: "90%", alignself: "center", margin: "0 auto" }}>
 
-        {/* Navigation Buttons */}
-        <div
-          style={{
-            display: "flex",
-            gap: "16px",
-            marginTop: "20px",
-            justifyContent: "space-between",
-          }}>
-          <button
-            className="claim-back-button"
-            type="button"
-            onClick={handleBack}
+
+          {/* Navigation Buttons */}
+          <div
             style={{
-              flex: currentStep === totalSteps ? 1 : "none",
-              padding: "14px 32px",
-              background: "#f3f4f6",
-              color: "#374151",
-              border: "none",
-              borderRadius: "12px",
-              fontWeight: "600",
-              fontSize: "16px",
-              cursor: "pointer",
-              transition: "all 0.2s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = "#e5e7eb";
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = "#f3f4f6";
+              display: "flex",
+              gap: "16px",
+              marginTop: "20px",
+              justifyContent: "space-between",
             }}>
-            Back
-          </button>
-
-          {currentStep < totalSteps ? (
             <button
+              className="claim-back-button"
               type="button"
-              onClick={handleNext}
+              onClick={handleBack}
               style={{
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "8px",
+                flex: currentStep === totalSteps ? 1 : "none",
                 padding: "14px 32px",
-                background: "linear-gradient(135deg, #059669, #10b981)",
-                color: "#ffffff",
+                background: "#f3f4f6",
+                color: "#374151",
                 border: "none",
                 borderRadius: "12px",
                 fontWeight: "600",
                 fontSize: "16px",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
-                boxShadow: "0 4px 6px -1px rgba(16, 185, 129, 0.2)",
               }}
               onMouseEnter={(e) => {
-                e.target.style.transform = "translateY(-2px)";
-                e.target.style.boxShadow = "0 8px 12px -1px rgba(16, 185, 129, 0.3)";
+                e.target.style.background = "#e5e7eb";
               }}
               onMouseLeave={(e) => {
-                e.target.style.transform = "translateY(0)";
-                e.target.style.boxShadow = "0 4px 6px -1px rgba(16, 185, 129, 0.2)";
+                e.target.style.background = "#f3f4f6";
               }}>
-              Next <ArrowRight size={18} strokeWidth={2.25} />
+              Back
             </button>
-          ) : (
+
+          {currentStep < totalSteps ? (
             <button
+              className="operator-primary-action"
               type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitting || !formData.ownership_attestation}
-              style={{
-                flex: 1,
-                padding: "14px 32px",
-                background:
-                  isSubmitting || !formData.ownership_attestation
-                    ? "#9ca3af"
-                    : "linear-gradient(135deg, #059669, #10b981)",
-                color: "#ffffff",
-                border: "none",
-                borderRadius: "12px",
-                fontWeight: "600",
-                fontSize: "16px",
-                cursor:
-                  isSubmitting || !formData.ownership_attestation
-                    ? "not-allowed"
-                    : "pointer",
-                transition: "all 0.2s ease",
-                boxShadow:
-                  isSubmitting || !formData.ownership_attestation
-                    ? "none"
-                    : "0 4px 6px -1px rgba(16, 185, 129, 0.2)",
-                opacity: isSubmitting || !formData.ownership_attestation ? 0.7 : 1,
-              }}
-              onMouseEnter={(e) => {
-                if (!isSubmitting) {
+                onClick={handleNext}
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  padding: "14px 32px",
+                  background: "linear-gradient(135deg, #059669, #10b981)",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: "12px",
+                  fontWeight: "600",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  boxShadow: "0 4px 6px -1px rgba(16, 185, 129, 0.2)",
+                }}
+                onMouseEnter={(e) => {
                   e.target.style.transform = "translateY(-2px)";
                   e.target.style.boxShadow = "0 8px 12px -1px rgba(16, 185, 129, 0.3)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isSubmitting) {
+                }}
+                onMouseLeave={(e) => {
                   e.target.style.transform = "translateY(0)";
                   e.target.style.boxShadow = "0 4px 6px -1px rgba(16, 185, 129, 0.2)";
-                }
-              }}>
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </button>
-          )}
+                }}>
+                Next <ArrowRight size={18} strokeWidth={2.25} />
+              </button>
+          ) : (
+            <button
+              className="operator-primary-action"
+              type="button"
+                onClick={handleSubmit}
+                disabled={isSubmitting || !formData.ownership_attestation}
+                style={{
+                  flex: 1,
+                  padding: "14px 32px",
+                  background:
+                    isSubmitting || !formData.ownership_attestation
+                      ? "#9ca3af"
+                      : "linear-gradient(135deg, #059669, #10b981)",
+                  color: "#ffffff",
+                  border: "none",
+                  borderRadius: "12px",
+                  fontWeight: "600",
+                  fontSize: "16px",
+                  cursor:
+                    isSubmitting || !formData.ownership_attestation
+                      ? "not-allowed"
+                      : "pointer",
+                  transition: "all 0.2s ease",
+                  boxShadow:
+                    isSubmitting || !formData.ownership_attestation
+                      ? "none"
+                      : "0 4px 6px -1px rgba(16, 185, 129, 0.2)",
+                  opacity: isSubmitting || !formData.ownership_attestation ? 0.7 : 1,
+                }}
+                onMouseEnter={(e) => {
+                  if (!isSubmitting) {
+                    e.target.style.transform = "translateY(-2px)";
+                    e.target.style.boxShadow = "0 8px 12px -1px rgba(16, 185, 129, 0.3)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isSubmitting) {
+                    e.target.style.transform = "translateY(0)";
+                    e.target.style.boxShadow = "0 4px 6px -1px rgba(16, 185, 129, 0.2)";
+                  }
+                }}>
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
