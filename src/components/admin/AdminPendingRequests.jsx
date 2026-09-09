@@ -211,16 +211,18 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
               <button onClick={onClose} style={{ background: "none", border: "0.8px solid #dce7e1", borderRadius: "8px", width: "32px", height: "32px", cursor: "pointer", fontSize: "16px", color: "#617182" }}>✕</button>
             </div>
           </div>
-          {record.status === "pending" && (
+          {record.status !== "rejected" && (
             <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
-              <button
-                className="admin-primary-action"
-                onClick={() => onApprove(record._id)}
-                disabled={approving}
-                style={{ flex: 1, height: "40px", borderRadius: "10px", background: "linear-gradient(170deg,#1b6b46,#2da96d)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: approving ? 0.6 : 1 }}
-              >
-                {approving ? "Approving…" : "Approve"}
-              </button>
+              {record.status === "pending" && (
+                <button
+                  className="admin-primary-action"
+                  onClick={() => onApprove(record._id)}
+                  disabled={approving}
+                  style={{ flex: 1, height: "40px", borderRadius: "10px", background: "linear-gradient(170deg,#1b6b46,#2da96d)", border: "none", color: "#fff", fontSize: "13px", fontWeight: 700, cursor: "pointer", opacity: approving ? 0.6 : 1 }}
+                >
+                  {approving ? "Approving…" : "Approve"}
+                </button>
+              )}
               <button
                 onClick={() => onReject(record)}
                 disabled={rejecting}
