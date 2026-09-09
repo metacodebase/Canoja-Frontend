@@ -15,7 +15,7 @@ import useAdminTheme from "../admin/useAdminTheme";
 import { resolveLocationSearch } from "./locationSearch";
 import "./consumerExplore.css";
 
-const ConsumerExplore = ({ embedded = false, themeOverride }) => {
+const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight = true }) => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useAdminTheme();
   const activeTheme = themeOverride || theme;
@@ -26,7 +26,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
   const [mapLimit, setMapLimit] = useState(50);
   const { filters, setFilters, query, setQuery, view, setView, sort, setSort } = useExploreState();
   const { coords, locating, locationError } = useBrowserLocation();
-  const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords);
+  const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords, showSpotlight);
   const openShop = useCallback((shop) => {
     const businessId = shop._id || shop.place_id || shop.id || "selected";
     sessionStorage.setItem("selectedBusiness", JSON.stringify(shop));
@@ -102,7 +102,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride }) => {
         <ExploreControls query={query} onQueryChange={setQuery} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
         {filtersOpen && <ExploreFilterPanel value={filters} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setFilters(nextFilters); setFiltersOpen(false); }} />}
         {view === "map" ? <ExploreMap shops={visibleShops} coords={mapCoords} locating={!hasSelectedLocation && locating} locationError={hasSelectedLocation ? "" : locationError} onShopSelect={openShop} theme={activeTheme} canLoadMore={shops.length >= mapLimit && mapLimit < 1000} nextLimit={Math.min(mapLimit + 50, 1000)} onLoadMore={() => setMapLimit(limit => Math.min(limit + 50, 1000))} /> : <>
-          <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={spotlightLoading || (!(filters.region || filters.zipCode || filters.state) && locating)} />
+          {showSpotlight && <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={spotlightLoading || (!(filters.region || filters.zipCode || filters.state) && locating)} />}
           <ExploreSection
             title="All"
             shops={visibleShops.slice(0, 6)}

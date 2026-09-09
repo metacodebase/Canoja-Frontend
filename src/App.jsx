@@ -31,6 +31,17 @@ import ConsumerExplore from "./components/consumer/ConsumerExplore";
 import ConsumerAllShops from "./components/consumer/ConsumerAllShops";
 import ConsumerBusinessDetail from "./components/consumer/ConsumerBusinessDetail";
 import LandingPage from "./components/LandingPage";
+import OperatorLayout from "./components/OperatorLayout";
+import { useAuth } from "./context/AuthContext";
+
+const ClaimBusinessPage = () => {
+  const { user } = useAuth();
+  const form = <ClaimBusinessForm />;
+
+  return user?.role === "operator"
+    ? <OperatorLayout>{form}</OperatorLayout>
+    : form;
+};
 
 // Create QueryClient with sensible defaults
 const queryClient = new QueryClient({
@@ -70,7 +81,7 @@ function App() {
             {/* Claim Business Form - Public */}
             <Route 
               path="/claim-business" 
-              element={<ClaimBusinessForm />} 
+              element={<ClaimBusinessPage />} 
             />
 
             {/* Admin Routes - Protected */}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Table, ConfigProvider, Drawer } from "antd";
 import AdminShell from "./AdminShell";
-import { useAdminRetailers, useAdminAuditLog, useRecentAuditLog, useCreateRetailer } from "../../services/admin";
+import { useAdminRetailers, useAdminAuditLog, useRecentAuditLog, useCreateRetailer, useUpdateRetailer, useDeleteRetailer } from "../../services/admin";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Search } from "lucide-react";
@@ -161,7 +161,60 @@ function DetailRow({ label, value }) {
   );
 }
 
-function RetailerDrawer({ record, onClose }) {
+function EditRow({ label, value, onChange, type = "text" }) {
+  return <label style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+    <span style={{ fontSize: "12px", fontWeight: 700, color: "#617182", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</span>
+    <input type={type} value={value ?? ""} onChange={e => onChange(e.target.value)} style={{ height: "38px", padding: "0 10px", border: "0.8px solid #b8cdc2", borderRadius: "8px", color: "#18212b", background: "#fff", minWidth: 0 }} />
+  </label>;
+}
+
+const dateInputValue = value => value ? new Date(value).toISOString().slice(0, 10) : "";
+const retailerForm = record => ({
+  business_name: record.business_name || "", dba: record.dba || "",
+  license_number: record.license_number || "", license_status: record.license_status || "",
+  license_type: record.license_type || "", jurisdiction: record.jurisdiction || "",
+  issue_date: dateInputValue(record.issue_date), expiration_date: dateInputValue(record.expiration_date),
+  business_address: record.business_address || "", city: record.city || "",
+  stateName: record.stateName || "", postal_code: record.postal_code || "",
+  phone: record.contact_information?.phone || "", email: record.contact_information?.email || "",
+  website: record.contact_information?.website || "", owner_name: record.owner?.name || "",
+  owner_email: record.owner?.email || "", owner_phone: record.owner?.phone || "",
+  location_link: record.location_link || "", googlePlaceId: record.googlePlaceId || "",
+  latitude: record.latitude ?? "", longitude: record.longitude ?? "",
+  operator_name: record.operator_name || "", business_status: record.business_status || "",
+});
+
+function RetailerDrawer({ record, onClose, onSaved, onDeleted }) {
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({});
+  const { mutateAsync: updateRetailer, isPending: saving } = useUpdateRetailer();
+  const { mutateAsync: deleteRetailer, isPending: deleting } = useDeleteRetailer();
+  useEffect(() => {
+    if (record) setForm(retailerForm(record));
+    setEditing(false);
+  }, [record]);
+  const set = (key, value) => setForm(current => ({ ...current, [key]: value }));
+  const save = async () => {
+    try {
+      const result = await updateRetailer({ id: record._id, data: form });
+      toast.success("Retailer updated successfully");
+      setEditing(false);
+      onSaved(result.data);
+    } catch (error) {
+      toast.error(error.message || "Failed to update retailer");
+    }
+  };
+  const remove = async () => {
+    const confirmed = window.confirm(`Delete ${record.business_name || "this retailer"}? This permanently removes the record and cannot be undone.`);
+    if (!confirmed) return;
+    try {
+      await deleteRetailer(record._id);
+      toast.success("Retailer deleted successfully");
+      onDeleted();
+    } catch (error) {
+      toast.error(error.message || "Failed to delete retailer");
+    }
+  };
   const { data: auditData } = useAdminAuditLog(
     record ? { targetType: "LicenseRecord", targetId: record._id, limit: 20 } : {}
   );
@@ -199,6 +252,8 @@ function RetailerDrawer({ record, onClose }) {
               </div>
               <div style={{ display: "flex", alignItems: "center", gap: "8px", flexShrink: 0 }}>
                 <StatusBadge status={vrLabel} />
+                {!editing && <button onClick={() => setEditing(true)} style={{ border: "none", borderRadius: "8px", height: "32px", padding: "0 12px", background: "#1b6b46", color: "#fff", fontWeight: 700, cursor: "pointer" }}>Edit</button>}
+                {!editing && <button onClick={remove} disabled={deleting} style={{ border: "0.8px solid #f0b7b7", borderRadius: "8px", height: "32px", padding: "0 12px", background: "#fff1f1", color: "#c93636", fontWeight: 700, cursor: "pointer" }}>{deleting ? "Deleting…" : "Delete"}</button>}
                 <button onClick={onClose} style={{ background: "none", border: "0.8px solid #dce7e1", borderRadius: "8px", width: "32px", height: "32px", cursor: "pointer", fontSize: "16px", color: "#617182" }}>✕</button>
               </div>
             </div>
@@ -211,17 +266,23 @@ function RetailerDrawer({ record, onClose }) {
 
           {/* Scrollable body */}
           <div style={{ flex: 1, overflowY: "auto", padding: "24px", display: "flex", flexDirection: "column", gap: "24px" }}>
+            {editing && <div style={{ display: "flex", gap: "8px", position: "sticky", top: 0, zIndex: 2, background: "#fff", paddingBottom: "10px" }}>
+              <button onClick={save} disabled={saving || !form.business_name?.trim()} style={{ height: "38px", padding: "0 16px", border: 0, borderRadius: "8px", background: "#1b6b46", color: "#fff", fontWeight: 700, cursor: "pointer" }}>{saving ? "Saving…" : "Save changes"}</button>
+              <button onClick={() => { setForm(retailerForm(record)); setEditing(false); }} disabled={saving} style={{ height: "38px", padding: "0 16px", border: "0.8px solid #dce7e1", borderRadius: "8px", background: "#fff", fontWeight: 700, cursor: "pointer" }}>Cancel</button>
+              <a href={record.location_link || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent([record.business_name, record.business_address, record.city, record.stateName].filter(Boolean).join(", "))}`} target="_blank" rel="noreferrer" style={{ marginLeft: "auto", alignSelf: "center", color: "#1b6b46", fontSize: "13px", fontWeight: 700 }}>Google Maps ↗</a>
+            </div>}
+            {editing && <div><p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Business</p><div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}><EditRow label="Business name" value={form.business_name} onChange={v => set("business_name", v)} /><EditRow label="DBA" value={form.dba} onChange={v => set("dba", v)} /></div></div>}
 
             {/* License info */}
             <div>
               <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                <DetailRow label="License #" value={record.license_number} />
-                <DetailRow label="Status" value={record.license_status} />
-                <DetailRow label="Type" value={record.license_type} />
-                <DetailRow label="Jurisdiction" value={record.jurisdiction || record.stateName} />
-                <DetailRow label="Issued" value={record.issue_date ? new Date(record.issue_date).toLocaleDateString() : null} />
-                <DetailRow label="Expires" value={exp ? exp.toLocaleDateString() : null} />
+                {editing ? <EditRow label="License #" value={form.license_number} onChange={v => set("license_number", v)} /> : <DetailRow label="License #" value={record.license_number} />}
+                {editing ? <EditRow label="Status" value={form.license_status} onChange={v => set("license_status", v)} /> : <DetailRow label="Status" value={record.license_status} />}
+                {editing ? <EditRow label="Type" value={form.license_type} onChange={v => set("license_type", v)} /> : <DetailRow label="Type" value={record.license_type} />}
+                {editing ? <EditRow label="Jurisdiction" value={form.jurisdiction} onChange={v => set("jurisdiction", v)} /> : <DetailRow label="Jurisdiction" value={record.jurisdiction || record.stateName} />}
+                {editing ? <EditRow type="date" label="Issued" value={form.issue_date} onChange={v => set("issue_date", v)} /> : <DetailRow label="Issued" value={record.issue_date ? new Date(record.issue_date).toLocaleDateString() : null} />}
+                {editing ? <EditRow type="date" label="Expires" value={form.expiration_date} onChange={v => set("expiration_date", v)} /> : <DetailRow label="Expires" value={exp ? exp.toLocaleDateString() : null} />}
               </div>
             </div>
 
@@ -229,10 +290,7 @@ function RetailerDrawer({ record, onClose }) {
             <div>
               <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Location</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                <DetailRow label="Address" value={record.business_address} />
-                <DetailRow label="City" value={record.city} />
-                <DetailRow label="State" value={record.stateName} />
-                <DetailRow label="ZIP" value={record.postal_code} />
+                {[["Address", "business_address"], ["City", "city"], ["State", "stateName"], ["ZIP", "postal_code"]].map(([label, key]) => editing ? <EditRow key={key} label={label} value={form[key]} onChange={v => set(key, v)} /> : <DetailRow key={key} label={label} value={record[key]} />)}
               </div>
             </div>
 
@@ -240,12 +298,10 @@ function RetailerDrawer({ record, onClose }) {
             <div>
               <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Contact</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                <DetailRow label="Phone" value={record.contact_information?.phone} />
-                <DetailRow label="Email" value={record.contact_information?.email} />
-                <DetailRow label="Website" value={record.contact_information?.website} />
-                <DetailRow label="Owner" value={record.owner?.name} />
+                {[["Phone", "phone", record.contact_information?.phone], ["Email", "email", record.contact_information?.email], ["Website", "website", record.contact_information?.website], ["Owner", "owner_name", record.owner?.name], ["Owner email", "owner_email", record.owner?.email], ["Owner phone", "owner_phone", record.owner?.phone]].map(([label, key, value]) => editing ? <EditRow key={key} label={label} value={form[key]} onChange={v => set(key, v)} /> : <DetailRow key={key} label={label} value={value} />)}
               </div>
             </div>
+            {editing && <div><p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Google Maps data</p><div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}><EditRow label="Maps URL" value={form.location_link} onChange={v => set("location_link", v)} /><EditRow label="Google Place ID" value={form.googlePlaceId} onChange={v => set("googlePlaceId", v)} /><EditRow label="Latitude" value={form.latitude} onChange={v => set("latitude", v)} /><EditRow label="Longitude" value={form.longitude} onChange={v => set("longitude", v)} /><EditRow label="Operator" value={form.operator_name} onChange={v => set("operator_name", v)} /><EditRow label="Business status" value={form.business_status} onChange={v => set("business_status", v)} /></div></div>}
 
             {/* Verification lifecycle */}
             {false && (lifecycle.length > 0 || auditLogs.length > 0) && (
@@ -1376,7 +1432,15 @@ export default function AdminRetailers() {
           </div>
         </div>
       </div>
-      <RetailerDrawer record={drawerRecord} onClose={() => setDrawerRecord(null)} />
+      <RetailerDrawer record={drawerRecord} onClose={() => setDrawerRecord(null)} onDeleted={() => {
+        setDrawerRecord(null);
+        queryClient.invalidateQueries({ queryKey: ["adminRetailers"] });
+        queryClient.invalidateQueries({ queryKey: ["adminAuditLog"] });
+      }} onSaved={updated => {
+        setDrawerRecord(current => ({ ...current, ...updated }));
+        queryClient.invalidateQueries({ queryKey: ["adminRetailers"] });
+        queryClient.invalidateQueries({ queryKey: ["adminAuditLog"] });
+      }} />
       {showAddModal && (
         <AddRetailerModal
           onClose={() => setShowAddModal(false)}

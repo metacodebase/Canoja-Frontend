@@ -163,6 +163,30 @@ export const useCreateRetailer = () =>
     },
   });
 
+export const useUpdateRetailer = () =>
+  useMutation({
+    mutationFn: async ({ id, data }) => {
+      try {
+        const response = await api.patch(`/admin/retailers/${id}`, data);
+        return response.data;
+      } catch (error) {
+        throw new Error(error.response?.data?.error || "Failed to update retailer");
+      }
+    },
+  });
+
+export const useDeleteRetailer = () =>
+  useMutation({
+    mutationFn: async (id) => {
+      try {
+        const response = await api.delete(`/admin/retailers/${id}`);
+        return response.data;
+      } catch (error) {
+        throw new Error(error.response?.data?.error || "Failed to delete retailer");
+      }
+    },
+  });
+
 export const useEscalatePendingVerification = () =>
   useMutation({
     mutationFn: async ({ id, note }) => {

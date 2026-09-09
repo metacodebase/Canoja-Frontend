@@ -5,11 +5,17 @@ import { getCachedResults, setCachedResults } from "./exploreCache";
 
 const CACHE_SECTION = "spotlight-paid";
 
-const useSpotlightShops = (filters, sort, coords) => {
+const useSpotlightShops = (filters, sort, coords, enabled = true) => {
   const [spotlightShops, setSpotlightShops] = useState(() => getCachedResults(CACHE_SECTION) || []);
   const [spotlightLoading, setSpotlightLoading] = useState(() => !getCachedResults(CACHE_SECTION));
 
   useEffect(() => {
+    if (!enabled) {
+      setSpotlightShops([]);
+      setSpotlightLoading(false);
+      return undefined;
+    }
+
     const hasFilterLocation = filters.region || filters.zipCode || filters.state;
     const hasLocation = hasFilterLocation || coords;
 
@@ -40,7 +46,7 @@ const useSpotlightShops = (filters, sort, coords) => {
       .finally(() => !cancelled && setSpotlightLoading(false));
 
     return () => { cancelled = true; };
-  }, [coords, filters, sort]);
+  }, [coords, enabled, filters, sort]);
 
   return { spotlightShops, spotlightLoading };
 };

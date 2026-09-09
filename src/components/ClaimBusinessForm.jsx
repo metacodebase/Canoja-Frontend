@@ -6,12 +6,33 @@ import "react-toastify/dist/ReactToastify.css";
 import canojaLogo from "../assets/canojaLogo.png";
 import bannerBoxesImage from "../assets/bannerBoxes.png";
 import api from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import "./claimBusinessForm.css";
+
+const CLAIMED_BUSINESSES_KEY = "canojaClaimedBusinessIds";
+
+const readClaimedBusinessIds = () => {
+  try {
+    return JSON.parse(sessionStorage.getItem(CLAIMED_BUSINESSES_KEY)) || [];
+  } catch {
+    return [];
+  }
+};
+
+const rememberClaimedBusiness = (businessId) => {
+  if (!businessId) return;
+  sessionStorage.setItem(
+    CLAIMED_BUSINESSES_KEY,
+    JSON.stringify([...new Set([...readClaimedBusinessIds(), businessId])])
+  );
+};
 
 const ClaimBusinessForm = () => {
   const theme = localStorage.getItem("canoja-theme") || "dark";
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const explorePath = user?.role === "operator" ? "/operator/explore" : "/explore";
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 4;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,6 +74,11 @@ const ClaimBusinessForm = () => {
     const businessName = searchParams.get("businessName");
     const address = searchParams.get("address");
 
+    if (pharmacyId && readClaimedBusinessIds().includes(pharmacyId)) {
+      navigate(explorePath, { replace: true });
+      return;
+    }
+
     if (pharmacyId) {
       setFormData((prev) => ({
         ...prev,
@@ -61,7 +87,7 @@ const ClaimBusinessForm = () => {
         physical_address: address || prev.physical_address,
       }));
     }
-  }, [searchParams]);
+  }, [explorePath, navigate, searchParams]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -124,7 +150,7 @@ const ClaimBusinessForm = () => {
       setCurrentStep(currentStep - 1);
       return;
     }
-    navigate("/explore");
+    navigate(explorePath);
   };
 
   const handleSubmit = async () => {
@@ -216,6 +242,7 @@ const ClaimBusinessForm = () => {
 
       if (response.data.success) {
         const { data } = response.data;
+        rememberClaimedBusiness(formData.pharmacyId);
         
         // Handle different verification statuses
         if (data.verification_status === "auto_verified") {
@@ -240,10 +267,17 @@ const ClaimBusinessForm = () => {
           );
         }
 
-        navigate("/explore", { replace: true });
+        navigate(explorePath, { replace: true });
       }
     } catch (error) {
       console.error("Submission error:", error);
+
+      if (error.response?.data?.data?.claimed) {
+        rememberClaimedBusiness(formData.pharmacyId);
+        toast.info("This business has already been claimed.");
+        navigate(explorePath, { replace: true });
+        return;
+      }
       
       // Handle specific error messages
       const errorMessage =
