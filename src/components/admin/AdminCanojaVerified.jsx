@@ -38,6 +38,20 @@ function formatExpirationDate(value) {
   return expirationDate(value)?.toLocaleDateString("en-US", FMT) || "Not provided";
 }
 
+function governmentSourceLabel(record) {
+  const labels = {
+    "bc-lcrb": "British Columbia LCRB",
+    aglc: "Alberta AGLC",
+    "ontario-agco": "Ontario AGCO",
+    "michigan-cra": "Michigan CRA",
+    state_db: "Official state database",
+    manual: "Manual verification",
+    ai_verified: "AI verified",
+  };
+  const source = record.government_source?.provider || record.sourceType;
+  return labels[source] || record.regulatory_body || source;
+}
+
 // ── Badges ────────────────────────────────────────────────────────────────────
 function BadgeStatus({ status }) {
   const map = {
@@ -221,7 +235,7 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
               <DetailRow label="Expires" value={formatExpirationDate(rawRecord.expiration_date)} />
               <DetailRow
                 label="Source"
-                value={rawRecord.sourceType || rawRecord.government_source?.provider}
+                value={governmentSourceLabel(rawRecord)}
                 href={rawRecord.government_source?.url}
               />
               <DetailRow label="Risk Flag" value={rawRecord.riskFlag} />

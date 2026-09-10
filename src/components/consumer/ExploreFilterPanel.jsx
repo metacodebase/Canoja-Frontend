@@ -4,7 +4,7 @@ import FilterLocation from "./FilterLocation";
 import { EMPTY_FILTERS } from "./filterConfig";
 import MaterialIcon from "./MaterialIcon";
 
-const ExploreFilterPanel = ({ value, onApply, onClose }) => {
+const ExploreFilterPanel = ({ value, onApply, onClose, showSpotlight }) => {
   const [draft, setDraft] = useState(value);
   useEffect(() => setDraft(value), [value]);
   const setField = (key, fieldValue) => setDraft((current) => ({ ...current, [key]: fieldValue }));
@@ -18,7 +18,7 @@ const ExploreFilterPanel = ({ value, onApply, onClose }) => {
         </header>
         <div className="filter-panel__body">
           <FilterLocation draft={draft} setField={setField} />
-          <FilterCategories draft={draft} setDraft={setDraft} />
+          <FilterCategories draft={draft} setDraft={setDraft} showSpotlight={showSpotlight} />
         </div>
         <footer className="filter-panel__footer">
           <button className="filter-reset" onClick={() => setDraft({ ...EMPTY_FILTERS })}><MaterialIcon name="refresh" /> Reset</button>

@@ -20,6 +20,7 @@ const ConsumerAllShops = () => {
   const filters = state?.filters || EMPTY_FILTERS;
   const sort = state?.sort || "";
   const query = state?.query?.trim() || "";
+  const showSpotlight = state?.showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier);
   const [shops, setShops] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -42,18 +43,22 @@ const ConsumerAllShops = () => {
     try {
       const result = await searchShops(payload);
       if (cancelled()) return;
-      const nextShops = result?.data?.shops || [];
+      const resultShops = result?.data?.shops || [];
+      const nextShops = resultShops.filter(
+        (shop) => !showSpotlight || shop.featured !== true,
+      );
       setShops((current) => {
         const known = new Set(current.map(getShopKey));
-        return [...current, ...nextShops.filter((shop) => !known.has(getShopKey(shop)))];
+        return [...current, ...nextShops.filter((shop) => !known.has(getShopKey(shop)))]
+          .sort((a, b) => Number(b.featured === true) - Number(a.featured === true));
       });
-      setHasMore(result?.data?.pagination?.has_more ?? nextShops.length === 10);
+      setHasMore(result?.data?.pagination?.has_more ?? resultShops.length === 10);
     } catch {
       if (!cancelled()) setHasMore(false);
     } finally {
       if (!cancelled()) setLoading(false);
     }
-  }, [coords, filters, locating, query, sort]);
+  }, [coords, filters, locating, query, showSpotlight, sort]);
 
   useEffect(() => {
     let cancelled = false;

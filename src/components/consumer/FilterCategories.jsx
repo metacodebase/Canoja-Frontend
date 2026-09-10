@@ -9,7 +9,7 @@ const FILTERS = [
   ["spotlight", "Spotlight"],
 ];
 
-const FilterCategories = ({ draft, setDraft }) => {
+const FilterCategories = ({ draft, setDraft, showSpotlight }) => {
   const toggle = (key) => setDraft((current) => ({
     ...current,
     [key]: !current[key],
@@ -20,7 +20,7 @@ const FilterCategories = ({ draft, setDraft }) => {
   return (
     <section className="filter-block category-block">
       <strong>Business Filters</strong>
-      {FILTERS.map(([key, label]) => (
+      {FILTERS.filter(([key]) => key !== "spotlight" || showSpotlight).map(([key, label]) => (
         <div key={key}>
           <button className="filter-check" onClick={() => toggle(key)}>
             <span className={`mobile-checkbox${draft[key] ? " checked" : ""}`}>{draft[key] && <MaterialIcon name="check" size={16} color="#fff" />}</span>

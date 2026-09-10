@@ -13,10 +13,13 @@ import useExploreState from "./useExploreState";
 import useSpotlightShops from "./useSpotlightShops";
 import useAdminTheme from "../admin/useAdminTheme";
 import { resolveLocationSearch } from "./locationSearch";
+import { useAuth } from "../../context/AuthContext";
 import "./consumerExplore.css";
 
-const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight = true }) => {
+const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const canViewSpotlight = showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier);
   const { theme, toggleTheme } = useAdminTheme();
   const activeTheme = themeOverride || theme;
   const [shops, setShops] = useState(() => getCachedResults("all") || []);
@@ -26,12 +29,18 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight = true
   const [mapLimit, setMapLimit] = useState(50);
   const { filters, setFilters, query, setQuery, view, setView, sort, setSort } = useExploreState();
   const { coords, locating, locationError } = useBrowserLocation();
-  const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords, showSpotlight);
+  const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords, canViewSpotlight);
   const openShop = useCallback((shop) => {
     const businessId = shop._id || shop.place_id || shop.id || "selected";
     sessionStorage.setItem("selectedBusiness", JSON.stringify(shop));
     navigate(`/business/${encodeURIComponent(businessId)}`, { state: { business: shop } });
   }, [navigate]);
+
+  useEffect(() => {
+    if (!canViewSpotlight && filters.spotlight) {
+      setFilters((current) => ({ ...current, spotlight: false }));
+    }
+  }, [canViewSpotlight, filters.spotlight, setFilters]);
 
   useEffect(() => {
     let cancelled = false;
@@ -87,12 +96,16 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight = true
     const term = query.trim().toLowerCase();
     const filtered = shops.filter((shop) => {
       const matchesSearch = activeSearchLocation || !term || `${shop.name} ${shop.address} ${shop.found_by_query}`.toLowerCase().includes(term);
-      return matchesSearch;
+      return matchesSearch && (!canViewSpotlight || shop.featured !== true);
     });
-    return [...filtered].sort((a, b) => sort === "rating"
-      ? (b.rating || 0) - (a.rating || 0)
-      : sort === "alphabetical" ? (a.name || "").localeCompare(b.name || "") : 0);
-  }, [query, activeSearchLocation, shops, sort]);
+    return [...filtered].sort((a, b) => {
+      const featuredOrder = Number(b.featured === true) - Number(a.featured === true);
+      if (featuredOrder) return featuredOrder;
+      return sort === "rating"
+        ? (b.rating || 0) - (a.rating || 0)
+        : sort === "alphabetical" ? (a.name || "").localeCompare(b.name || "") : 0;
+    });
+  }, [query, activeSearchLocation, shops, sort, canViewSpotlight]);
 
   return (
     <div className={embedded ? "consumer-theme" : `admin-theme operator-theme admin-theme--${theme}`}>
@@ -100,15 +113,15 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight = true
         <div className="consumer-shell">
         <ExploreHeader view={view} onViewChange={setView} theme={activeTheme} onThemeToggle={toggleTheme} />
         <ExploreControls query={query} onQueryChange={setQuery} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
-        {filtersOpen && <ExploreFilterPanel value={filters} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setFilters(nextFilters); setFiltersOpen(false); }} />}
+        {filtersOpen && <ExploreFilterPanel value={filters} showSpotlight={canViewSpotlight} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setFilters(nextFilters); setFiltersOpen(false); }} />}
         {view === "map" ? <ExploreMap shops={visibleShops} coords={mapCoords} locating={!hasSelectedLocation && locating} locationError={hasSelectedLocation ? "" : locationError} onShopSelect={openShop} theme={activeTheme} canLoadMore={shops.length >= mapLimit && mapLimit < 1000} nextLimit={Math.min(mapLimit + 50, 1000)} onLoadMore={() => setMapLimit(limit => Math.min(limit + 50, 1000))} /> : <>
-          {showSpotlight && <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={spotlightLoading || (!(filters.region || filters.zipCode || filters.state) && locating)} />}
+          {canViewSpotlight && <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={spotlightLoading || (!(filters.region || filters.zipCode || filters.state) && locating)} />}
           <ExploreSection
             title="All"
             shops={visibleShops.slice(0, 6)}
             emptyText={locationError || "No operators found near this location."}
             loading={loading}
-            onSeeAll={() => navigate("/explore/all", { state: { filters, sort, query } })}
+            onSeeAll={() => navigate("/explore/all", { state: { filters, sort, query, showSpotlight: canViewSpotlight } })}
           />
         </>}
         </div>
