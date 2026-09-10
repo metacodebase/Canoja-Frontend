@@ -13,6 +13,7 @@ import { useQueryClient, useQuery } from "@tanstack/react-query";
 import api from "../../services/api";
 import { toast } from "react-toastify";
 import { BadgeCheck, Clock3, Eye, Search, ShieldX } from "lucide-react";
+import CanojaVerifiedBadge from "../CanojaVerifiedBadge";
 
 const C = {
   border: "#dce7e1",
@@ -139,11 +140,17 @@ function RenewModal({ record, onClose, onConfirm, loading }) {
 }
 
 // ── Detail drawer ─────────────────────────────────────────────────────────────
-function DetailRow({ label, value }) {
+function DetailRow({ label, value, href }) {
   return (
     <div className="admin-detail-row" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
       <span style={{ fontSize: "12px", fontWeight: 700, color: "#617182", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</span>
-      <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>
+      {href ? (
+        <a href={href} target="_blank" rel="noopener noreferrer" style={{ fontSize: "14px", color: C.green, fontWeight: 700 }}>
+          {value || "Official source"} ↗
+        </a>
+      ) : (
+        <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>
+      )}
     </div>
   );
 }
@@ -171,6 +178,7 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
               </p>
             </div>
             <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
+              {rawRecord.canojaVerified && <CanojaVerifiedBadge size={48} />}
               <BadgeStatus status={record.badgeStatus} />
               <button onClick={onClose} style={{ background: "none", border: "0.8px solid #dce7e1", borderRadius: "8px", width: "32px", height: "32px", cursor: "pointer", fontSize: "16px", color: "#617182" }}>✕</button>
             </div>
@@ -211,7 +219,11 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
               <DetailRow label="Type" value={rawRecord.license_type} />
               <DetailRow label="Status" value={rawRecord.license_status} />
               <DetailRow label="Expires" value={formatExpirationDate(rawRecord.expiration_date)} />
-              <DetailRow label="Source" value={rawRecord.sourceType} />
+              <DetailRow
+                label="Source"
+                value={rawRecord.sourceType || rawRecord.government_source?.provider}
+                href={rawRecord.government_source?.url}
+              />
               <DetailRow label="Risk Flag" value={rawRecord.riskFlag} />
             </div>
           </div>
@@ -222,8 +234,8 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
               <DetailRow label="City" value={rawRecord.city} />
               <DetailRow label="State" value={rawRecord.stateName} />
-              <DetailRow label="Address" value={rawRecord.address} />
-              <DetailRow label="Zip" value={rawRecord.zip} />
+              <DetailRow label="Address" value={rawRecord.business_address || rawRecord.address} />
+              <DetailRow label="Zip" value={rawRecord.postal_code || rawRecord.zip} />
             </div>
           </div>
 

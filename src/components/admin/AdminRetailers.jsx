@@ -238,7 +238,8 @@ function RetailerDrawer({ record, onClose, onSaved, onDeleted }) {
   const isExpired = exp && exp.getTime() < now;
   const isExpiring = exp && !isExpired && (exp.getTime() - now) < 30 * 86400000;
 
-  const vrLabel = vr?.status === "approved" && vr?.method === "manual" ? "Admin Verified"
+  const vrLabel = record?.canojaVerified ? "Verified"
+    : vr?.status === "approved" && vr?.method === "manual" ? "Admin Verified"
     : vr?.status === "auto_verified" ? "Auto Verified"
       : vr?.status === "pending" ? "Pending"
         : record?.claimed ? "Verified" : "Unverified";
