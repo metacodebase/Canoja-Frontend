@@ -178,7 +178,7 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
               </p>
             </div>
             <div style={{ display: "flex", gap: "8px", flexShrink: 0 }}>
-              {rawRecord.canojaVerified && <CanojaVerifiedBadge size={48} />}
+              {record.badgeStatus !== "Revoked" && <CanojaVerifiedBadge size={48} />}
               <BadgeStatus status={record.badgeStatus} />
               <button onClick={onClose} style={{ background: "none", border: "0.8px solid #dce7e1", borderRadius: "8px", width: "32px", height: "32px", cursor: "pointer", fontSize: "16px", color: "#617182" }}>✕</button>
             </div>
