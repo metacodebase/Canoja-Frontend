@@ -44,6 +44,7 @@ function governmentSourceLabel(record) {
     aglc: "Alberta AGLC",
     "ontario-agco": "Ontario AGCO",
     "michigan-cra": "Michigan CRA",
+    "colorado-med": "Colorado MED",
     state_db: "Official state database",
     manual: "Manual verification",
     ai_verified: "AI verified",
@@ -631,10 +632,11 @@ export default function AdminCanojaVerified() {
       title: "Business",
       dataIndex: "name",
       key: "name",
+      width: 360,
       render: (_, row) => (
-        <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <span style={{ fontWeight: 700, fontSize: "15.36px", color: C.textPrimary }}>{row.name}</span>
-          <span style={{ fontSize: "13px", color: C.textSecondary }}>{row.sub}</span>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "328px", minWidth: 0 }}>
+          <span title={row.name} style={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: 700, fontSize: "15.36px", color: C.textPrimary }}>{row.name}</span>
+          <span title={row.sub} style={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontSize: "13px", color: C.textSecondary }}>{row.sub}</span>
         </div>
       ),
     },
