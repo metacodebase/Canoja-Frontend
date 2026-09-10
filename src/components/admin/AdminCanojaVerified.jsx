@@ -260,6 +260,8 @@ function VerifiedDrawer({ record, rawRecord, onClose, onRevoke, onRenew, revokin
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
               <DetailRow label="Phone" value={rawRecord.contact_information?.phone} />
               <DetailRow label="Email" value={rawRecord.contact_information?.email} />
+              <DetailRow label="Website" value={rawRecord.contact_information?.website} href={rawRecord.contact_information?.website} />
+              <DetailRow label="Owner" value={rawRecord.owner?.name || rawRecord.operator_name} />
             </div>
           </div>
 

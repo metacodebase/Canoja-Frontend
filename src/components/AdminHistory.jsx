@@ -199,9 +199,12 @@ const AdminHistory = () => {
                 <DetailRow label="Business Type" value={selectedRequest.business_type === "cannabis_operator" ? "Cannabis Operator" : selectedRequest.business_type === "smoke_shop" ? "Smoke Shop" : selectedRequest.business_type} />
                 <DetailRow label="Verification Method" value={selectedRequest.verification_method === "auto" ? "Auto" : "Manual"} />
                 <DetailRow label="Status" value={selectedRequest.status === "auto_verified" ? "Auto Verified" : selectedRequest.status ? selectedRequest.status.charAt(0).toUpperCase() + selectedRequest.status.slice(1) : null} />
-                <DetailRow label="Address" value={selectedRequest.physical_address} />
-                <DetailRow label="Phone" value={selectedRequest.business_phone_number} />
-                <DetailRow label="Website" value={selectedRequest.website_or_social_media_link} />
+                <DetailRow label="Address" value={selectedRequest.business_profile?.business_address || selectedRequest.physical_address} />
+                <DetailRow label="City / State" value={[selectedRequest.business_profile?.city, selectedRequest.business_profile?.stateName].filter(Boolean).join(", ")} />
+                <DetailRow label="Phone" value={selectedRequest.business_profile?.contact_information?.phone || selectedRequest.business_phone_number} />
+                <DetailRow label="Email" value={selectedRequest.business_profile?.contact_information?.email || selectedRequest.contact_person?.email_address} />
+                <DetailRow label="Website" value={selectedRequest.business_profile?.contact_information?.website || selectedRequest.website_or_social_media_link} />
+                <DetailRow label="Source Link" value={selectedRequest.business_profile?.government_source?.url ? <a href={selectedRequest.business_profile.government_source.url} target="_blank" rel="noopener noreferrer">Official source ↗</a> : null} />
               </div>
               {selectedRequest.contact_person && (
                 <div style={{ marginBottom: 20 }}>
@@ -215,11 +218,12 @@ const AdminHistory = () => {
               {selectedRequest.license_information && (
                 <div style={{ marginBottom: 20 }}>
                   <h3 style={{ fontSize: 14, fontWeight: 600, color: "#1e293b", marginBottom: 10, borderBottom: "2px solid #e2e8f0", paddingBottom: 6 }}>License Information</h3>
-                  <DetailRow label="License Number" value={selectedRequest.license_information.license_number} />
-                  <DetailRow label="Issuing Authority" value={selectedRequest.license_information.issuing_authority} />
-                  <DetailRow label="License Type" value={selectedRequest.license_information.license_type} />
-                  <DetailRow label="Jurisdiction" value={selectedRequest.license_information.jurisdiction} />
-                  <DetailRow label="Expiration Date" value={selectedRequest.license_information.expiration_date ? new Date(selectedRequest.license_information.expiration_date).toLocaleDateString() : null} />
+                  <DetailRow label="License Number" value={selectedRequest.business_profile?.license_number || selectedRequest.license_information.license_number} />
+                  <DetailRow label="Issuing Authority" value={selectedRequest.business_profile?.regulatory_body || selectedRequest.license_information.issuing_authority} />
+                  <DetailRow label="License Type" value={selectedRequest.business_profile?.license_type || selectedRequest.license_information.license_type} />
+                  <DetailRow label="Status" value={selectedRequest.business_profile?.license_status} />
+                  <DetailRow label="Jurisdiction" value={selectedRequest.business_profile?.jurisdiction || selectedRequest.license_information.jurisdiction} />
+                  <DetailRow label="Expiration Date" value={(selectedRequest.business_profile?.expiration_date || selectedRequest.license_information.expiration_date) ? new Date(selectedRequest.business_profile?.expiration_date || selectedRequest.license_information.expiration_date).toLocaleDateString() : null} />
                 </div>
               )}
               {(selectedRequest.uploaded_documents?.state_license_document || selectedRequest.uploaded_documents?.utility_bill || selectedRequest.contact_person?.government_issued_id_document) && (

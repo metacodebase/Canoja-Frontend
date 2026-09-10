@@ -127,6 +127,16 @@ function ActionBtn({ row }) {
 
 // ── Data mapper ───────────────────────────────────────────────────────────────
 const SOURCE_LABELS = { state_db: "State DB", manual: "Manual", ai_verified: "AI Verified" };
+const governmentSourceLabel = record => ({
+  "bc-lcrb": "British Columbia LCRB",
+  aglc: "Alberta AGLC",
+  "ontario-agco": "Ontario AGCO",
+  "michigan-cra": "Michigan CRA",
+  "colorado-med": "Colorado MED",
+  state_db: "Official state database",
+  manual: "Manual verification",
+  ai_verified: "AI verified",
+}[record.government_source?.provider || record.sourceType] || record.regulatory_body || record.sourceType);
 
 function mapRetailer(r) {
   const now = Date.now();
@@ -354,7 +364,7 @@ function RetailerDrawer({ record, onClose, onSaved, onDeleted }) {
             <div>
               <p className="admin-detail-section-title" style={{ fontSize: "13px", fontWeight: 800, color: "#18212b", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Meta</p>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-                <DetailRow label="Source" value={SOURCE_LABELS[record.sourceType] || record.sourceType} />
+                <DetailRow label="Source" value={governmentSourceLabel(record)} href={record.government_source?.url} />
                 <DetailRow label="Risk Flag" value={record.riskFlag} />
                 <DetailRow label="Completeness" value={record.dataCompletenessScore != null ? `${record.dataCompletenessScore}%` : null} />
                 <DetailRow label="Claimed" value={record.claimed ? `Yes · ${record.claimedAt ? new Date(record.claimedAt).toLocaleDateString() : ""}` : "No"} />

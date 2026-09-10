@@ -177,11 +177,11 @@ function PharmacyCard({ shop: record, onViewProfile }) {
   );
 }
 
-function DetailRow({ label, value }) {
+function DetailRow({ label, value, href }) {
   return (
     <div className="admin-detail-row" style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
       <span style={{ fontSize: "12px", fontWeight: 700, color: "#617182", textTransform: "uppercase", letterSpacing: "0.8px" }}>{label}</span>
-      <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>
+      {href ? <a href={href} target="_blank" rel="noreferrer" style={{ fontSize: "14px", color: C.green, fontWeight: 700 }}>{value || "Open link"} ↗</a> : <span style={{ fontSize: "14px", color: "#18212b" }}>{value || "—"}</span>}
     </div>
   );
 }
@@ -235,6 +235,8 @@ function ProfileDrawer({ record, onClose }) {
               <DetailRow label="Expires" value={record.expiration_date ? new Date(record.expiration_date).toLocaleDateString("en-US", FMT) : null} />
               <DetailRow label="Issue Date" value={record.issue_date ? new Date(record.issue_date).toLocaleDateString("en-US", FMT) : null} />
               <DetailRow label="Rating" value={record.rating ? `${record.rating}★ (${record.reviews || 0} reviews)` : null} />
+              <DetailRow label="Jurisdiction" value={record.jurisdiction || record.stateName} />
+              <DetailRow label="Source" value={record.government_source?.provider || record.sourceType} href={record.government_source?.url} />
             </div>
           </div>
 
@@ -256,6 +258,7 @@ function ProfileDrawer({ record, onClose }) {
               <DetailRow label="Phone" value={record.contact_information?.phone} />
               <DetailRow label="Email" value={record.contact_information?.email} />
               <DetailRow label="Website" value={record.contact_information?.website} />
+              <DetailRow label="Owner" value={record.owner?.name || record.operator_name} />
             </div>
           </div>
 

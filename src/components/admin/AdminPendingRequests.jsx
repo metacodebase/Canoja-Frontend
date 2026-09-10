@@ -168,6 +168,7 @@ function DetailRow({ label, value }) {
 }
 
 function RequestDrawer({ record, onClose, onApprove, onReject, approving, rejecting }) {
+  const profile = record?.business_profile;
   const { data: auditData } = useAdminAuditLog(
     record ? { targetType: "VerificationRequest", targetId: record._id, limit: 20 } : {}
   );
@@ -252,9 +253,12 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Business</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <DetailRow label="Phone" value={record.business_phone_number} />
-              <DetailRow label="Website" value={record.website_or_social_media_link} />
-              <DetailRow label="Address" value={record.physical_address} />
+              <DetailRow label="Phone" value={profile?.contact_information?.phone || record.business_phone_number} />
+              <DetailRow label="Email" value={profile?.contact_information?.email || record.contact_person?.email_address} />
+              <DetailRow label="Website" value={profile?.contact_information?.website || record.website_or_social_media_link} />
+              <DetailRow label="Address" value={profile?.business_address || record.physical_address} />
+              <DetailRow label="City / State" value={[profile?.city, profile?.stateName].filter(Boolean).join(", ")} />
+              <DetailRow label="Source Link" value={profile?.government_source?.url ? <a href={profile.government_source.url} target="_blank" rel="noreferrer">Official source ↗</a> : null} />
             </div>
           </div>
 
@@ -262,10 +266,12 @@ function RequestDrawer({ record, onClose, onApprove, onReject, approving, reject
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <DetailRow label="License #" value={record.license_information?.license_number} />
-              <DetailRow label="Type" value={record.license_information?.license_type} />
-              <DetailRow label="Authority" value={record.license_information?.issuing_authority} />
-              <DetailRow label="Jurisdiction" value={record.license_information?.jurisdiction} />
+              <DetailRow label="License #" value={profile?.license_number || record.license_information?.license_number} />
+              <DetailRow label="Type" value={profile?.license_type || record.license_information?.license_type} />
+              <DetailRow label="Status" value={profile?.license_status} />
+              <DetailRow label="Authority" value={profile?.regulatory_body || record.license_information?.issuing_authority} />
+              <DetailRow label="Jurisdiction" value={profile?.jurisdiction || record.license_information?.jurisdiction} />
+              <DetailRow label="Expires" value={(profile?.expiration_date || record.license_information?.expiration_date) ? new Date(profile?.expiration_date || record.license_information.expiration_date).toLocaleDateString() : null} />
             </div>
           </div>
 

@@ -197,6 +197,7 @@ function VRDetailRow({ label, value }) {
 }
 
 function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, reviewerMode, onNext, onPrev, hasNext, hasPrev, reviewerIndex, reviewerTotal }) {
+  const profile = record?.business_profile;
   const { data: auditData } = useAdminAuditLog(
     record ? { targetType: "VerificationRequest", targetId: record._id, limit: 20 } : {}
   );
@@ -296,9 +297,12 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Business</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <VRDetailRow label="Phone" value={record.business_phone_number} />
-              <VRDetailRow label="Website" value={record.website_or_social_media_link} />
-              <VRDetailRow label="Address" value={record.physical_address} />
+              <VRDetailRow label="Phone" value={profile?.contact_information?.phone || record.business_phone_number} />
+              <VRDetailRow label="Email" value={profile?.contact_information?.email || record.contact_person?.email_address} />
+              <VRDetailRow label="Website" value={profile?.contact_information?.website || record.website_or_social_media_link} />
+              <VRDetailRow label="Address" value={profile?.business_address || record.physical_address} />
+              <VRDetailRow label="City / State" value={[profile?.city, profile?.stateName].filter(Boolean).join(", ")} />
+              <VRDetailRow label="Source Link" value={profile?.government_source?.url ? <a href={profile.government_source.url} target="_blank" rel="noreferrer">Official source ↗</a> : null} />
             </div>
           </div>
 
@@ -306,11 +310,12 @@ function VRDrawer({ record, onClose, onApprove, onReject, approving, rejecting, 
           <div>
             <p style={{ fontSize: "13px", fontWeight: 800, color: C.textPrimary, textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>License</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px" }}>
-              <VRDetailRow label="License #" value={record.license_information?.license_number} />
-              <VRDetailRow label="Type" value={record.license_information?.license_type} />
-              <VRDetailRow label="Authority" value={record.license_information?.issuing_authority} />
-              <VRDetailRow label="Jurisdiction" value={record.license_information?.jurisdiction} />
-              <VRDetailRow label="Expires" value={record.license_information?.expiration_date ? new Date(record.license_information.expiration_date).toLocaleDateString() : null} />
+              <VRDetailRow label="License #" value={profile?.license_number || record.license_information?.license_number} />
+              <VRDetailRow label="Type" value={profile?.license_type || record.license_information?.license_type} />
+              <VRDetailRow label="Status" value={profile?.license_status} />
+              <VRDetailRow label="Authority" value={profile?.regulatory_body || record.license_information?.issuing_authority} />
+              <VRDetailRow label="Jurisdiction" value={profile?.jurisdiction || record.license_information?.jurisdiction} />
+              <VRDetailRow label="Expires" value={(profile?.expiration_date || record.license_information?.expiration_date) ? new Date(profile?.expiration_date || record.license_information.expiration_date).toLocaleDateString() : null} />
             </div>
           </div>
 
