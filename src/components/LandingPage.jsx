@@ -15,18 +15,28 @@ function SearchPanel() {
   const { user } = useAuth();
   const [tab, setTab] = useState("operators");
   const [location, setLocation] = useState("Denver, CO");
+  const [licenseLocation, setLicenseLocation] = useState("");
+  const [licenseNumber, setLicenseNumber] = useState("");
   const explorePath = user?.role === "operator" ? "/operator/explore" : "/explore";
-  const submit = (event) => { event.preventDefault(); navigate(`${explorePath}?location=${encodeURIComponent(location)}`); };
+  const submit = (event) => {
+    event.preventDefault();
+    const params = new URLSearchParams();
+    const selectedLocation = tab === "licenses" ? licenseLocation : location;
+    if (selectedLocation.trim()) params.set("location", selectedLocation.trim());
+    if (tab === "licenses") params.set("license", licenseNumber.trim());
+    navigate(`${explorePath}?${params.toString()}`);
+  };
   return <form className="landing-search" onSubmit={submit}>
     <div className="landing-search__tabs" role="tablist">
       <button type="button" className={tab === "operators" ? "active" : ""} onClick={() => setTab("operators")}>Explore Operators</button>
       <button type="button" className={tab === "licenses" ? "active" : ""} onClick={() => setTab("licenses")}>Search Licenses</button>
     </div>
-    <label>Location or operator name<input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="City, state, or operator" /></label>
-    <div className="landing-search__row">
+    <label>{tab === "licenses" ? "Location (optional)" : "Location or operator name"}<input value={tab === "licenses" ? licenseLocation : location} onChange={(e) => tab === "licenses" ? setLicenseLocation(e.target.value) : setLocation(e.target.value)} placeholder={tab === "licenses" ? "City or state (optional)" : "City, state, or operator"} /></label>
+    {tab === "licenses" && <label className="landing-search__license">License number<input required value={licenseNumber} onChange={(e) => setLicenseNumber(e.target.value)} placeholder="Enter license number" /></label>}
+    {tab === "operators" && <div className="landing-search__row">
       <label>Operator type<span className="select-field">All Operators <ChevronDown size={19} /></span></label>
       <label>Distance<span className="select-field">Within 10 Miles <ChevronDown size={19} /></span></label>
-    </div>
+    </div>}
     <button className="primary-button landing-search__submit" type="submit">{tab === "operators" ? "Explore Operators" : "Search Licenses"}</button>
     <p>Canoja does not issue cannabis licenses. Official determinations remain with the applicable regulatory authority.</p>
   </form>;
