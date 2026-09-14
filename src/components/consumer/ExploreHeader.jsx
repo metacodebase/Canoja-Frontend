@@ -13,7 +13,7 @@ const ExploreHeader = ({ view, onViewChange, theme, onThemeToggle }) => {
   return (
     <>
       <header className="consumer-header">
-        <button className="consumer-brand" onClick={() => navigate("/explore")}>
+        <button className="consumer-brand" onClick={() => navigate("/")} aria-label="Go to Canoja home">
           <img src={canojaLogo} alt="" />
           <span>Canoja</span>
         </button>
