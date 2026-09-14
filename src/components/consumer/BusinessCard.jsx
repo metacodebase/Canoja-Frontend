@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import canojaShop from "../../assets/canoja-shop.png";
 
 const getImage = (shop) => shop.photo_url || shop.photos?.[0]?.url || shop.image;
@@ -6,12 +6,15 @@ const getDistance = (shop) => shop.distance_miles ?? shop.distance ?? shop.dista
 
 const BusinessCard = ({ shop, spotlight = false }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const image = getImage(shop);
   const distance = getDistance(shop);
   const status = shop.open_now === true ? "Open" : shop.open_now === false ? "Closed" : "N/A";
   const isFeatured = spotlight || shop.featured || shop.spotlight;
   const businessId = shop._id || shop.place_id || shop.id;
   const openDetails = () => {
+    const scrollKey = location.pathname === "/explore/all" ? "consumerAllShopsScrollY" : "consumerExploreScrollY";
+    sessionStorage.setItem(scrollKey, String(window.scrollY));
     sessionStorage.setItem("selectedBusiness", JSON.stringify(shop));
     navigate(`/business/${encodeURIComponent(businessId || "selected")}`, { state: { business: shop } });
   };

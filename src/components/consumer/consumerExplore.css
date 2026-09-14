@@ -85,7 +85,10 @@
 .business-list > div .consumer-business-card { height: 100%; box-sizing: border-box; }
 .section-heading { display: flex; align-items: center; justify-content: space-between; }
 .section-heading h2 { margin: 0 0 14px; color: #fff; font-size: 18px; }
-.section-heading button { border: 0; background: transparent; color: #fff; font-size: 28px; }
+.section-heading__actions { display: flex; align-items: center; gap: 12px; }
+.section-refreshing { margin: 0 0 14px; color: #8fa19b; font-size: 12px; }
+.section-heading button { display: flex; align-items: center; gap: 8px; margin: 0 0 14px; border: 0; background: transparent; color: #fff; font-size: 14px; font-weight: 700; cursor: pointer; }
+.section-heading button b { font-size: 28px; font-weight: 400; line-height: .7; }
 .business-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 .spotlight-list { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(300px, 42%); gap: 14px; overflow-x: auto; margin-top: -8px; padding: 10px 0 16px; scroll-behavior: smooth; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
 .spotlight-list::-webkit-scrollbar { display: none; }

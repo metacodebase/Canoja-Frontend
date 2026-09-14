@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { searchShops } from "../../services/api";
 import ExploreControls from "./ExploreControls";
@@ -18,6 +18,7 @@ import "./consumerExplore.css";
 
 const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => {
   const navigate = useNavigate();
+  const scrollRestored = useRef(false);
   const { user } = useAuth();
   const canViewSpotlight = showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier);
   const { theme, toggleTheme } = useAdminTheme();
@@ -32,9 +33,19 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => 
   const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords, canViewSpotlight);
   const openShop = useCallback((shop) => {
     const businessId = shop._id || shop.place_id || shop.id || "selected";
+    sessionStorage.setItem("consumerExploreScrollY", String(window.scrollY));
     sessionStorage.setItem("selectedBusiness", JSON.stringify(shop));
     navigate(`/business/${encodeURIComponent(businessId)}`, { state: { business: shop } });
   }, [navigate]);
+
+  useEffect(() => {
+    if (scrollRestored.current || loading || view !== "list") return;
+    scrollRestored.current = true;
+    const savedScrollY = Number(sessionStorage.getItem("consumerExploreScrollY"));
+    sessionStorage.removeItem("consumerExploreScrollY");
+    if (!Number.isFinite(savedScrollY) || savedScrollY <= 0) return;
+    requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: savedScrollY, behavior: "instant" })));
+  }, [loading, shops.length, view]);
 
   useEffect(() => {
     if (!canViewSpotlight && filters.spotlight) {

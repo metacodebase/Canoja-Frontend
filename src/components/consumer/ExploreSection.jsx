@@ -20,11 +20,12 @@ const ExploreSection = ({ title, shops, spotlight = false, emptyText, loading, o
     <section className={`consumer-section${spotlight ? " spotlight-section" : ""}`}>
       <div className="section-heading">
         <h2>{title}</h2>
-        {onSeeAll && <button aria-label={`See all ${title}`} onClick={onSeeAll}>›</button>}
+        <div className="section-heading__actions">
+          {loading && shops.length > 0 && <span className="section-refreshing">Refreshing…</span>}
+          {onSeeAll && <button aria-label={`See all ${title}`} onClick={onSeeAll}><span>See All</span><b aria-hidden="true">›</b></button>}
+        </div>
       </div>
-      {loading ? (
-        <div className="consumer-state">Finding operators near you…</div>
-      ) : shops.length ? (
+      {shops.length ? (
         <div
           ref={listRef}
           className={spotlight ? "spotlight-list" : "business-list"}
@@ -36,6 +37,8 @@ const ExploreSection = ({ title, shops, spotlight = false, emptyText, loading, o
           onTouchEnd={() => setPaused(false)}>
           {shops.map((shop, index) => <BusinessCard key={shop._id || shop.place_id || index} shop={shop} spotlight={spotlight} />)}
         </div>
+      ) : loading ? (
+        <div className="consumer-state">Finding operators near you…</div>
       ) : (
         <div className="consumer-state">{emptyText}</div>
       )}

@@ -5,15 +5,18 @@ import canojaWordmark from "../assets/canoja-wordmark.png";
 import LandingSections from "./LandingSections";
 import LandingMoreSections from "./LandingMoreSections";
 import LandingAgeGate from "./LandingAgeGate";
+import { useAuth } from "../context/AuthContext";
 import "./landingPage.css";
 
 const navItems = ["Home", "Discover", "License Search", "Why Canoja", "For Operators", "Mobile App", "Platform Roadmap"];
 
 function SearchPanel() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [tab, setTab] = useState("operators");
   const [location, setLocation] = useState("Denver, CO");
-  const submit = (event) => { event.preventDefault(); navigate(`/explore?location=${encodeURIComponent(location)}`); };
+  const explorePath = user?.role === "operator" ? "/operator/explore" : "/explore";
+  const submit = (event) => { event.preventDefault(); navigate(`${explorePath}?location=${encodeURIComponent(location)}`); };
   return <form className="landing-search" onSubmit={submit}>
     <div className="landing-search__tabs" role="tablist">
       <button type="button" className={tab === "operators" ? "active" : ""} onClick={() => setTab("operators")}>Explore Operators</button>
@@ -30,7 +33,9 @@ function SearchPanel() {
 }
 
 export default function LandingPage() {
+  const { user } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const explorePath = user?.role === "operator" ? "/operator/explore" : "/explore";
   return <main className="landing">
     <LandingAgeGate />
     <div className="landing-strip">Verified. Trusted. Connected. · Cannabis Discovery · License Visibility · Operator Profiles</div>
@@ -45,7 +50,7 @@ export default function LandingPage() {
         <div className="eyebrow"><span />Verified. Trusted. Connected.</div>
         <h1>Discover licensed<br />cannabis businesses<br />with <em>confidence.</em></h1>
         <p>Canoja is a compliance-first cannabis technology platform that helps adult consumers discover licensed dispensaries and operators, review public license information, and connect directly with trusted cannabis businesses.</p>
-        <div className="landing-actions"><Link className="primary-button" to="/explore">Explore Operators</Link><a href="/explore">Verify a License</a><a href="#mobile-app">Get the Mobile App</a></div>
+        <div className="landing-actions"><Link className="primary-button" to={explorePath}>Explore Operators</Link><Link to={explorePath}>Verify a License</Link><a href="#mobile-app">Get the Mobile App</a></div>
         <div className="landing-trust"><span><i />Public license visibility</span><span><i />Clear verification indicators</span><span><i />Built for future compliance</span></div>
       </div>
       <SearchPanel />

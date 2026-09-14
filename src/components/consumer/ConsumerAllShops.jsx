@@ -11,6 +11,9 @@ import { useAuth } from "../../context/AuthContext";
 import "./consumerExplore.css";
 
 const getShopKey = (shop) => shop._id || shop.place_id || shop.id;
+const readAllShopsCache = () => {
+  try { return JSON.parse(sessionStorage.getItem("consumerAllShopsState")); } catch { return null; }
+};
 
 const ConsumerAllShops = () => {
   const navigate = useNavigate();
@@ -21,12 +24,27 @@ const ConsumerAllShops = () => {
   const sort = state?.sort || "";
   const query = state?.query?.trim() || "";
   const showSpotlight = state?.showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier);
-  const [shops, setShops] = useState([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const cacheKey = JSON.stringify({ filters, sort, query, showSpotlight });
+  const cachedState = useRef(readAllShopsCache()).current;
+  const matchingCache = cachedState?.cacheKey === cacheKey ? cachedState : null;
+  const [shops, setShops] = useState(() => matchingCache?.shops || []);
+  const [page, setPage] = useState(() => matchingCache?.page || 1);
+  const [hasMore, setHasMore] = useState(() => matchingCache?.hasMore ?? true);
   const [loading, setLoading] = useState(false);
   const observer = useRef(null);
   const { coords, locating, locationError } = useBrowserLocation();
+
+  useEffect(() => {
+    sessionStorage.setItem("consumerAllShopsState", JSON.stringify({ cacheKey, shops, page, hasMore }));
+  }, [cacheKey, hasMore, page, shops]);
+
+  useEffect(() => {
+    if (!shops.length) return;
+    const savedScrollY = Number(sessionStorage.getItem("consumerAllShopsScrollY"));
+    sessionStorage.removeItem("consumerAllShopsScrollY");
+    if (!Number.isFinite(savedScrollY) || savedScrollY <= 0) return;
+    requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: savedScrollY, behavior: "instant" })));
+  }, [shops.length]);
 
   const loadPage = useCallback(async (pageNumber, cancelled = () => false) => {
     setLoading(true);
