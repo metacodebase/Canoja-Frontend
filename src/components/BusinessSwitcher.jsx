@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Store } from "lucide-react";
+import { ArrowLeft, Store } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import useAdminTheme from "./admin/useAdminTheme";
@@ -17,14 +17,24 @@ const BusinessSwitcher = () => {
     navigate("/operator/dashboard", { replace: true });
   };
 
+  const handleBack = () => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate("/operator/dashboard", { replace: true });
+  };
+
   return (
     <main style={{ ...styles.page, ...(light ? lightStyles.page : {}) }}>
       <section style={styles.panel}>
         <header style={styles.header}>
-          <h1 style={{ ...styles.title, ...(light ? lightStyles.title : {}) }}>Switch Business</h1>
-          <p style={{ ...styles.subtitle, ...(light ? lightStyles.subtitle : {}) }}>
-            Choose which of your {businesses.length} linked businesses you want to manage.
-          </p>
+          <button type="button" onClick={handleBack} style={{ ...styles.backButton, ...(light ? lightStyles.backButton : {}) }} aria-label="Go back">
+            <ArrowLeft size={22} strokeWidth={2.2} />
+          </button>
+          <div>
+            <h1 style={{ ...styles.title, ...(light ? lightStyles.title : {}) }}>Switch Business</h1>
+            <p style={{ ...styles.subtitle, ...(light ? lightStyles.subtitle : {}) }}>
+              Choose which of your {businesses.length} linked businesses you want to manage.
+            </p>
+          </div>
         </header>
 
         <div style={styles.list}>
@@ -62,7 +72,8 @@ const styles = {
   page: { minHeight: "100dvh", background: "#032326", display: "grid", alignItems: "start", justifyItems: "center", padding: "clamp(32px, 10vh, 96px) clamp(16px, 5vw, 32px)", boxSizing: "border-box", fontFamily: "system-ui, -apple-system, sans-serif" },
   panel: { width: "100%", maxWidth: "620px", minWidth: 0 },
   brand: { color: "#34d399", fontSize: "24px", fontWeight: 800, marginBottom: "48px", display: "flex", alignItems: "center", gap: "10px" },
-  header: { marginBottom: "24px" },
+  header: { marginBottom: "24px", display: "flex", alignItems: "flex-start", gap: "12px" },
+  backButton: { width: "40px", height: "40px", flexShrink: 0, display: "grid", placeItems: "center", borderRadius: "11px", border: "1px solid rgba(255,255,255,.12)", background: "rgba(255,255,255,.08)", color: "#fff", cursor: "pointer" },
   title: { color: "#fff", fontSize: "clamp(28px, 8vw, 32px)", fontWeight: 800, lineHeight: 1.2, margin: "0 0 8px", letterSpacing: "-0.5px" },
   subtitle: { color: "rgba(255,255,255,0.55)", fontSize: "15px", lineHeight: 1.5, margin: 0 },
   list: { display: "grid", gap: "12px" },
@@ -79,6 +90,7 @@ const lightStyles = {
   page: { background: "radial-gradient(circle at top, #f7fcf9 0%, #edf6f1 100%)" },
   title: { color: "#17372c" },
   subtitle: { color: "#617a70" },
+  backButton: { border: "1px solid rgba(23,55,44,.14)", background: "rgba(255,255,255,.82)", color: "#17372c", boxShadow: "0 4px 12px rgba(23,55,44,.08)" },
   card: { border: "1px solid rgba(110,255,178,.32)", background: "linear-gradient(155deg, #1b6b46 0%, #2eb870 100%)", color: "#fff", boxShadow: "0 8px 20px rgba(0,219,77,.14), 0 0 12px rgba(46,184,112,.12), inset 0 1px 0 rgba(255,255,255,.06)" },
   icon: { background: "rgba(255,255,255,.16)", color: "#fff" },
   name: { color: "#fff" },

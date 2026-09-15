@@ -65,8 +65,14 @@ const OperatorProfile = () => {
             <section className="operator-profile-card">
               <div className="operator-profile-card__heading"><span className="green"><Camera size={22} /></span><div><h2>Business Photo</h2><p>This photo appears on your public profile.</p></div></div>
               <div className="operator-profile-photo">
-                <div className="operator-profile-photo__preview">{photoPreview ? <img src={photoPreview} alt="Business profile preview" /> : <Image size={38} />}</div>
-                <div><h3>{photo ? photo.name : photoPreview ? "Current business photo" : "No photo uploaded yet"}</h3><p>JPEG or PNG, maximum 10 MB. A new upload replaces the current photo.</p><label><Camera size={16} />{photoPreview ? "Replace photo" : "Choose photo"}<input type="file" accept="image/jpeg,image/png" onChange={selectPhoto} hidden /></label>{photo && <button type="button" onClick={() => setPhoto(null)}>Remove selection</button>}</div>
+                <div className="operator-profile-photo__preview" style={{
+                  backgroundColor:'red',
+                  overflow: "hidden",
+                }}>{photoPreview ?
+                   <img style={{ width:"100%"
+                }} src={photoPreview} alt="Business profile preview" /> : <Image size={38} />}</div>
+                <div>
+                  <h3>{photo ? photo.name : photoPreview ? "Current business photo" : "No photo uploaded yet"}</h3><p>JPEG or PNG, maximum 10 MB. A new upload replaces the current photo.</p><label><Camera size={16} />{photoPreview ? "Replace photo" : "Choose photo"}<input type="file" accept="image/jpeg,image/png" onChange={selectPhoto} hidden /></label>{photo && <button type="button" onClick={() => setPhoto(null)}>Remove selection</button>}</div>
               </div>
             </section>
 
