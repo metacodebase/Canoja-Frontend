@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { applyLandingLocation } from "./landingSearchState";
+import { resolveLocationSearch } from "./locationSearch";
 import { EMPTY_FILTERS } from "./filterConfig";
 
 const STORAGE_KEY = "consumerExploreState";
@@ -11,7 +13,8 @@ const loadExploreState = () => {
       const radius = Number(params.get("radius") || 10);
       return {
         filters: { ...EMPTY_FILTERS, radius: Math.min(100, Math.max(1, radius || 10)), cannabis: params.get("type") === "cannabis", smokeShops: params.get("type") === "smoke" },
-        query: params.get("license") ? "" : params.get("location") || "",
+        query: "",
+        initializing: Boolean(params.get("location")?.trim()) && !params.has("license"),
         view: "list", sort: "",
       };
     }
@@ -31,7 +34,17 @@ const useExploreState = () => {
   const [state, setState] = useState(loadExploreState);
   const { search } = useLocation();
   useEffect(() => {
-    if (search) setState(loadExploreState());
+    if (!search) return;
+    const initial = loadExploreState();
+    setState(initial);
+    const params = new URLSearchParams(search);
+    const input = params.get("location")?.trim() || "";
+    if (!input || params.has("license")) return;
+    let cancelled = false;
+    resolveLocationSearch(input).then(location => {
+      if (!cancelled) setState(current => applyLandingLocation(current, input, location));
+    });
+    return () => { cancelled = true; };
   }, [search]);
 
   useEffect(() => {

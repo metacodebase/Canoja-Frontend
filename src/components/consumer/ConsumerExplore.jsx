@@ -31,10 +31,10 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => 
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const [mapLimit, setMapLimit] = useState(50);
-  const { filters, setFilters, query, setQuery, view, setView, sort, setSort } = useExploreState();
+  const { filters, setFilters, query, setQuery, view, setView, sort, setSort, initializing } = useExploreState();
   const { coords, locating, locationError } = useBrowserLocation();
   const { location: activeSearchLocation, resolving } = useSearchLocation(query);
-  const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords, canViewSpotlight, query, activeSearchLocation, resolving);
+  const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords, canViewSpotlight, query, activeSearchLocation, resolving || initializing);
 
   const openShop = useCallback((shop) => {
     const businessId = shop._id || shop.place_id || shop.id || "selected";
@@ -65,6 +65,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => 
   useEffect(() => setMapLimit(50), [filters]);
 
   useEffect(() => {
+    if (initializing) return;
     if (!requestedLicense && (resolving || (query.trim() && !activeSearchLocation && locating))) return;
     let cancelled = false;
     const payload = buildExplorePayload(filters, sort, coords, query, activeSearchLocation);
@@ -97,7 +98,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => 
       .catch(() => !cancelled && setShops([]))
       .finally(() => !cancelled && setLoading(false));
     return () => { cancelled = true; };
-  }, [coords, filters, locating, sort, activeSearchLocation, view, mapLimit, requestedLicense, requestedLocation, query, resolving]);
+  }, [coords, filters, locating, sort, activeSearchLocation, view, mapLimit, requestedLicense, requestedLocation, query, resolving, initializing]);
 
   const visibleShops = useMemo(() => {
     const filtered = shops.filter((shop) => {
@@ -118,14 +119,14 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => 
         <div className="consumer-shell">
         <ExploreHeader view={view} onViewChange={setView} theme={activeTheme} onThemeToggle={toggleTheme} />
         <ExploreControls query={query} onQueryChange={setQuery} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
-        {filtersOpen && <ExploreFilterPanel value={effectiveFilters} showSpotlight={canViewSpotlight} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { if (["region", "searchType", "state", "city", "zipCode"].some(key => nextFilters[key] !== effectiveFilters[key])) setQuery(""); setFilters(nextFilters); setFiltersOpen(false); }} />}
+        {filtersOpen && <ExploreFilterPanel value={effectiveFilters} showSpotlight={canViewSpotlight} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setQuery(""); setFilters(nextFilters); setFiltersOpen(false); }} />}
         {view === "map" ? <ExploreMap shops={visibleShops} coords={mapCoords} locating={!hasSelectedLocation && locating} locationError={hasSelectedLocation ? "" : locationError} onShopSelect={openShop} theme={activeTheme} canLoadMore={shops.length >= mapLimit && mapLimit < 1000} nextLimit={Math.min(mapLimit + 50, 1000)} onLoadMore={() => setMapLimit(limit => Math.min(limit + 50, 1000))} /> : <>
-          {canViewSpotlight && <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={resolving || spotlightLoading || (!hasSelectedLocation && locating)} />}
+          {canViewSpotlight && <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={initializing || resolving || spotlightLoading || (!hasSelectedLocation && locating)} />}
           <ExploreSection
             title="All"
             shops={visibleShops.slice(0, 6)}
             emptyText={requestedLicense ? "No exact or close license match was found." : (!hasSelectedLocation && locationError) || "No operators found near this location."}
-            loading={loading || resolving}
+            loading={loading || resolving || initializing}
             onSeeAll={() => navigate("/explore/all", { state: { filters, sort, query, searchLocation: activeSearchLocation, coords, showSpotlight: canViewSpotlight } })}
           />
         </>}

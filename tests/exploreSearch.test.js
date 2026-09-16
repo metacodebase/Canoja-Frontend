@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { EMPTY_FILTERS, buildExplorePayload } from '../src/components/consumer/filterConfig.js';
+import { applyLandingLocation } from '../src/components/consumer/landingSearchState.js';
 import { resolveLocationSearch } from '../src/components/consumer/locationSearch.js';
 
 const denver = { city: 'Denver', state: 'Colorado', country: 'US', lat: 39.7392, lng: -104.9903 };
@@ -40,4 +41,16 @@ test('geocoding supplies country and coordinates and rejects operator POIs', asy
     globalThis.fetch = async () => ({ ok: true, json: async () => [{ type: 'shop', address: { city: 'Denver', state: 'Colorado' } }] });
     assert.equal(await resolveLocationSearch('Acme'), null);
   } finally { globalThis.fetch = originalFetch; }
+});
+
+test('landing locations populate filters with an empty search; operator names remain searchable', () => {
+  const initial = { filters: { ...EMPTY_FILTERS, radius: 50 }, query: "", initializing: true };
+  const locationState = applyLandingLocation(initial, 'Denver, CO', denver);
+  assert.equal(locationState.query, '');
+  assert.equal(locationState.filters.state, 'Colorado');
+  assert.equal(locationState.filters.city, 'Denver');
+  assert.equal(locationState.filters.region, 'US');
+  assert.equal(locationState.filters.radius, 50);
+  assert.equal(locationState.initializing, false);
+  assert.equal(applyLandingLocation(initial, 'Acme', null).query, 'Acme');
 });
