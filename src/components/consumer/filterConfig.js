@@ -24,12 +24,15 @@ export const hasActiveFilters = (filters) => Object.entries(filters).some(([key,
 
 export const buildSearchPayload = (filters, sortBy) => {
   const payload = { page: 1, limit: 10, sortBy: sortBy || undefined };
-  if (!filters.region) payload.radius = filters.radius;
+  if (!filters.region || filters.state || filters.city || filters.zipCode) payload.radius = Math.round(filters.radius * 1609.344);
   if (filters.region) payload.country = filters.region;
   if (filters.searchType === "zip" && filters.zipCode) payload.zipCode = filters.zipCode.trim();
   if (filters.searchType === "state_city" && filters.state) payload.state = filters.state.trim();
   if (filters.searchType === "state_city" && filters.city) payload.city = filters.city.trim();
   payload.filters = {
+    country: filters.region || undefined,
+    state: filters.searchType === "state_city" ? filters.state || undefined : undefined,
+    city: filters.searchType === "state_city" ? filters.city || undefined : undefined,
     openNow: filters.openNow || undefined,
     canojaVerified: filters.canojaVerified || undefined,
     smokeShop: filters.smokeShops ? true : filters.cannabis ? false : undefined,
@@ -39,5 +42,18 @@ export const buildSearchPayload = (filters, sortBy) => {
     hasMenu: filters.hasMenu || undefined,
     featured: filters.spotlight || undefined,
   };
+  return payload;
+};
+
+export const buildExplorePayload = (filters, sort, coords, query, resolvedLocation) => {
+  const effectiveFilters = resolvedLocation ? { ...filters, region: resolvedLocation.country, searchType: "state_city", state: resolvedLocation.state, city: resolvedLocation.city, zipCode: "" } : filters;
+  const payload = buildSearchPayload(effectiveFilters, sort);
+  const hasLocation = effectiveFilters.region || effectiveFilters.zipCode || effectiveFilters.state;
+  if (query.trim() && !resolvedLocation) payload.keyword = query.trim();
+  if (resolvedLocation) {
+    delete payload.filters.state;
+    delete payload.filters.city;
+    Object.assign(payload, { lat: resolvedLocation.lat, lng: resolvedLocation.lng });
+  } else if (!hasLocation && coords) Object.assign(payload, coords);
   return payload;
 };

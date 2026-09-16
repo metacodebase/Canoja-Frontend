@@ -24,11 +24,11 @@ export const resolveLocationSearch = async (query) => {
     const city = address.city || address.town || address.village || address.municipality;
     const state = address.state || address.province || address.region;
 
-    if (!city || !state || !LOCATION_TYPES.has(result.type || result.addresstype)) {
+    if (!state || !LOCATION_TYPES.has(result.type || result.addresstype)) {
       return null;
     }
 
-    return { city: String(city).trim(), state: String(state).trim() };
+    return { city: String(city || "").trim(), state: String(state).trim(), country: String(address.country_code || "").toUpperCase(), lat: Number(result.lat), lng: Number(result.lon) };
   } catch {
     return null;
   }

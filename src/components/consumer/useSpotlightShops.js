@@ -1,29 +1,34 @@
 import { useEffect, useState } from "react";
 import { getSpotlightShops, searchShops } from "../../services/api";
-import { buildSearchPayload } from "./filterConfig";
+import { buildExplorePayload } from "./filterConfig";
 import { getCachedResults, setCachedResults } from "./exploreCache";
 
 const CACHE_SECTION = "spotlight-paid";
 
-const useSpotlightShops = (filters, sort, coords, enabled = true) => {
-  const [spotlightShops, setSpotlightShops] = useState(() => getCachedResults(CACHE_SECTION) || []);
+const useSpotlightShops = (filters, sort, coords, enabled = true, query = "", resolvedLocation = null, resolving = false) => {
+  const [spotlightShops, setSpotlightShops] = useState([]);
   const [spotlightLoading, setSpotlightLoading] = useState(() => !getCachedResults(CACHE_SECTION));
 
   useEffect(() => {
+    if (resolving) return;
     if (!enabled) {
       setSpotlightShops([]);
       setSpotlightLoading(false);
       return undefined;
     }
 
-    const hasFilterLocation = filters.region || filters.zipCode || filters.state;
+    const hasFilterLocation = filters.region || filters.zipCode || filters.state || resolvedLocation;
     const hasLocation = hasFilterLocation || coords;
+    if (!hasLocation && query.trim()) {
+      setSpotlightShops([]);
+      setSpotlightLoading(false);
+      return;
+    }
 
     let cancelled = false;
-    const payload = buildSearchPayload(filters, sort);
+    const payload = buildExplorePayload(filters, sort, coords, query, resolvedLocation);
     payload.limit = 20;
     payload.filters = { ...payload.filters, featured: true };
-    if (!hasFilterLocation) Object.assign(payload, coords);
     const requestKey = hasLocation ? JSON.stringify(payload) : "global";
     const cached = getCachedResults(CACHE_SECTION, requestKey);
     if (cached) {
@@ -46,7 +51,7 @@ const useSpotlightShops = (filters, sort, coords, enabled = true) => {
       .finally(() => !cancelled && setSpotlightLoading(false));
 
     return () => { cancelled = true; };
-  }, [coords, enabled, filters, sort]);
+  }, [coords, enabled, filters, sort, query, resolvedLocation, resolving]);
 
   return { spotlightShops, spotlightLoading };
 };

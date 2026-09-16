@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { searchShops } from "../../services/api";
 import BusinessCard from "./BusinessCard";
 import ExploreHeader from "./ExploreHeader";
-import { buildSearchPayload, EMPTY_FILTERS } from "./filterConfig";
+import { buildExplorePayload, EMPTY_FILTERS } from "./filterConfig";
+import useSearchLocation from "./useSearchLocation";
 import useBrowserLocation from "./useBrowserLocation";
 import useAdminTheme from "../admin/useAdminTheme";
 import OperatorLayout from "../OperatorLayout";
@@ -24,6 +25,7 @@ const ConsumerAllShops = () => {
   const sort = state?.sort || "";
   const query = state?.query?.trim() || "";
   const showSpotlight = state?.showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier);
+  const { location: resolvedLocation, resolving } = useSearchLocation(query, state?.searchLocation);
   const cacheKey = JSON.stringify({ filters, sort, query, showSpotlight });
   const cachedState = useRef(readAllShopsCache()).current;
   const matchingCache = cachedState?.cacheKey === cacheKey ? cachedState : null;
@@ -32,7 +34,10 @@ const ConsumerAllShops = () => {
   const [hasMore, setHasMore] = useState(() => matchingCache?.hasMore ?? true);
   const [loading, setLoading] = useState(false);
   const observer = useRef(null);
-  const { coords, locating, locationError } = useBrowserLocation();
+  const requestContext = useRef(null);
+  const { coords: browserCoords, locating: browserLocating, locationError } = useBrowserLocation();
+  const coords = state?.coords || browserCoords;
+  const locating = !state?.coords && browserLocating;
 
   useEffect(() => {
     sessionStorage.setItem("consumerAllShopsState", JSON.stringify({ cacheKey, shops, page, hasMore }));
@@ -47,17 +52,23 @@ const ConsumerAllShops = () => {
   }, [shops.length]);
 
   const loadPage = useCallback(async (pageNumber, cancelled = () => false) => {
+    if (resolving || (query && !resolvedLocation && locating)) return;
     setLoading(true);
-    const payload = { ...buildSearchPayload(filters, sort), page: pageNumber, limit: 10 };
-    if (query) payload.keyword = query;
+    const payload = { ...buildExplorePayload(filters, sort, coords, query, resolvedLocation), page: pageNumber, limit: 10 };
     const hasFilterLocation = filters.region || filters.zipCode || filters.state;
-    if (!query && !hasFilterLocation && !coords) {
+    if (!hasFilterLocation && !resolvedLocation && !coords) {
       setLoading(locating);
       setHasMore(false);
       return;
     }
-    if (!query && !hasFilterLocation) Object.assign(payload, coords);
 
+    const contextKey = JSON.stringify({ ...payload, page: 1 });
+    if (requestContext.current !== contextKey) {
+      requestContext.current = contextKey;
+      setShops([]);
+      setHasMore(true);
+      if (pageNumber !== 1) { setPage(1); setLoading(false); return; }
+    }
     try {
       const result = await searchShops(payload);
       if (cancelled()) return;
@@ -76,7 +87,7 @@ const ConsumerAllShops = () => {
     } finally {
       if (!cancelled()) setLoading(false);
     }
-  }, [coords, filters, locating, query, showSpotlight, sort]);
+  }, [coords, filters, locating, query, showSpotlight, sort, resolvedLocation, resolving]);
 
   useEffect(() => {
     let cancelled = false;
@@ -104,8 +115,8 @@ const ConsumerAllShops = () => {
         <div className="business-list">
           {shops.map((shop, index) => <div key={getShopKey(shop) || index} ref={index === shops.length - 1 ? lastCardRef : null}><BusinessCard shop={shop} /></div>)}
         </div>
-        {loading && <div className="consumer-state all-shops-loading">Loading more operators…</div>}
-        {!loading && !shops.length && <div className="consumer-state">{locationError || "No operators found near this location."}</div>}
+        {(loading || resolving) && <div className="consumer-state all-shops-loading">Loading more operators…</div>}
+        {!loading && !resolving && !shops.length && <div className="consumer-state">{locationError || "No operators found near this location."}</div>}
         </div>
       </main>
   );

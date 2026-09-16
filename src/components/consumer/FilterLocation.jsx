@@ -18,8 +18,8 @@ const getCityOptions = (state) => {
 const FilterLocation = ({ draft, setField }) => (
   <>
     <section className="filter-block">
-      <div className="filter-block__heading"><strong>Distance</strong><span>{draft.radius ?? 50} mi</span></div>
-      <input type="range" min="1" max="100" value={draft.radius ?? 50} onChange={(event) => setField("radius", Number(event.target.value))} />
+      <div className="filter-block__heading"><strong>Distance</strong><span>{draft.region && !draft.state && !draft.zipCode ? "Entire region" : `${draft.radius ?? 50} mi`}</span></div>
+      <input type="range" disabled={Boolean(draft.region && !draft.state && !draft.zipCode)} min="1" max="100" value={draft.radius ?? 50} onChange={(event) => setField("radius", Number(event.target.value))} />
       <div className="range-labels"><small>1</small><small>100</small></div>
     </section>
     <section className="filter-block">
