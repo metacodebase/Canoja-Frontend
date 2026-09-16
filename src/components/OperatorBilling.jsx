@@ -152,7 +152,7 @@ const styles = {
     boxShadow: "0 8px 24px rgba(4,202,143,.25)"
   },
   actionDisabled: { opacity: .45, cursor: "not-allowed", boxShadow: "none" },
-  finePrint: { color: "#64748b", fontSize: "12px", textAlign: "center" },
+  finePrint: { color: "#64748b", fontSize: "12px", textAlign: "center" ,marginTop: "12px"},
 };
 
 export default OperatorBilling;
