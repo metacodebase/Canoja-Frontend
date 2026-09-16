@@ -3,7 +3,7 @@ import { getSpotlightShops, searchShops } from "../../services/api";
 import { buildExplorePayload } from "./filterConfig";
 import { getCachedResults, setCachedResults } from "./exploreCache";
 
-const CACHE_SECTION = "spotlight-paid";
+const CACHE_SECTION = "spotlight-enabled-v2";
 
 const useSpotlightShops = (filters, sort, coords, enabled = true, query = "", resolvedLocation = null, resolving = false) => {
   const [spotlightShops, setSpotlightShops] = useState([]);
@@ -28,7 +28,7 @@ const useSpotlightShops = (filters, sort, coords, enabled = true, query = "", re
     let cancelled = false;
     const payload = buildExplorePayload(filters, sort, coords, query, resolvedLocation);
     payload.limit = 20;
-    payload.filters = { ...payload.filters, featured: true };
+    payload.filters = { ...payload.filters, spotlight: true };
     const requestKey = hasLocation ? JSON.stringify(payload) : "global";
     const cached = getCachedResults(CACHE_SECTION, requestKey);
     if (cached) {
@@ -43,7 +43,7 @@ const useSpotlightShops = (filters, sort, coords, enabled = true, query = "", re
       .then((result) => {
         if (cancelled) return;
         const shops = result?.data?.shops || [];
-        const eligible = shops.filter((shop) => shop.featured === true && shop.claimed === true);
+        const eligible = shops.filter((shop) => shop.spotlight === true && shop.claimed === true);
         setCachedResults(CACHE_SECTION, requestKey, eligible);
         setSpotlightShops(eligible);
       })

@@ -10,7 +10,7 @@ const BusinessCard = ({ shop, spotlight = false }) => {
   const image = getImage(shop);
   const distance = getDistance(shop);
   const status = shop.open_now === true ? "Open" : shop.open_now === false ? "Closed" : "N/A";
-  const isFeatured = spotlight || shop.featured || shop.spotlight;
+  const isFeatured = shop.featured === true;
   const businessId = shop._id || shop.place_id || shop.id;
   const openDetails = () => {
     const scrollKey = location.pathname === "/explore/all" ? "consumerAllShopsScrollY" : "consumerExploreScrollY";
@@ -21,7 +21,7 @@ const BusinessCard = ({ shop, spotlight = false }) => {
 
   return (
     <article
-      className={`consumer-business-card${isFeatured ? " spotlight-card" : ""}`}
+      className={`consumer-business-card${spotlight || isFeatured ? " spotlight-card" : ""}`}
       role="button"
       tabIndex="0"
       onClick={openDetails}

@@ -1,4 +1,4 @@
-const CACHE_KEY = "consumerExploreResults";
+const CACHE_KEY = "consumerExploreResults-v2";
 const CACHE_TTL = 5 * 60 * 1000;
 
 const readCache = () => {

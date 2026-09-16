@@ -17,6 +17,7 @@ const getCityOptions = (state) => {
 
 const FilterLocation = ({ draft, setField }) => (
   <>
+    {draft.licenseLocation && <label className="filter-field">License location<input value={draft.licenseLocation} onChange={event => setField("licenseLocation", event.target.value)} /></label>}
     <section className="filter-block">
       <div className="filter-block__heading"><strong>Distance</strong><span>{draft.region && !draft.state && !draft.zipCode ? "Entire region" : `${draft.radius ?? 50} mi`}</span></div>
       <input type="range" disabled={Boolean(draft.region && !draft.state && !draft.zipCode)} min="1" max="100" value={draft.radius ?? 50} onChange={(event) => setField("radius", Number(event.target.value))} />
@@ -41,7 +42,7 @@ const FilterLocation = ({ draft, setField }) => (
         <label className="filter-field">Zip Code<div className="filter-input"><MaterialIcon name="search" color="#999" /><input value={draft.zipCode} onChange={(event) => setField("zipCode", event.target.value)} placeholder="Search by zip code…" /></div></label>
       ) : (
         <div className="filter-field-grid">
-          <label className="filter-field"><span className="filter-field-label">State</span><div className="filter-input filter-input--dropdown"><MaterialIcon name="location-on" color="#279d4f" /><input list="explore-region-states" value={draft.state} onChange={(event) => { const state = event.target.value; setField("state", state); if (!draft.region) { const region = Object.entries(REGION_STATES).find(([, states]) => states.includes(state))?.[0]; if (region) setField("region", region); } }} placeholder="Select state or province" /><MaterialIcon name="expand-more" className="filter-dropdown-arrow" /><datalist id="explore-region-states">{(draft.region ? REGION_STATES[draft.region] : ALL_STATES).map(state => <option key={state} value={state} />)}</datalist></div></label>
+          <label className="filter-field"><span className="filter-field-label">State</span><div className="filter-input filter-input--dropdown"><MaterialIcon name="location-on" color="#279d4f" /><input list="explore-region-states" value={draft.state} onChange={(event) => { const state = event.target.value; setField("state", state); setField("licenseLocation", ""); if (!draft.region) { const region = Object.entries(REGION_STATES).find(([, states]) => states.includes(state))?.[0]; if (region) setField("region", region); } }} placeholder="Select state or province" /><MaterialIcon name="expand-more" className="filter-dropdown-arrow" /><datalist id="explore-region-states">{(draft.region ? REGION_STATES[draft.region] : ALL_STATES).map(state => <option key={state} value={state} />)}</datalist></div></label>
           <label className="filter-field"><span className="filter-field-label"><small>(optional)</small> City</span><div className="filter-input filter-input--dropdown"><MaterialIcon name="location-city" color="#279d4f" /><input list="explore-state-cities" value={draft.city} onChange={(event) => setField("city", event.target.value)} placeholder="Select city" /><MaterialIcon name="expand-more" className="filter-dropdown-arrow" /><datalist id="explore-state-cities">{getCityOptions(draft.state).map(city => <option key={city} value={city} />)}</datalist></div></label>
         </div>
       )}

@@ -8,7 +8,7 @@ const BENEFITS = [
   { icon: <Eye size={18} />, text: "Shows your business at the top of the Explore screen" },
   { icon: <Users size={18} />, text: "Reaches consumers actively browsing nearby shops" },
   { icon: <Filter size={18} />, text: "Appears when users apply the Spotlight filter" },
-  { icon: <Star size={18} />, text: "Displays a featured badge on your listing card" },
+  { icon: <Star size={18} />, text: "Includes your listing in the Spotlight section" },
 ];
 
 const OperatorSpotlight = () => {

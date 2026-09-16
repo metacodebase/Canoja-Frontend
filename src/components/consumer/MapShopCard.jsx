@@ -1,3 +1,4 @@
+import { isSpotlightShop } from "./mapShopOrdering";
 import { ChevronLeft, ChevronRight, MapPin, Phone, Navigation } from "lucide-react";
 
 const value = (shop, ...keys) => keys.map((key) => shop?.[key]).find(Boolean);
@@ -11,6 +12,7 @@ const MapShopCard = ({ shop, index, total, onPrevious, onNext, onOpen }) => {
       <div className="map-card-stack" aria-live="polite">
         <span className="map-card-peek map-card-peek--left" />
         <article className="map-shop-card">
+          {(isSpotlightShop(shop) || shop.featured === true) && <span className="map-featured-tag">★ Featured</span>}
           <h3>{value(shop, "name", "business_name") || "Canoja operator"}</h3>
           <p><MapPin size={16} />{value(shop, "address", "business_address") || "Address unavailable"}</p>
           {value(shop, "phone", "phone_number") && <p><Phone size={16} />{value(shop, "phone", "phone_number")}</p>}

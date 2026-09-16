@@ -66,7 +66,6 @@ const OperatorProfile = () => {
               <div className="operator-profile-card__heading"><span className="green"><Camera size={22} /></span><div><h2>Business Photo</h2><p>This photo appears on your public profile.</p></div></div>
               <div className="operator-profile-photo">
                 <div className="operator-profile-photo__preview" style={{
-                  backgroundColor:'red',
                   overflow: "hidden",
                 }}>{photoPreview ?
                    <img style={{ width:"100%"

@@ -40,7 +40,7 @@ export const buildSearchPayload = (filters, sortBy) => {
       ? filters.medical && filters.recreational ? "both" : filters.medical ? "medical" : filters.recreational ? "recreational" : undefined
       : undefined,
     hasMenu: filters.hasMenu || undefined,
-    featured: filters.spotlight || undefined,
+    spotlight: filters.spotlight || undefined,
   };
   return payload;
 };
@@ -57,3 +57,9 @@ export const buildExplorePayload = (filters, sort, coords, query, resolvedLocati
   } else if (!hasLocation && coords) Object.assign(payload, coords);
   return payload;
 };
+
+export const buildLicensePayload = (filters, sort, licenseNumber) => ({
+  ...buildSearchPayload(filters, sort),
+  licenseNumber: licenseNumber.trim(),
+  location: filters.licenseLocation || undefined,
+});

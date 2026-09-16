@@ -2,11 +2,11 @@ import { Search } from "lucide-react";
 import { SlidersVertical } from "lucide-react";
 import MaterialIcon from "./MaterialIcon";
 
-const ExploreControls = ({ query, onQueryChange, filtersOpen, onFiltersToggle, sort, onSortChange }) => (
+const ExploreControls = ({ query, onQueryChange, filtersOpen, onFiltersToggle, sort, onSortChange, placeholder = "Search" }) => (
   <div className="explore-controls">
     <label className="consumer-search">
       <Search aria-hidden="true" size={16} strokeWidth={2} />
-      <input value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder="Search" />
+      <input value={query} onChange={(event) => onQueryChange(event.target.value)} placeholder={placeholder} />
     </label>
     <div className="explore-actions">
       <button className={`explore-icon-button${filtersOpen ? " active" : ""}`} onClick={onFiltersToggle} aria-label="Filters"><SlidersVertical size={20} /></button>

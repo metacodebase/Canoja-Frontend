@@ -7,7 +7,7 @@ import MaterialIcon from "./MaterialIcon";
 const ExploreFilterPanel = ({ value, onApply, onClose, showSpotlight }) => {
   const [draft, setDraft] = useState(value);
   useEffect(() => setDraft(value), [value]);
-  const setField = (key, fieldValue) => setDraft((current) => ({ ...current, [key]: fieldValue }));
+  const setField = (key, fieldValue) => setDraft((current) => ({ ...current, [key]: fieldValue, ...(["region", "state", "city", "zipCode", "searchType"].includes(key) ? { licenseLocation: "" } : {}) }));
 
   return (
     <div className="filter-backdrop" onMouseDown={(event) => event.target === event.currentTarget && onClose()}>

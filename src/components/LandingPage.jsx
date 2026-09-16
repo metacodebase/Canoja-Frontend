@@ -1,4 +1,4 @@
-import { ArrowRight, Menu, Search, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu, Search, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import canojaWordmark from "../assets/canoja-wordmark.png";
@@ -40,8 +40,8 @@ function SearchPanel() {
     <label>{tab === "licenses" ? "Location (optional)" : "Location or operator name"}<input value={tab === "licenses" ? licenseLocation : location} onChange={(e) => tab === "licenses" ? setLicenseLocation(e.target.value) : setLocation(e.target.value)} placeholder={tab === "licenses" ? "City or state (optional)" : "City, state, or operator"} /></label>
     {tab === "licenses" && <label className="landing-search__license">License number<input required value={licenseNumber} onChange={(e) => setLicenseNumber(e.target.value)} placeholder="Enter license number" /></label>}
     {tab === "operators" && <div className="landing-search__row">
-      <label>Operator type<select className="select-field" value={operatorType} onChange={event => setOperatorType(event.target.value)}><option value="all">All Operators</option><option value="cannabis">Cannabis</option><option value="smoke">Smoke Shop</option></select></label>
-      <label>Distance<select className="select-field" value={radius} onChange={event => setRadius(Number(event.target.value))}>{[5, 10, 25, 50, 100].map(miles => <option key={miles} value={miles}>Within {miles} Miles</option>)}</select></label>
+      <label>Operator type<span className="landing-select"><select className="select-field" value={operatorType} onChange={event => setOperatorType(event.target.value)}><option value="all">All Operators</option><option value="cannabis">Cannabis</option><option value="smoke">Smoke Shop</option></select><ChevronDown size={18} aria-hidden="true" /></span></label>
+      <label>Distance<span className="landing-select"><select className="select-field" value={radius} onChange={event => setRadius(Number(event.target.value))}>{[5, 10, 25, 50, 100].map(miles => <option key={miles} value={miles}>Within {miles} Miles</option>)}</select><ChevronDown size={18} aria-hidden="true" /></span></label>
     </div>}
     <button className="primary-button landing-search__submit" type="submit">{tab === "operators" ? "Explore Operators" : "Search Licenses"}</button>
     <p>Canoja does not issue cannabis licenses. Official determinations remain with the applicable regulatory authority.</p>

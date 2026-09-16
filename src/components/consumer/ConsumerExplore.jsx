@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { searchShops } from "../../services/api";
+import { orderMapShops, allSectionShops } from "./mapShopOrdering";
 import ExploreControls from "./ExploreControls";
 import ExploreFilterPanel from "./ExploreFilterPanel";
 import ExploreHeader from "./ExploreHeader";
 import ExploreMap from "./ExploreMap";
 import ExploreSection from "./ExploreSection";
 import { getCachedResults, setCachedResults } from "./exploreCache";
-import { buildExplorePayload, hasActiveFilters } from "./filterConfig";
+import { buildExplorePayload, buildLicensePayload, hasActiveFilters } from "./filterConfig";
 import useBrowserLocation from "./useBrowserLocation";
 import useExploreState from "./useExploreState";
 import useSpotlightShops from "./useSpotlightShops";
@@ -19,19 +20,18 @@ import "./consumerExplore.css";
 const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const requestedLicense = searchParams.get("license")?.trim() || "";
-  const requestedLocation = searchParams.get("location")?.trim() || "";
+  const licenseSearch = searchParams.has("license");
   const scrollRestored = useRef(false);
   const { user } = useAuth();
-  const canViewSpotlight = !requestedLicense && (showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier));
+  const canViewSpotlight = !licenseSearch && (showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier));
   const { theme, toggleTheme } = useAdminTheme();
   const activeTheme = themeOverride || theme;
-  const [shops, setShops] = useState(() => requestedLicense ? [] : getCachedResults("all") || []);
-  const [loading, setLoading] = useState(() => requestedLicense ? true : !getCachedResults("all"));
+  const [shops, setShops] = useState(() => licenseSearch ? [] : getCachedResults("all") || []);
+  const [loading, setLoading] = useState(() => licenseSearch ? true : !getCachedResults("all"));
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const [mapLimit, setMapLimit] = useState(50);
-  const { filters, setFilters, query, setQuery, view, setView, sort, setSort, initializing } = useExploreState();
+  const { filters, setFilters, query, setQuery, view, setView, sort, setSort, initializing, licenseNumber = "", setLicenseNumber } = useExploreState();
   const { coords, locating, locationError } = useBrowserLocation();
   const { location: activeSearchLocation, resolving } = useSearchLocation(query);
   const { spotlightShops, spotlightLoading } = useSpotlightShops(filters, sort, coords, canViewSpotlight, query, activeSearchLocation, resolving || initializing);
@@ -66,16 +66,14 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => 
 
   useEffect(() => {
     if (initializing) return;
-    if (!requestedLicense && (resolving || (query.trim() && !activeSearchLocation && locating))) return;
+    if (!licenseSearch && (resolving || (query.trim() && !activeSearchLocation && locating))) return;
     let cancelled = false;
-    const payload = buildExplorePayload(filters, sort, coords, query, activeSearchLocation);
-    if (requestedLicense) {
-      payload.licenseNumber = requestedLicense;
-      if (requestedLocation) payload.location = requestedLocation;
-    }
-    if (view === "map") payload.limit = mapLimit;
+    if (licenseSearch && !licenseNumber.trim()) { setShops([]); setLoading(false); return; }
+    const payload = licenseSearch ? buildLicensePayload(filters, sort, licenseNumber) : buildExplorePayload(filters, sort, coords, query, activeSearchLocation);
+    payload.prioritizeFeatured = view !== "map";
+    if (view === "map") { payload.limit = mapLimit; payload.prioritizeSpotlight = canViewSpotlight; }
     const hasFilterLocation = filters.region || filters.zipCode || filters.state || activeSearchLocation;
-    if (!requestedLicense && !hasFilterLocation && !coords) {
+    if (!licenseSearch && !hasFilterLocation && !coords) {
       setShops([]);
       setLoading(locating);
       return;
@@ -98,12 +96,10 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => 
       .catch(() => !cancelled && setShops([]))
       .finally(() => !cancelled && setLoading(false));
     return () => { cancelled = true; };
-  }, [coords, filters, locating, sort, activeSearchLocation, view, mapLimit, requestedLicense, requestedLocation, query, resolving, initializing]);
+  }, [coords, filters, locating, sort, activeSearchLocation, view, mapLimit, licenseSearch, licenseNumber, query, resolving, initializing, canViewSpotlight]);
 
   const visibleShops = useMemo(() => {
-    const filtered = shops.filter((shop) => {
-      return (!canViewSpotlight || shop.featured !== true);
-    });
+    const filtered = allSectionShops(shops, canViewSpotlight, spotlightShops);
     return [...filtered].sort((a, b) => {
       const featuredOrder = Number(b.featured === true) - Number(a.featured === true);
       if (featuredOrder) return featuredOrder;
@@ -111,23 +107,25 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => 
         ? (b.rating || 0) - (a.rating || 0)
         : sort === "alphabetical" ? (a.name || "").localeCompare(b.name || "") : 0;
     });
-  }, [shops, sort, canViewSpotlight]);
+  }, [shops, sort, canViewSpotlight, spotlightShops]);
+
+  const mapShops = useMemo(() => orderMapShops(canViewSpotlight ? [...spotlightShops, ...shops] : shops, canViewSpotlight), [shops, canViewSpotlight, spotlightShops]);
 
   return (
     <div className={embedded ? "consumer-theme" : `admin-theme operator-theme admin-theme--${theme}`}>
       <main className="consumer-explore">
         <div className="consumer-shell">
         <ExploreHeader view={view} onViewChange={setView} theme={activeTheme} onThemeToggle={toggleTheme} />
-        <ExploreControls query={query} onQueryChange={setQuery} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
+        <ExploreControls query={licenseSearch ? licenseNumber : query} onQueryChange={licenseSearch ? setLicenseNumber : setQuery} placeholder={licenseSearch ? "Search license number" : "Search"} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
         {filtersOpen && <ExploreFilterPanel value={effectiveFilters} showSpotlight={canViewSpotlight} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setQuery(""); setFilters(nextFilters); setFiltersOpen(false); }} />}
-        {view === "map" ? <ExploreMap shops={visibleShops} coords={mapCoords} locating={!hasSelectedLocation && locating} locationError={hasSelectedLocation ? "" : locationError} onShopSelect={openShop} theme={activeTheme} canLoadMore={shops.length >= mapLimit && mapLimit < 1000} nextLimit={Math.min(mapLimit + 50, 1000)} onLoadMore={() => setMapLimit(limit => Math.min(limit + 50, 1000))} /> : <>
+        {view === "map" ? <ExploreMap shops={mapShops} coords={mapCoords} locating={!hasSelectedLocation && locating} locationError={hasSelectedLocation ? "" : locationError} onShopSelect={openShop} theme={activeTheme} canLoadMore={shops.length >= mapLimit && mapLimit < 1000} nextLimit={Math.min(mapLimit + 50, 1000)} onLoadMore={() => setMapLimit(limit => Math.min(limit + 50, 1000))} /> : <>
           {canViewSpotlight && <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={initializing || resolving || spotlightLoading || (!hasSelectedLocation && locating)} />}
           <ExploreSection
             title="All"
             shops={visibleShops.slice(0, 6)}
-            emptyText={requestedLicense ? "No exact or close license match was found." : (!hasSelectedLocation && locationError) || "No operators found near this location."}
+            emptyText={licenseSearch ? "No exact or close license match was found." : (!hasSelectedLocation && locationError) || "No operators found near this location."}
             loading={loading || resolving || initializing}
-            onSeeAll={() => navigate("/explore/all", { state: { filters, sort, query, searchLocation: activeSearchLocation, coords, showSpotlight: canViewSpotlight } })}
+            onSeeAll={() => navigate("/explore/all", { state: { filters, sort, query, searchLocation: activeSearchLocation, coords, licenseNumber: licenseSearch ? licenseNumber : undefined, spotlightShops, showSpotlight: canViewSpotlight } })}
           />
         </>}
         </div>

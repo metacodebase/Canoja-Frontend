@@ -9,12 +9,13 @@ const STORAGE_KEY = "consumerExploreState";
 const loadExploreState = () => {
   try {
     const params = new URLSearchParams(window.location.search);
-    if (params.has("location") || params.has("type") || params.has("radius")) {
+    if (params.has("location") || params.has("type") || params.has("radius") || params.has("license")) {
       const radius = Number(params.get("radius") || 10);
       return {
         filters: { ...EMPTY_FILTERS, radius: Math.min(100, Math.max(1, radius || 10)), cannabis: params.get("type") === "cannabis", smokeShops: params.get("type") === "smoke" },
         query: "",
-        initializing: Boolean(params.get("location")?.trim()) && !params.has("license"),
+        licenseNumber: params.get("license")?.trim() || "",
+        initializing: Boolean(params.get("location")?.trim()),
         view: "list", sort: "",
       };
     }
@@ -39,10 +40,10 @@ const useExploreState = () => {
     setState(initial);
     const params = new URLSearchParams(search);
     const input = params.get("location")?.trim() || "";
-    if (!input || params.has("license")) return;
+    if (!input) return;
     let cancelled = false;
     resolveLocationSearch(input).then(location => {
-      if (!cancelled) setState(current => applyLandingLocation(current, input, location));
+      if (!cancelled) setState(current => applyLandingLocation(current, input, location, params.has("license")));
     });
     return () => { cancelled = true; };
   }, [search]);
@@ -58,10 +59,12 @@ const useExploreState = () => {
   const setFilters = useCallback(value => update("filters", value), [update]);
   const setQuery = useCallback(value => update("query", value), [update]);
   const setView = useCallback(value => update("view", value), [update]);
+  const setLicenseNumber = useCallback(value => update("licenseNumber", value), [update]);
   const setSort = useCallback(value => update("sort", value), [update]);
 
   return {
     ...state,
+    setLicenseNumber,
     setFilters,
     setQuery,
     setView,

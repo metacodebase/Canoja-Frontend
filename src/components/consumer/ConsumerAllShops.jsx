@@ -1,9 +1,10 @@
+import {allSectionShops} from "./mapShopOrdering";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { searchShops } from "../../services/api";
 import BusinessCard from "./BusinessCard";
 import ExploreHeader from "./ExploreHeader";
-import { buildExplorePayload, EMPTY_FILTERS } from "./filterConfig";
+import { buildExplorePayload, buildLicensePayload, EMPTY_FILTERS } from "./filterConfig";
 import useSearchLocation from "./useSearchLocation";
 import useBrowserLocation from "./useBrowserLocation";
 import useAdminTheme from "../admin/useAdminTheme";
@@ -22,11 +23,13 @@ const ConsumerAllShops = () => {
   const { theme, toggleTheme } = useAdminTheme();
   const { state } = useLocation();
   const filters = state?.filters || EMPTY_FILTERS;
+  const licenseNumber = state?.licenseNumber;
+  const licenseSearch = licenseNumber !== undefined;
   const sort = state?.sort || "";
   const query = state?.query?.trim() || "";
   const showSpotlight = state?.showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier);
   const { location: resolvedLocation, resolving } = useSearchLocation(query, state?.searchLocation);
-  const cacheKey = JSON.stringify({ filters, sort, query, showSpotlight });
+  const cacheKey = JSON.stringify({ filters, sort, query, showSpotlight, licenseNumber });
   const cachedState = useRef(readAllShopsCache()).current;
   const matchingCache = cachedState?.cacheKey === cacheKey ? cachedState : null;
   const [shops, setShops] = useState(() => matchingCache?.shops || []);
@@ -54,9 +57,9 @@ const ConsumerAllShops = () => {
   const loadPage = useCallback(async (pageNumber, cancelled = () => false) => {
     if (resolving || (query && !resolvedLocation && locating)) return;
     setLoading(true);
-    const payload = { ...buildExplorePayload(filters, sort, coords, query, resolvedLocation), page: pageNumber, limit: 10 };
+    const payload = { ...(licenseSearch ? buildLicensePayload(filters, sort, licenseNumber) : buildExplorePayload(filters, sort, coords, query, resolvedLocation)), page: pageNumber, limit: 10, prioritizeFeatured: true };
     const hasFilterLocation = filters.region || filters.zipCode || filters.state;
-    if (!hasFilterLocation && !resolvedLocation && !coords) {
+    if (!licenseSearch && !hasFilterLocation && !resolvedLocation && !coords) {
       setLoading(locating);
       setHasMore(false);
       return;
@@ -73,9 +76,7 @@ const ConsumerAllShops = () => {
       const result = await searchShops(payload);
       if (cancelled()) return;
       const resultShops = result?.data?.shops || [];
-      const nextShops = resultShops.filter(
-        (shop) => !showSpotlight || shop.featured !== true,
-      );
+      const nextShops = allSectionShops(resultShops, showSpotlight, state?.spotlightShops);
       setShops((current) => {
         const known = new Set(current.map(getShopKey));
         return [...current, ...nextShops.filter((shop) => !known.has(getShopKey(shop)))]
@@ -87,7 +88,7 @@ const ConsumerAllShops = () => {
     } finally {
       if (!cancelled()) setLoading(false);
     }
-  }, [coords, filters, locating, query, showSpotlight, sort, resolvedLocation, resolving]);
+  }, [coords, filters, locating, query, sort, resolvedLocation, resolving, licenseSearch, licenseNumber, showSpotlight, state?.spotlightShops]);
 
   useEffect(() => {
     let cancelled = false;

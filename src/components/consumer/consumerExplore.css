@@ -293,3 +293,5 @@
   .map-result-count { top: 14px; bottom: auto; }
   .canoja-marker-label { max-width: 115px; }
 }
+
+.map-featured-tag { display: inline-flex; align-items: center; padding: 4px 10px; margin-bottom: 8px; border-radius: 999px; background: #ffc425; color: #102016; font-size: 12px; font-weight: 700; }

@@ -1,7 +1,7 @@
-export const applyLandingLocation = (state, input, location) => ({
+export const applyLandingLocation = (state, input, location, licenseSearch = false) => ({
   ...state,
   initializing: false,
-  query: location ? "" : input,
+  query: location || licenseSearch ? "" : input,
   filters: location ? {
     ...state.filters,
     region: location.country,
@@ -9,5 +9,5 @@ export const applyLandingLocation = (state, input, location) => ({
     state: location.state,
     city: location.city,
     zipCode: "",
-  } : state.filters,
+  } : licenseSearch ? { ...state.filters, licenseLocation: input } : state.filters,
 });
