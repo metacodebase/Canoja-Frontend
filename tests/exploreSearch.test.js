@@ -100,3 +100,15 @@ test('Featured and Spotlight share the same shop designation', () => {
   assert.equal(orderMapShops([disabled, enabled], true)[0]._id, 'enabled');
   assert.deepEqual(allSectionShops([enabled, disabled], true).map(s => s._id), ['disabled']);
 });
+
+test('dummy Featured values and Spotlight-only flags do not qualify', () => {
+  const dummy = [
+    {_id:'string', featured:'true', claimed:true, plan_tier:'starter'},
+    {_id:'unclaimed', featured:true, claimed:false, plan_tier:'starter'},
+    {_id:'free', featured:true, claimed:true, plan_tier:'free'},
+    {_id:'fallback', spotlight:true, claimed:true, plan_tier:'starter'},
+  ];
+  const genuine = {_id:'real', featured:true, claimed:true, plan_tier:'starter'};
+  assert.equal(orderMapShops([...dummy, genuine], true)[0]._id, 'real');
+  assert.equal(allSectionShops([...dummy, genuine], true).length, 4);
+});

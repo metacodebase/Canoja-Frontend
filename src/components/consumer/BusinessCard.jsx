@@ -1,3 +1,4 @@
+import { isSpotlightShop } from "./mapShopOrdering";
 import { useLocation, useNavigate } from "react-router-dom";
 import canojaShop from "../../assets/canoja-shop.png";
 
@@ -10,7 +11,7 @@ const BusinessCard = ({ shop, spotlight = false }) => {
   const image = getImage(shop);
   const distance = getDistance(shop);
   const status = shop.open_now === true ? "Open" : shop.open_now === false ? "Closed" : "N/A";
-  const isFeatured = shop.featured === true;
+  const isFeatured = isSpotlightShop(shop);
   const businessId = shop._id || shop.place_id || shop.id;
   const openDetails = () => {
     const scrollKey = location.pathname === "/explore/all" ? "consumerAllShopsScrollY" : "consumerExploreScrollY";

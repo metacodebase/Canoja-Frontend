@@ -2,7 +2,7 @@ const shopId = shop => shop.original?._id || shop._id || shop.place_id || shop.i
 
 export const isSpotlightShop = shop => {
   const record = shop.original || shop;
-  return (shop.featured ?? record.featured ?? shop.spotlight ?? record.spotlight) === true && record.claimed === true && ['starter', 'pro'].includes(record.plan_tier);
+  return (shop.featured ?? record.featured) === true && record.claimed === true && ['starter', 'pro'].includes(record.plan_tier);
 };
 
 export const orderMapShops = (shops, prioritizeSpotlight) => {

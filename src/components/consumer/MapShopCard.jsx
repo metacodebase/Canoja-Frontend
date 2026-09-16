@@ -5,20 +5,23 @@ const value = (shop, ...keys) => keys.map((key) => shop?.[key]).find(Boolean);
 
 const MapShopCard = ({ shop, index, total, onPrevious, onNext, onOpen }) => {
   const types = value(shop, "type", "business_type", "found_by_query");
-  const distance = value(shop, "distance_miles", "distance", "distance_from_user");
+  const distance = shop.distance_miles ?? shop.distance ?? shop.distance_from_user;
+  const numericDistance = Number(distance);
 
   return (
     <div className="map-card-dock">
       <div className="map-card-stack" aria-live="polite">
         <span className="map-card-peek map-card-peek--left" />
         <article className="map-shop-card">
-          {(isSpotlightShop(shop) || shop.featured === true) && <span className="map-featured-tag">★ Featured</span>}
+          {isSpotlightShop(shop) && <span className="map-featured-tag">★ Featured</span>}
           <h3>{value(shop, "name", "business_name") || "Canoja operator"}</h3>
           <p><MapPin size={16} />{value(shop, "address", "business_address") || "Address unavailable"}</p>
           {value(shop, "phone", "phone_number") && <p><Phone size={16} />{value(shop, "phone", "phone_number")}</p>}
-          <p><Navigation size={16} />{distance != null ? `${Number(distance).toFixed(1)} mi away` : "Distance unavailable"}</p>
+          <p><Navigation size={16} />{distance != null && Number.isFinite(numericDistance) ? `${numericDistance.toFixed(1)} mi away` : "Distance unavailable"}</p>
+          <div className="map-shop-card__footer">
           {types && <span className="map-shop-type">{Array.isArray(types) ? types.join(" · ") : types}</span>}
           <button className="map-card-open" onClick={onOpen} aria-label="Open operator details"><ChevronRight size={20} /></button>
+          </div>
         </article>
         <span className="map-card-peek map-card-peek--right" />
       </div>
