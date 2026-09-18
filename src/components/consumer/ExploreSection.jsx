@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import BusinessCard from "./BusinessCard";
 
-const ExploreSection = ({ title, shops, spotlight = false, emptyText, loading, onSeeAll }) => {
+const ExploreSection = ({ title, shops, spotlight = false, emptyText, loading, onSeeAll, userCoords }) => {
   const listRef = useRef(null);
   const [paused, setPaused] = useState(false);
 
@@ -35,7 +35,7 @@ const ExploreSection = ({ title, shops, spotlight = false, emptyText, loading, o
           onBlurCapture={() => setPaused(false)}
           onTouchStart={() => setPaused(true)}
           onTouchEnd={() => setPaused(false)}>
-          {shops.map((shop, index) => <BusinessCard key={shop._id || shop.place_id || index} shop={shop} spotlight={spotlight} />)}
+          {shops.map((shop, index) => <BusinessCard key={shop._id || shop.place_id || index} shop={shop} spotlight={spotlight} userCoords={userCoords} />)}
         </div>
       ) : loading ? (
         <div className="consumer-state">Finding operators near you…</div>

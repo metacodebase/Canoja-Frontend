@@ -26,7 +26,7 @@ const addShopMarker = (maps, map, item, onSelect) => {
   return marker;
 };
 
-const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect, theme, canLoadMore, nextLimit, onLoadMore }) => {
+const ExploreMap = ({ shops, coords, userCoords, locating, locationError, onShopSelect, theme, canLoadMore, nextLimit, onLoadMore }) => {
   const sectionRef = useRef(null);
   const mapNode = useRef(null);
   const mapRef = useRef(null);
@@ -85,7 +85,7 @@ const ExploreMap = ({ shops, coords, locating, locationError, onShopSelect, them
 
   const selected = mappedShops[selectedIndex]?.shop;
   const toggleFullscreen = () => isFullscreen ? document.exitFullscreen() : sectionRef.current?.requestFullscreen();
-  return <section ref={sectionRef} className="consumer-map" aria-label="Nearby operators map"><div ref={mapNode} className="google-map-canvas" /><button type="button" className="map-fullscreen" onClick={toggleFullscreen} aria-label={isFullscreen ? "Exit fullscreen" : "Open fullscreen"}>{isFullscreen ? "×" : "⛶"}</button>{mapError && <div className="map-error">{mapError}</div>}{canLoadMore && <button type="button" className="map-load-more" onClick={onLoadMore}>Load up to {nextLimit} operators</button>}{selected && <MapShopCard shop={selected} index={selectedIndex} total={mappedShops.length} onPrevious={() => setSelectedIndex((index) => Math.max(0, index - 1))} onNext={() => setSelectedIndex((index) => Math.min(mappedShops.length - 1, index + 1))} onOpen={() => onShopSelect(selected)} />}<div className="map-result-count"><strong>{mappedShops.length} operators in this area</strong>{locating ? "Finding your location…" : locationError}</div></section>;
+  return <section ref={sectionRef} className="consumer-map" aria-label="Nearby operators map"><div ref={mapNode} className="google-map-canvas" /><button type="button" className="map-fullscreen" onClick={toggleFullscreen} aria-label={isFullscreen ? "Exit fullscreen" : "Open fullscreen"}>{isFullscreen ? "×" : "⛶"}</button>{mapError && <div className="map-error">{mapError}</div>}{canLoadMore && <button type="button" className="map-load-more" onClick={onLoadMore}>Load up to {nextLimit} operators</button>}{selected && <MapShopCard userCoords={userCoords} shop={selected} index={selectedIndex} total={mappedShops.length} onPrevious={() => setSelectedIndex((index) => Math.max(0, index - 1))} onNext={() => setSelectedIndex((index) => Math.min(mappedShops.length - 1, index + 1))} onOpen={() => onShopSelect(selected)} />}<div className="map-result-count"><strong>{mappedShops.length} operators in this area</strong>{locating ? "Finding your location…" : locationError}</div></section>;
 };
 
 export default ExploreMap;

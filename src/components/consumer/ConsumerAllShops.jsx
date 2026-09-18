@@ -27,9 +27,8 @@ const ConsumerAllShops = () => {
   const licenseSearch = licenseNumber !== undefined;
   const sort = state?.sort || "";
   const query = state?.query?.trim() || "";
-  const showSpotlight = state?.showSpotlight ?? !licenseSearch;
   const { location: resolvedLocation, resolving } = useSearchLocation(query, state?.searchLocation);
-  const cacheKey = JSON.stringify({ filters, sort, query, showSpotlight, licenseNumber });
+  const cacheKey = JSON.stringify({ filters, sort, query, licenseNumber, allSectionVersion: 2 });
   const cachedState = useRef(readAllShopsCache()).current;
   const matchingCache = cachedState?.cacheKey === cacheKey ? cachedState : null;
   const [shops, setShops] = useState(() => matchingCache?.shops || []);
@@ -76,7 +75,7 @@ const ConsumerAllShops = () => {
       const result = await searchShops(payload);
       if (cancelled()) return;
       const resultShops = result?.data?.shops || [];
-      const nextShops = allSectionShops(resultShops, showSpotlight, state?.spotlightShops);
+      const nextShops = allSectionShops(resultShops);
       setShops((current) => {
         const known = new Set(current.map(getShopKey));
         return [...current, ...nextShops.filter((shop) => !known.has(getShopKey(shop)))]
@@ -88,7 +87,7 @@ const ConsumerAllShops = () => {
     } finally {
       if (!cancelled()) setLoading(false);
     }
-  }, [coords, filters, locating, query, sort, resolvedLocation, resolving, licenseSearch, licenseNumber, showSpotlight, state?.spotlightShops]);
+  }, [coords, filters, locating, query, sort, resolvedLocation, resolving, licenseSearch, licenseNumber]);
 
   useEffect(() => {
     let cancelled = false;
@@ -114,7 +113,7 @@ const ConsumerAllShops = () => {
           <h2>All operators</h2>
         </div>
         <div className="business-list">
-          {shops.map((shop, index) => <div key={getShopKey(shop) || index} ref={index === shops.length - 1 ? lastCardRef : null}><BusinessCard shop={shop} /></div>)}
+          {shops.map((shop, index) => <div key={getShopKey(shop) || index} ref={index === shops.length - 1 ? lastCardRef : null}><BusinessCard shop={shop} userCoords={browserCoords} /></div>)}
         </div>
         {(loading || resolving) && <div className="consumer-state all-shops-loading">Loading more operators…</div>}
         {!loading && !resolving && !shops.length && <div className="consumer-state">{locationError || "No operators found near this location."}</div>}

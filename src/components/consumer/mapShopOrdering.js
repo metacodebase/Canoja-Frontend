@@ -17,9 +17,5 @@ export const orderMapShops = (shops, prioritizeSpotlight) => {
   return prioritizeSpotlight ? [...unique].sort((a, b) => Number(isSpotlightShop(b)) - Number(isSpotlightShop(a))) : unique;
 };
 
-export const allSectionShops = (shops, showSpotlight = false, spotlightShops = []) => {
-  const spotlightIds = new Set(spotlightShops.map(shopId).filter(Boolean));
-  return orderMapShops(shops, false)
-    .filter(shop => !showSpotlight || (!isSpotlightShop(shop) && !spotlightIds.has(shopId(shop))))
-    .sort((a, b) => Number(b.featured === true) - Number(a.featured === true));
-};
+export const allSectionShops = shops => orderMapShops(shops, false)
+  .sort((a, b) => Number(b.featured === true) - Number(a.featured === true));

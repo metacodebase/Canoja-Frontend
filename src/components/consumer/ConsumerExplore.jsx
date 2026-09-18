@@ -97,7 +97,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight = true
   }, [coords, filters, locating, sort, activeSearchLocation, view, mapLimit, licenseSearch, licenseNumber, query, resolving, initializing, canViewSpotlight]);
 
   const visibleShops = useMemo(() => {
-    const filtered = allSectionShops(shops, canViewSpotlight, spotlightShops);
+    const filtered = allSectionShops(shops);
     return [...filtered].sort((a, b) => {
       const featuredOrder = Number(b.featured === true) - Number(a.featured === true);
       if (featuredOrder) return featuredOrder;
@@ -105,7 +105,7 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight = true
         ? (b.rating || 0) - (a.rating || 0)
         : sort === "alphabetical" ? (a.name || "").localeCompare(b.name || "") : 0;
     });
-  }, [shops, sort, canViewSpotlight, spotlightShops]);
+  }, [shops, sort]);
 
   const mapShops = useMemo(() => orderMapShops(canViewSpotlight ? [...spotlightShops, ...shops] : shops, canViewSpotlight), [shops, canViewSpotlight, spotlightShops]);
 
@@ -116,14 +116,15 @@ const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight = true
         <ExploreHeader view={view} onViewChange={setView} theme={activeTheme} onThemeToggle={toggleTheme} />
         <ExploreControls query={licenseSearch ? licenseNumber : query} onQueryChange={licenseSearch ? setLicenseNumber : setQuery} placeholder={licenseSearch ? "Search license number" : "Search"} filtersOpen={filtersOpen || hasActiveFilters(filters)} onFiltersToggle={() => setFiltersOpen(true)} sort={sort} onSortChange={setSort} />
         {filtersOpen && <ExploreFilterPanel value={effectiveFilters} showSpotlight={canViewSpotlight} onClose={() => setFiltersOpen(false)} onApply={(nextFilters) => { setQuery(""); setFilters(nextFilters); setFiltersOpen(false); }} />}
-        {view === "map" ? <ExploreMap shops={mapShops} coords={mapCoords} locating={!hasSelectedLocation && locating} locationError={hasSelectedLocation ? "" : locationError} onShopSelect={openShop} theme={activeTheme} canLoadMore={shops.length >= mapLimit && mapLimit < 1000} nextLimit={Math.min(mapLimit + 50, 1000)} onLoadMore={() => setMapLimit(limit => Math.min(limit + 50, 1000))} /> : <>
-          {canViewSpotlight && <ExploreSection title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={initializing || resolving || spotlightLoading || (!hasSelectedLocation && locating)} />}
+        {view === "map" ? <ExploreMap userCoords={coords} shops={mapShops} coords={mapCoords} locating={!hasSelectedLocation && locating} locationError={hasSelectedLocation ? "" : locationError} onShopSelect={openShop} theme={activeTheme} canLoadMore={shops.length >= mapLimit && mapLimit < 1000} nextLimit={Math.min(mapLimit + 50, 1000)} onLoadMore={() => setMapLimit(limit => Math.min(limit + 50, 1000))} /> : <>
+          {canViewSpotlight && <ExploreSection userCoords={coords} title="Spotlight" shops={spotlightShops} spotlight emptyText={filters.region || filters.zipCode || filters.state ? "No spotlight operators match this location." : locationError || "No spotlight operators yet."} loading={initializing || resolving || spotlightLoading || (!hasSelectedLocation && locating)} />}
           <ExploreSection
+            userCoords={coords}
             title="All"
             shops={visibleShops.slice(0, 6)}
             emptyText={licenseSearch ? "No exact or close license match was found." : (!hasSelectedLocation && locationError) || "No operators found near this location."}
             loading={loading || resolving || initializing}
-            onSeeAll={() => navigate("/explore/all", { state: { filters, sort, query, searchLocation: activeSearchLocation, coords, licenseNumber: licenseSearch ? licenseNumber : undefined, spotlightShops, showSpotlight: canViewSpotlight } })}
+            onSeeAll={() => navigate("/explore/all", { state: { filters, sort, query, searchLocation: activeSearchLocation, coords, licenseNumber: licenseSearch ? licenseNumber : undefined } })}
           />
         </>}
         </div>

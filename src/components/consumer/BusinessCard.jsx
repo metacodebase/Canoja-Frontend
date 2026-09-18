@@ -1,15 +1,15 @@
+import { formatShopDistance } from "./shopDistance";
 import { isSpotlightShop } from "./mapShopOrdering";
 import { useLocation, useNavigate } from "react-router-dom";
 import canojaShop from "../../assets/canoja-shop.png";
 
 const getImage = (shop) => shop.photo_url || shop.photos?.[0]?.url || shop.image;
-const getDistance = (shop) => shop.distance_miles ?? shop.distance ?? shop.distance_from_user;
 
-const BusinessCard = ({ shop, spotlight = false }) => {
+const BusinessCard = ({ shop, spotlight = false, userCoords }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const image = getImage(shop);
-  const distance = getDistance(shop);
+  const distance = formatShopDistance(shop, userCoords);
   const status = shop.open_now === true ? "Open" : shop.open_now === false ? "Closed" : "N/A";
   const isFeatured = isSpotlightShop(shop);
   const businessId = shop._id || shop.place_id || shop.id;
@@ -43,7 +43,7 @@ const BusinessCard = ({ shop, spotlight = false }) => {
         <span>{shop.found_by_query || shop.business_type || "Cannabis operator"}</span>
         <p>{shop.address || shop.business_address || "Address unavailable"}</p>
         <small>
-          {distance != null ? `${Number(distance).toFixed(1)} mi away` : "Distance unavailable"}
+          {distance}
           {" · "}<b className={status === "Open" ? "open" : "closed"}>{status}</b>
         </small>
       </div>
