@@ -14,7 +14,8 @@ const RoleRoute = ({ allowedRoles, children }) => {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
+    const loginPath = allowedRoles?.includes("admin") ? "/admin" : "/login";
+    return <Navigate to={loginPath} replace state={{ from: location }} />;
   }
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {

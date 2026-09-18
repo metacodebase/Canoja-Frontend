@@ -71,8 +71,9 @@ function App() {
             {/* General Login */}
             <Route path="/login" element={<Login />} />
             
-            {/* Redirect old admin login route to general login */}
-            <Route path="/admin/login" element={<Navigate to="/login" replace />} />
+            {/* Admin Login */}
+            <Route path="/admin" element={<Login />} />
+            <Route path="/admin/login" element={<Navigate to="/admin" replace />} />
 
             {/* Forgot Password Flow */}
             <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -136,7 +137,6 @@ function App() {
             />
             
             {/* Default Redirects */}
-            <Route path="/admin" element={<Navigate to="/" replace />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
           

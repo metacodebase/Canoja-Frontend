@@ -12,11 +12,14 @@ const AdminLogin = () => {
 	const [error, setError] = useState("");
 	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
-	const { login, isAuthenticated } = useAuth();
+	const { login, isAuthenticated, user } = useAuth();
 	const loginMutation = useAdminLogin();
 
 	if (isAuthenticated) {
-		return <Navigate to="/admin/dashboard" replace />;
+		const home = user?.role === "admin"
+			? "/admin/retailers"
+			: user?.role === "operator" ? "/operator/dashboard" : "/explore";
+		return <Navigate to={home} replace />;
 	}
 
 	const handleSubmit = async (e) => {
