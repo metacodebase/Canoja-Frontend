@@ -27,7 +27,7 @@ const ConsumerAllShops = () => {
   const licenseSearch = licenseNumber !== undefined;
   const sort = state?.sort || "";
   const query = state?.query?.trim() || "";
-  const showSpotlight = state?.showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier);
+  const showSpotlight = state?.showSpotlight ?? !licenseSearch;
   const { location: resolvedLocation, resolving } = useSearchLocation(query, state?.searchLocation);
   const cacheKey = JSON.stringify({ filters, sort, query, showSpotlight, licenseNumber });
   const cachedState = useRef(readAllShopsCache()).current;

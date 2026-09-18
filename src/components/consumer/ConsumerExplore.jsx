@@ -14,16 +14,14 @@ import useExploreState from "./useExploreState";
 import useSpotlightShops from "./useSpotlightShops";
 import useAdminTheme from "../admin/useAdminTheme";
 import useSearchLocation from "./useSearchLocation";
-import { useAuth } from "../../context/AuthContext";
 import "./consumerExplore.css";
 
-const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight }) => {
+const ConsumerExplore = ({ embedded = false, themeOverride, showSpotlight = true }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const licenseSearch = searchParams.has("license");
   const scrollRestored = useRef(false);
-  const { user } = useAuth();
-  const canViewSpotlight = !licenseSearch && (showSpotlight ?? ["starter", "pro"].includes(user?.plan_tier));
+  const canViewSpotlight = !licenseSearch && showSpotlight;
   const { theme, toggleTheme } = useAdminTheme();
   const activeTheme = themeOverride || theme;
   const [shops, setShops] = useState(() => licenseSearch ? [] : getCachedResults("all") || []);
